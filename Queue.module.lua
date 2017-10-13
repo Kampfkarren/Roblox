@@ -4,7 +4,7 @@ function QueueTemplate:Enqueue(value)
 	table.insert(self.queue, 1, value)
 end
 
-function QueueTemplate:Dequeue(value)
+function QueueTemplate:Dequeue()
 	return table.remove(self.queue)
 end
 
