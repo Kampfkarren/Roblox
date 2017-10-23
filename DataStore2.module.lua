@@ -29,6 +29,7 @@
 local Players = game:GetService("Players")
 local DataStoreService = game:GetService("DataStoreService")
 local table = require(game:GetService("ReplicatedStorage").Boilerplate.table)
+local RegularSave = false
 
 --DataStore object
 local DataStore = {}
@@ -184,7 +185,7 @@ local function DataStore2(dataStoreName, player)
 	DataStoreCache[player][dataStoreName] = dataStore
 	
 	spawn(function()
-		while wait(30) do
+		while RegularSave and wait(30) do
 			dataStore:Save()
 		end
 	end)
