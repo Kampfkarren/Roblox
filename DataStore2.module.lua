@@ -71,22 +71,6 @@ function DataStore:Get(defaultValue, dontAttemptGet)
 	return value
 end
 
-local HttpService = game:GetService("HttpService")
-
---[[
-function DataStore:GetTable(defaultValue)
-	self.isJson = true
-	
-	local value = self:Get(defaultValue)
-	
-	if typeof(value) == "string" then
-		return HttpService:JSONDecode(value)
-	else
-		return value
-	end
-end
-]]
-
 function DataStore:Set(value)
 	if typeof(value) == "table" then
 		self.value = table.deep(value)
