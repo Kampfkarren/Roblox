@@ -3,7 +3,7 @@ local Iterators = {}
 Iterators.shuffle = function(t)
   local keyList = {}
   
-  for i,_ in pairs(t) do
+  for i in pairs(t) do
     table.insert(keyList, i)
   end
   
