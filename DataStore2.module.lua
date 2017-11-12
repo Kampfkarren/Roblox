@@ -139,6 +139,7 @@ local function DataStore2(dataStoreName, player)
 	
 	dataStore.dataStore = DataStoreService:GetDataStore(dataStoreName)
 	dataStore.name = dataStoreName
+	dataStore.player = player
 	dataStore.key = player.UserId
 	dataStore.callbacks = {}
 	dataStore.bindToClose = {}
