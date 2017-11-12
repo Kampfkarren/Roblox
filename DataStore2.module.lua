@@ -42,7 +42,7 @@ end
 
 function DataStore:_Update()
 	for _,callback in pairs(self.callbacks) do
-		callback(self.value)
+		callback(self.value, self)
 	end
 end
 
