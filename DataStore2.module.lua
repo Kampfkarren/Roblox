@@ -99,11 +99,15 @@ function DataStore:OnUpdate(callback)
 	table.insert(self.callbacks, callback)
 end
 
+function DataStore:_Save()
+	return self.value
+end
+
 function DataStore:Save()
 	if self.value ~= nil then
 		local value = self.value
-		
-		pcall(self.dataStore.SetAsync, self.dataStore, self.key, value)
+		print("saved "..self.name)
+		pcall(self.dataStore.UpdateAsync, self._Save, self)
 	end
 end
 
