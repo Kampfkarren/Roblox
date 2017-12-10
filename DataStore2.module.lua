@@ -150,10 +150,12 @@ local function DataStore2(dataStoreName, player)
 	
 	setmetatable(dataStore, DataStoreMetatable)
 	
-	local event = Instance.new("BindableEvent")
+	local event, fired = Instance.new("BindableEvent"), false
 	
 	game:BindToClose(function()
-		event.Event:wait()
+		if not fired then
+			event.Event:wait()
+		end
 		
 		local value = dataStore:Get(nil, true)
 		
@@ -165,6 +167,7 @@ local function DataStore2(dataStoreName, player)
 	Players.PlayerRemoving:connect(function(player)
 		dataStore:Save()
 		event:Fire()
+		fired = true
 	end)
 	
 	if not DataStoreCache[player] then
