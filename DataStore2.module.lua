@@ -5,9 +5,7 @@
 	
 	DataStore2 DataStore:
 	- Get([defaultValue])
-	- GetTableKey(key)
 	- Set(value)
-	- SetTableKey(key, value)
 	- Update(updateFunc)
 	- Increment(value)
 	- Save()
@@ -30,6 +28,7 @@ local Players = game:GetService("Players")
 local DataStoreService = game:GetService("DataStoreService")
 local table = require(game:GetService("ReplicatedStorage").Boilerplate.table)
 local RegularSave = false
+local SaveInStudio = false
 
 --DataStore object
 local DataStore = {}
@@ -100,6 +99,11 @@ function DataStore:OnUpdate(callback)
 end
 
 function DataStore:Save()
+	if game:GetService("RunService"):IsStudio() and not SaveInStudio then
+		warn(("Data store %s attempted to save in studio while SaveInStudio is false."):format(self.key))
+		return
+	end
+	
 	if self.value ~= nil then
 		pcall(self.dataStore.UpdateAsync, self.dataStore, self.key, function()
 			return self.value
