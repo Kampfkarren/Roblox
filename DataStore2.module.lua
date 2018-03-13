@@ -100,7 +100,7 @@ end
 
 function DataStore:Save()
 	if game:GetService("RunService"):IsStudio() and not SaveInStudio then
-		warn(("Data store %s attempted to save in studio while SaveInStudio is false."):format(self.key))
+		warn(("Data store %s attempted to save in studio while SaveInStudio is false."):format(self.name))
 		return
 	end
 	
