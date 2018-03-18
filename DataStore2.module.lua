@@ -48,7 +48,7 @@ end
 
 --Public functions
 function DataStore:Get(defaultValue, dontAttemptGet)
-	if not self.hasValue and dontAttemptGet then
+	if not self.haveValue and dontAttemptGet then
 		return self.value
 	end
 	
