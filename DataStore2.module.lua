@@ -44,6 +44,7 @@ function DataStore:_Update()
 	for _,callback in pairs(self.callbacks) do
 		callback(self.value, self)
 	end
+	self.haveValue = true
 end
 
 --Public functions
