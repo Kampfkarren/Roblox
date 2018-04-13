@@ -7,7 +7,7 @@
 	- Get([defaultValue])
 	- Set(value)
 	- Update(updateFunc)
-	- Increment(value)
+	- Increment(value, defaultValue)
 	- Save()
 	- OnUpdate(callback)
 	- BindToClose(callback)
@@ -29,7 +29,7 @@ local DataStoreService = game:GetService("DataStoreService")
 local table = require(game:GetService("ReplicatedStorage").Boilerplate.table)
 local RegularSave = false
 local RegularSaveNum = 300
-local SaveInStudio = false
+local SaveInStudio = game.ServerStorage.OverrideStudioClose.Value
 
 --DataStore object
 local DataStore = {}
@@ -87,13 +87,8 @@ function DataStore:Update(updateFunc)
 	self:_Update()
 end
 
-function DataStore:Increment(value)
-	if not self.value then
-		warn("no value to increment")
-	end
-	
-	self.value = self.value + value
-	self:_Update()
+function DataStore:Increment(value, defaultValue)
+	self:Set(self:Get(defaultValue) + value)
 end
 
 function DataStore:OnUpdate(callback)
