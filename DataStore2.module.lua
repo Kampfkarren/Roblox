@@ -8,6 +8,7 @@
 	- Set(value)
 	- Update(updateFunc)
 	- Increment(value, defaultValue)
+	- BeforeSave(modifier)
 	- Save()
 	- OnUpdate(callback)
 	- BindToClose(callback)
@@ -39,8 +40,8 @@ local DataStoreService = game:GetService("DataStoreService")
 local table = require(game:GetService("ReplicatedStorage").Boilerplate.table)
 local RegularSave = false
 local RegularSaveNum = 300
-local SaveInStudio = false
-local Debug = false
+local SaveInStudio = game.ServerStorage.OverrideStudioClose.Value
+local Debug = true
 
 --DataStore object
 local DataStore = {}
@@ -125,6 +126,10 @@ function DataStore:OnUpdate(callback)
 	table.insert(self.callbacks, callback)
 end
 
+function DataStore:BeforeSave(modifier)
+	table.insert(self.beforeSave, modifier)
+end
+
 function DataStore:Save()
 	if game:GetService("RunService"):IsStudio() and not SaveInStudio then
 		warn(("Data store %s attempted to save in studio while SaveInStudio is false."):format(self.name))
@@ -134,8 +139,14 @@ function DataStore:Save()
 	--TODO: check last saved value if its the same
 	
 	if self.value ~= nil then
+		local save = self.value
+		
+		for _,beforeSave in pairs(self.beforeSave) do
+			save = beforeSave(save, self)
+		end
+		
 		local key = os.time()
-		self.dataStore:SetAsync(key, self.value)
+		self.dataStore:SetAsync(key, save)
 		self.orderedDataStore:SetAsync(key, key)
 		
 		print("saved "..self.name)
@@ -178,6 +189,7 @@ local function DataStore2(dataStoreName, player)
 	dataStore.name = dataStoreName
 	dataStore.player = player
 	dataStore.callbacks = {}
+	dataStore.beforeSave = {}
 	dataStore.bindToClose = {}
 	
 	setmetatable(dataStore, DataStoreMetatable)
