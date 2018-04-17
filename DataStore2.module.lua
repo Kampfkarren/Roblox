@@ -40,8 +40,8 @@ local DataStoreService = game:GetService("DataStoreService")
 local table = require(game:GetService("ReplicatedStorage").Boilerplate.table)
 local RegularSave = false
 local RegularSaveNum = 300
-local SaveInStudio = game.ServerStorage.OverrideStudioClose.Value
-local Debug = true
+local SaveInStudio = false
+local Debug = false
 
 --DataStore object
 local DataStore = {}
