@@ -208,10 +208,12 @@ local function DataStore2(dataStoreName, player)
 		end
 	end)
 	
-	Players.PlayerRemoving:connect(function(player)
-		dataStore:Save()
-		event:Fire()
-		fired = true
+	Players.PlayerRemoving:connect(function(playerLeaving)
+		if playerLeaving == player then
+			dataStore:Save()
+			event:Fire()
+			fired = true
+		end
 	end)
 	
 	if not DataStoreCache[player] then
