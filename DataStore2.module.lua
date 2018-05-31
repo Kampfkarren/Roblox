@@ -8,6 +8,7 @@
 	- Set(value)
 	- Update(updateFunc)
 	- Increment(value, defaultValue)
+	- BeforeInitialGet(modifier)
 	- BeforeSave(modifier)
 	- Save()
 	- OnUpdate(callback)
@@ -42,6 +43,85 @@ local RegularSave = false
 local RegularSaveNum = 300
 local SaveInStudio = false
 local Debug = false
+
+local Verifier = {}
+
+function Verifier.typeValid(data)
+	return type(data) ~= 'userdata', typeof(data)
+end
+
+function Verifier.scanValidity(tbl, passed, path)
+	if type(tbl) ~= 'table' then
+		return Verifier.scanValidity({input = tbl}, {}, {})
+	end
+	passed, path = passed or {}, path or {'input'}
+	passed[tbl] = true
+	local tblType
+	do
+		local key, value = next(tbl)
+		if type(key) == 'number' then
+			tblType = 'Array'
+		else
+			tblType = 'Dictionary'
+		end
+	end
+	local last = 0
+	for key, value in next, tbl do
+		path[#path + 1] = tostring(key)
+		if type(key) == 'number' then
+			if tblType == 'Dictionary' then
+				return false, path, 'Mixed Array/Dictionary'
+			elseif key%1 ~= 0 then  -- if not an integer
+				return false, path, 'Non-integer index'
+			elseif key == math.huge or key == -math.huge then
+				return false, path, '(-)Infinity index'
+			end
+		elseif type(key) ~= 'string' then
+			return false, path, 'Non-string key', typeof(key)
+		elseif tblType == 'Array' then
+			return false, path, 'Mixed Array/Dictionary'
+		end
+		if tblType == 'Array' then
+			if last ~= key - 1 then
+				return false, path, 'Array with non-sequential indexes'
+			end
+			last = key
+		end
+		local isTypeValid, valueType = Verifier.typeValid(value)
+		if not isTypeValid then
+			return false, path, 'Invalid type', valueType
+		end
+		if type(value) == 'table' then
+			if passed[value] then
+				return false, path, 'Cyclic'
+			end
+			local isValid, keyPath, reason, extra = Verifier.scanValidity(value, passed, path)
+			if not isValid then
+				return isValid, keyPath, reason, extra
+			end
+		end
+		path[#path] = nil
+	end
+	passed[tbl] = nil
+	return true
+end
+
+function Verifier.getStringPath(path)
+	return table.concat(path, '.')
+end
+
+function Verifier.warnIfInvalid(input)
+	local isValid, keyPath, reason, extra = Verifier.scanValidity(input)
+	if not isValid then
+		if extra then
+			warn('Invalid at '..Verifier.getStringPath(keyPath)..' because: '..reason..' ('..tostring(extra)..')')
+		else
+			warn('Invalid at '..Verifier.getStringPath(keyPath)..' because: '..reason)
+		end
+	end
+	
+	return isValid
+end
 
 --DataStore object
 local DataStore = {}
@@ -80,7 +160,7 @@ end
 
 --Public functions
 function DataStore:Get(defaultValue, dontAttemptGet)
-	if not self.haveValue and dontAttemptGet then
+	if dontAttemptGet then
 		return self.value
 	end
 	
@@ -96,6 +176,12 @@ function DataStore:Get(defaultValue, dontAttemptGet)
 	
 	if typeof(value) == "table" and self.value ~= nil then
 		value = table.deep(value)
+	end
+	
+	if self.value ~= nil then
+		for _,modifier in pairs(self.beforeInitialGet) do
+			value = modifier(value, self)
+		end
 	end
 	
 	self.value = value
@@ -126,6 +212,10 @@ function DataStore:OnUpdate(callback)
 	table.insert(self.callbacks, callback)
 end
 
+function DataStore:BeforeInitialGet(modifier)
+	table.insert(self.beforeInitialGet, modifier)
+end
+
 function DataStore:BeforeSave(modifier)
 	table.insert(self.beforeSave, modifier)
 end
@@ -144,6 +234,8 @@ function DataStore:Save()
 		for _,beforeSave in pairs(self.beforeSave) do
 			save = beforeSave(save, self)
 		end
+		
+		if not Verifier.warnIfInvalid(save) then return error("Invalid data while saving") end
 		
 		local key = os.time()
 		self.dataStore:SetAsync(key, save)
@@ -190,6 +282,7 @@ local function DataStore2(dataStoreName, player)
 	dataStore.player = player
 	dataStore.callbacks = {}
 	dataStore.beforeSave = {}
+	dataStore.beforeInitialGet = {}
 	dataStore.bindToClose = {}
 	
 	setmetatable(dataStore, DataStoreMetatable)
