@@ -41,7 +41,7 @@ local DataStoreService = game:GetService("DataStoreService")
 local table = require(game:GetService("ReplicatedStorage").Boilerplate.table)
 local RegularSave = false
 local RegularSaveNum = 300
-local SaveInStudio = false
+local SaveInStudio = game.ServerStorage.StudioSave.Value
 local Debug = false
 
 local Verifier = {}
@@ -159,6 +159,24 @@ function DataStore:_Update()
 end
 
 --Public functions
+
+--[[**
+	<description>
+	Gets the result from the data store. Will yield the first time it is called.
+	</description>
+	
+	<parameter name = "defaultValue">
+	The default result if there is no result in the data store.
+	</parameter>
+	
+	<parameter name = "dontAttemptGet">
+	If there is no cached result, just return nil.
+	</parameter>
+	
+	<returns>
+	The value in the data store if there is no cached result. The cached result otherwise.
+	</returns>
+**--]]
 function DataStore:Get(defaultValue, dontAttemptGet)
 	if dontAttemptGet then
 		return self.value
@@ -189,6 +207,15 @@ function DataStore:Get(defaultValue, dontAttemptGet)
 	return value
 end
 
+--[[**
+	<description>
+	Sets the cached result to the value provided
+	</description>
+	
+	<parameter name = "value">
+	The value
+	</parameter>
+**--]]
 function DataStore:Set(value)
 	if typeof(value) == "table" then
 		self.value = table.deep(value)
@@ -199,27 +226,81 @@ function DataStore:Set(value)
 	self:_Update()
 end
 
+--[[**
+	<description>
+	Calls the function provided and sets the cached result.
+	</description>
+	
+	<parameter name = "updateFunc">
+	The function
+	</parameter>
+**--]]
 function DataStore:Update(updateFunc)
 	self.value = updateFunc(self.value)
 	self:_Update()
 end
 
+--[[**
+	<description>
+	Increment the cached result by value.
+	</description>
+	
+	<parameter name = "value">
+	The value to increment by.
+	</parameter>
+	
+	<parameter name = "defaultValue">
+	If there is no cached result, set it to this before incrementing.
+	</parameter>
+**--]]
 function DataStore:Increment(value, defaultValue)
 	self:Set(self:Get(defaultValue) + value)
 end
 
+--[[**
+	<description>
+	Takes a function to be called whenever the cached result updates.
+	</description>
+	
+	<parameter name = "callback">
+	The function to call.
+	</parameter>
+**--]]
 function DataStore:OnUpdate(callback)
 	table.insert(self.callbacks, callback)
 end
 
+--[[**
+	<description>
+	Takes a function to be called when :Get() is first called and there is a value in the data store. This function must return a value to set to. Used for deserializing.
+	</description>
+	
+	<parameter name = "modifier">
+	The modifier function.
+	</parameter>
+**--]]
 function DataStore:BeforeInitialGet(modifier)
 	table.insert(self.beforeInitialGet, modifier)
 end
 
+--[[**
+	<description>
+	Takes a function to be called before :Save(). This function must return a value that will be saved in the data store. Used for serializing.
+	</description>
+	
+	<parameter name = "modifier">
+	The modifier function.
+	</parameter>
+**--]]
 function DataStore:BeforeSave(modifier)
 	table.insert(self.beforeSave, modifier)
 end
 
+--[[**
+	<description>
+	Saves the data to the data store. Called when a player leaves.
+	</description>
+**--]]
 function DataStore:Save()
 	if game:GetService("RunService"):IsStudio() and not SaveInStudio then
 		warn(("Data store %s attempted to save in studio while SaveInStudio is false."):format(self.name))
@@ -245,14 +326,49 @@ function DataStore:Save()
 	end
 end
 
+--[[**
+	<description>
+	Add a function to be called before the game closes. Fired with the player and value of the data store.
+	</description>
+	
+	<parameter name = "callback">
+	The callback function.
+	</parameter>
+**--]]
 function DataStore:BindToClose(callback)
 	table.insert(self.bindToClose, callback)
 end
 
+--[[**
+	<description>
+	Gets the value of the cached result indexed by key. Does not attempt to get the current value in the data store.
+	</description>
+	
+	<parameter name = "key">
+	The key you're indexing by.
+	</parameter>
+	
+	<returns>
+	The value indexed.
+	</returns>
+**--]]
 function DataStore:GetKeyValue(key)
 	return (self.value or {})[key]
 end
 
+--[[**
+	<description>
+	Sets the value of the result in the database with the key and the new value. Attempts to get the value from the data store. Does not call functions fired on update.
+	</description>
+	
+	<parameter name = "key">
+	The key to set.
+	</parameter>
+	
+	<parameter name = "newValue">
+	The value to set.
+	</parameter>
+**--]]
 function DataStore:SetKeyValue(key, newValue)
 	if not self.value then
 		self.value = self:Get({})
