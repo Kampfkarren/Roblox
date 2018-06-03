@@ -316,7 +316,7 @@ function DataStore:Save()
 			save = beforeSave(save, self)
 		end
 		
-		if not Verifier.warnIfInvalid(save) then return error("Invalid data while saving") end
+		if not Verifier.warnIfInvalid(save) then return warn("Invalid data while saving") end
 		
 		local key = os.time()
 		self.dataStore:SetAsync(key, save)
