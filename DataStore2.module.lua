@@ -313,7 +313,14 @@ function DataStore:Save()
 		local save = self.value
 		
 		for _,beforeSave in pairs(self.beforeSave) do
-			save = beforeSave(save, self)
+			local success, newSave = pcall(beforeSave, save, self)
+			
+			if success then
+				save = newSave
+			else
+				warn("Error on BeforeSave: "..newSave)
+				return
+			end
 		end
 		
 		if not Verifier.warnIfInvalid(save) then return warn("Invalid data while saving") end
