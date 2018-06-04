@@ -41,7 +41,8 @@ local DataStoreService = game:GetService("DataStoreService")
 local table = require(game:GetService("ReplicatedStorage").Boilerplate.table)
 local RegularSave = false
 local RegularSaveNum = 300
-local SaveInStudio = game.ServerStorage.StudioSave.Value
+local SaveInStudioObject = game:GetService("ServerStorage"):FindFirstChild("SaveOnStudio")
+local SaveInStudio = SaveInStudioObject and SaveInStudioObject.Value
 local Debug = false
 
 local Verifier = {}
@@ -304,6 +305,9 @@ end
 function DataStore:Save()
 	if game:GetService("RunService"):IsStudio() and not SaveInStudio then
 		warn(("Data store %s attempted to save in studio while SaveInStudio is false."):format(self.name))
+		if not SaveInStudioObject then
+			warn("You can set the value of this by creating a BoolValue named SaveInStudio in ServerStorage.")
+		end
 		return
 	end
 	
