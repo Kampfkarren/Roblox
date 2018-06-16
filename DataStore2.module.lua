@@ -39,7 +39,7 @@
 --Required components
 local Players = game:GetService("Players")
 local DataStoreService = game:GetService("DataStoreService")
-local table = require(game:GetService("ReplicatedStorage").Boilerplate.table)
+local table = require(script.table) --If you're using this from GitHub, this is the table in the boilerplate folder.
 local RegularSave = false
 local RegularSaveNum = 300
 local SaveInStudioObject = game:GetService("ServerStorage"):FindFirstChild("SaveOnStudio")
