@@ -42,7 +42,7 @@ local DataStoreService = game:GetService("DataStoreService")
 local table = require(script.table) --If you're using this from GitHub, this is the table in the boilerplate folder.
 local RegularSave = false
 local RegularSaveNum = 300
-local SaveInStudioObject = game:GetService("ServerStorage"):FindFirstChild("SaveOnStudio")
+local SaveInStudioObject = game:GetService("ServerStorage"):FindFirstChild("SaveInStudio")
 local SaveInStudio = SaveInStudioObject and SaveInStudioObject.Value
 local Debug = false
 
