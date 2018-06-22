@@ -300,6 +300,19 @@ end
 
 --[[**
 	<description>
+	Takes a function to be called after :Save().
+	</description>
+	
+	<parameter name = "callback">
+	The callback function.
+	</parameter>
+**--]]
+function DataStore:AfterSave(callback)
+	table.insert(self.afterSave, callback)
+end
+
+--[[**
+	<description>
 	Saves the data to the data store. Called when a player leaves.
 	</description>
 **--]]
@@ -333,6 +346,14 @@ function DataStore:Save()
 		local key = os.time()
 		self.dataStore:SetAsync(key, save)
 		self.orderedDataStore:SetAsync(key, key)
+		
+		for _,afterSave in pairs(self.afterSave) do
+			local success, err = pcall(afterSave, save, self)
+			
+			if not success then
+				warn("Error on AfterSave: "..err)
+			end
+		end
 		
 		print("saved "..self.name)
 	end
@@ -411,6 +432,7 @@ local function DataStore2(dataStoreName, player)
 	dataStore.callbacks = {}
 	dataStore.beforeSave = {}
 	dataStore.beforeInitialGet = {}
+	dataStore.afterSave = {}
 	dataStore.bindToClose = {}
 	
 	setmetatable(dataStore, DataStoreMetatable)
