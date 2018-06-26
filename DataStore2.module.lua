@@ -194,7 +194,7 @@ function DataStore:Get(defaultValue, dontAttemptGet)
 		value = self.value
 	end
 	
-	if typeof(value) == "table" and self.value ~= nil then
+	if typeof(value) == "table" then
 		value = table.deep(value)
 	end
 	
