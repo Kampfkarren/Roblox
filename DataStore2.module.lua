@@ -184,7 +184,19 @@ function DataStore:Get(defaultValue, dontAttemptGet)
 		return self.value
 	end
 	
-	while not self.haveValue and not pcall(self._GetRaw, self) do end
+	local backupCount = 0
+	while not self.haveValue and not pcall(self._GetRaw, self) do
+		if self.backupRetries then
+			backupCount = backupCount + 1
+			
+			if backupCount >= self.backupRetries then
+				self.backup = true
+				self.haveValue = true
+				self.value = self.backupValue
+				break
+			end
+		end
+	end
 	
 	local value
 	
@@ -313,6 +325,38 @@ end
 
 --[[**
 	<description>
+	Adds a backup to the data store if :Get() fails a specified amount of times.
+	Will return the value provided (if the value is nil, then the default value of :Get() will be returned)
+	and mark the data store as a backup store, and attempts to :Save() will not truly save.
+	</description>
+	
+	<parameter name = "retries">
+	Number of retries before the backup will be used.
+	</parameter>
+	
+	<parameter name = "value">
+	The value to return to :Get() in the case of a failure.
+	You can keep this blank and the default value you provided with :Get() will be used instead.
+	</parameter>
+**--]]
+function DataStore:SetBackup(retries, value)
+	self.backupRetries = retries
+	self.backupValue = value
+end
+
+--[[**
+	<description>
+	Unmark the data store as a backup data store and tell :Get() and reset values to nil.
+	</description>
+**--]]
+function DataStore:ClearBackup()
+	self.backup = nil
+	self.haveValue = false
+	self.value = nil
+end
+
+--[[**
+	<description>
 	Saves the data to the data store. Called when a player leaves.
 	</description>
 **--]]
@@ -326,6 +370,11 @@ function DataStore:Save()
 	end
 	
 	--TODO: check last saved value if its the same
+	
+	if self.backup then
+		warn("This data store is a backup store, and thus will not be saved.")
+		return
+	end
 	
 	if self.value ~= nil then
 		local save = self.value
