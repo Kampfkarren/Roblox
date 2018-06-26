@@ -356,6 +356,15 @@ function DataStore:ClearBackup()
 end
 
 --[[**
+	<returns>
+	Whether or not the data store is a backup data store and thus won't save during :Save() or call :AfterSave().
+	</returns>
+**--]]
+function DataStore:IsBackup()
+	return self.backup ~= nil --some people haven't learned if x then yet, and will do if x == false then.
+end
+
+--[[**
 	<description>
 	Saves the data to the data store. Called when a player leaves.
 	</description>
