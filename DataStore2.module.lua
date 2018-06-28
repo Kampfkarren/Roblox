@@ -158,6 +158,7 @@ function DataStore:_Update()
 	end
 	
 	self.haveValue = true
+	self.valueUpdated = true
 end
 
 --Public functions
@@ -370,6 +371,11 @@ end
 	</description>
 **--]]
 function DataStore:Save()
+	if not self.valueUpdated then
+		warn(("Data store %s was not saved as it was not updated."):format(self.name))
+		return
+	end
+	
 	if game:GetService("RunService"):IsStudio() and not SaveInStudio then
 		warn(("Data store %s attempted to save in studio while SaveInStudio is false."):format(self.name))
 		if not SaveInStudioObject then
@@ -377,8 +383,6 @@ function DataStore:Save()
 		end
 		return
 	end
-	
-	--TODO: check last saved value if its the same
 	
 	if self.backup then
 		warn("This data store is a backup store, and thus will not be saved.")
