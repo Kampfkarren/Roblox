@@ -186,15 +186,24 @@ function DataStore:Get(defaultValue, dontAttemptGet)
 	end
 	
 	local backupCount = 0
-	while not self.haveValue and not pcall(self._GetRaw, self) do
-		if self.backupRetries then
-			backupCount = backupCount + 1
-			
-			if backupCount >= self.backupRetries then
-				self.backup = true
-				self.haveValue = true
-				self.value = self.backupValue
-				break
+	
+	if not self.haveValue then
+		while not self.haveValue and not pcall(self._GetRaw, self) do
+			if self.backupRetries then
+				backupCount = backupCount + 1
+				
+				if backupCount >= self.backupRetries then
+					self.backup = true
+					self.haveValue = true
+					self.value = self.backupValue
+					break
+				end
+			end
+		end
+		
+		if self.value ~= nil then
+			for _,modifier in pairs(self.beforeInitialGet) do
+				self.value = modifier(self.value, self)
 			end
 		end
 	end
@@ -209,12 +218,6 @@ function DataStore:Get(defaultValue, dontAttemptGet)
 	
 	if typeof(value) == "table" then
 		value = table.deep(value)
-	end
-	
-	if self.value ~= nil then
-		for _,modifier in pairs(self.beforeInitialGet) do
-			value = modifier(value, self)
-		end
 	end
 	
 	self.value = value
