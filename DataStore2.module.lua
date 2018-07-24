@@ -227,6 +227,40 @@ end
 
 --[[**
 	<description>
+	The same as :Get only it'll check to make sure all keys in the default data provided
+	exist. If not, will pass in the default value only for that key.
+	This is recommended for tables in case you want to add new entries to the table.
+	Note this is not required for tables, it only provides an extra functionality.
+	</description>
+	
+	<parameter name = "defaultValue">
+	A table that will have its keys compared to that of the actual data received.
+	</parameter>
+	
+	<returns>
+	The value in the data store will all keys from the default value provided.
+	</returns>
+**--]]
+function DataStore:GetTable(default, ...)
+	assert(default ~= nil, "You must provide a default value with :GetTable.")
+	
+	local result = self:Get(default, ...)
+	
+	assert(typeof(result) == "table", ":GetTable was used when the value in the data store isn't a table.")
+	
+	for defaultKey,defaultValue in pairs(default) do
+		if not result[defaultKey] then
+			result[defaultKey] = defaultValue
+		end
+	end
+	
+	self:Set(result)
+	
+	return result
+end
+
+--[[**
+	<description>
 	Sets the cached result to the value provided
 	</description>
 	
