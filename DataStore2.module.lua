@@ -556,11 +556,9 @@ local function DataStore2(dataStoreName, player)
 			event:Fire()
 			fired = true
 			
-			if game:GetService("ServerStorage"):FindFirstChild("DataStore2_MemoryLeakPatch") then
-				delay(40, function() --Give a long delay for people who haven't figured out the cache :^(
-					DataStoreCache[playerLeaving] = nil
-				end)
-			end
+			delay(40, function() --Give a long delay for people who haven't figured out the cache :^(
+				DataStoreCache[playerLeaving] = nil
+			end)
 		end
 	end)
 	
