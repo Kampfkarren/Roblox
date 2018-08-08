@@ -530,13 +530,6 @@ do
 	function CombinedDataStore:OnUpdate(callback)
 		self.combinedStore:OnUpdate(function(value)
 			if value[self.combinedName] == nil then
-				warn("ERROR")
-				print(typeof(value) .. "/" .. tostring(value))
-				print("---")
-				if typeof(value) == "table" then
-					table.foreach(value, print)
-				end
-				print("---")
 				return
 			end
 			
