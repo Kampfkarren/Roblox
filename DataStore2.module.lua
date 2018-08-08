@@ -509,6 +509,42 @@ function DataStore:SetKeyValue(key, newValue)
 	self.value[key] = newValue
 end
 
+local CombinedDataStore = {}
+
+do
+	function CombinedDataStore:Get(defaultValue, ...)
+		local tableResult = self.combinedStore:GetTable({
+			[self.combinedName] = defaultValue
+		}, ...)
+		
+		return (tableResult or {})[self.combinedName]
+	end
+	
+	function CombinedDataStore:Set(value)
+		local tableResult = self.combinedStore:GetTable({})
+		tableResult[self.combinedName] = value
+		self.combinedStore:Set(tableResult)
+		self:_Update()
+	end
+	
+	function CombinedDataStore:OnUpdate(callback)
+		self.combinedStore:OnUpdate(function(value)
+			if value[self.combinedName] == nil then
+				warn("ERROR")
+				print(typeof(value) .. "/" .. tostring(value))
+				print("---")
+				if typeof(value) == "table" then
+					table.foreach(value, print)
+				end
+				print("---")
+				return
+			end
+			
+			callback(value[self.combinedName], self)
+		end)
+	end
+end
+
 local DataStoreMetatable = {}
 
 DataStoreMetatable.__index = DataStore
@@ -516,9 +552,51 @@ DataStoreMetatable.__index = DataStore
 --Library
 local DataStoreCache = {}
 
-local function DataStore2(dataStoreName, player)
+local DataStore2 = {}
+local combinedDataStoreInfo = {}
+
+--[[**
+	<description>
+	Run this once to combine all keys provided into one "main key".
+	Internally, this means that data will be stored in a table with the key mainKey.
+	This is used to get around the 2-DataStore2 reliability caveat.
+	</description>
+	
+	<parameter name = "mainKey">
+	The key that will be used to house the table.
+	</parameter>
+	
+	<parameter name = "...">
+	All the keys to combine under one table.
+	</parameter>
+**--]]
+function DataStore2.Combine(mainKey, ...)
+	for _,name in pairs({...}) do
+		combinedDataStoreInfo[name] = mainKey
+	end
+end
+
+function DataStore2:__call(dataStoreName, player)
 	if DataStoreCache[player] and DataStoreCache[player][dataStoreName] then
 		return DataStoreCache[player][dataStoreName]
+	elseif combinedDataStoreInfo[dataStoreName] then
+		local dataStore = DataStore2(combinedDataStoreInfo[dataStoreName], player)
+		
+		local combinedStore = setmetatable({
+			combinedName = dataStoreName,
+			combinedStore = dataStore
+		}, {
+			__index = function(self, key)
+				return CombinedDataStore[key] or dataStore[key]
+			end
+		})
+		
+		if not DataStoreCache[player] then
+			DataStoreCache[player] = {}
+		end
+		
+		DataStoreCache[player][dataStoreName] = combinedStore
+		return combinedStore
 	end
 	
 	local dataStore = {}
@@ -577,4 +655,4 @@ local function DataStore2(dataStoreName, player)
 	return dataStore
 end
 
-return DataStore2
+return setmetatable(DataStore2, DataStore2)
