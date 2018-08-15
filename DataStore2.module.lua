@@ -249,7 +249,7 @@ function DataStore:GetTable(default, ...)
 	assert(typeof(result) == "table", ":GetTable was used when the value in the data store isn't a table.")
 	
 	for defaultKey,defaultValue in pairs(default) do
-		if not result[defaultKey] then
+		if result[defaultKey] == nil then
 			result[defaultKey] = defaultValue
 		end
 	end
