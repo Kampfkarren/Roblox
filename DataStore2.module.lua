@@ -245,16 +245,20 @@ function DataStore:GetTable(default, ...)
 	assert(default ~= nil, "You must provide a default value with :GetTable.")
 	
 	local result = self:Get(default, ...)
+	local changed = false
 	
 	assert(typeof(result) == "table", ":GetTable was used when the value in the data store isn't a table.")
 	
 	for defaultKey,defaultValue in pairs(default) do
 		if result[defaultKey] == nil then
 			result[defaultKey] = defaultValue
+			changed = true
 		end
 	end
 	
-	self:Set(result)
+	if changed then
+		self:Set(result)
+	end
 	
 	return result
 end
@@ -509,6 +513,48 @@ function DataStore:SetKeyValue(key, newValue)
 	self.value[key] = newValue
 end
 
+local CombinedDataStore = {}
+
+do
+	function CombinedDataStore:Get(defaultValue, ...)
+		local tableResult = self.combinedStore:GetTable({
+			[self.combinedName] = defaultValue
+		}, ...)
+		
+		return (tableResult or {})[self.combinedName]
+	end
+	
+	function CombinedDataStore:Set(value)
+		local tableResult = self.combinedStore:GetTable({})
+		tableResult[self.combinedName] = value
+		self.combinedStore:Set(tableResult)
+		self:_Update()
+	end
+	
+	local function beforeInitGetOrSave(name)
+		CombinedDataStore[name] = function(self, callback)
+			self.combinedStore[name](self, function(value)
+				local new = callback(value[self.combinedName], self)
+				value[self.combinedName] = new
+				return value
+			end)
+		end
+	end
+	
+	beforeInitGetOrSave("BeforeInitialGet")
+	beforeInitGetOrSave("BeforeSave")
+	
+	function CombinedDataStore:OnUpdate(callback)
+		self.combinedStore:OnUpdate(function(value)
+			if value[self.combinedName] == nil then
+				return
+			end
+			
+			callback(value[self.combinedName], self)
+		end)
+	end
+end
+
 local DataStoreMetatable = {}
 
 DataStoreMetatable.__index = DataStore
@@ -516,9 +562,51 @@ DataStoreMetatable.__index = DataStore
 --Library
 local DataStoreCache = {}
 
-local function DataStore2(dataStoreName, player)
+local DataStore2 = {}
+local combinedDataStoreInfo = {}
+
+--[[**
+	<description>
+	Run this once to combine all keys provided into one "main key".
+	Internally, this means that data will be stored in a table with the key mainKey.
+	This is used to get around the 2-DataStore2 reliability caveat.
+	</description>
+	
+	<parameter name = "mainKey">
+	The key that will be used to house the table.
+	</parameter>
+	
+	<parameter name = "...">
+	All the keys to combine under one table.
+	</parameter>
+**--]]
+function DataStore2.Combine(mainKey, ...)
+	for _,name in pairs({...}) do
+		combinedDataStoreInfo[name] = mainKey
+	end
+end
+
+function DataStore2:__call(dataStoreName, player)
 	if DataStoreCache[player] and DataStoreCache[player][dataStoreName] then
 		return DataStoreCache[player][dataStoreName]
+	elseif combinedDataStoreInfo[dataStoreName] then
+		local dataStore = DataStore2(combinedDataStoreInfo[dataStoreName], player)
+		
+		local combinedStore = setmetatable({
+			combinedName = dataStoreName,
+			combinedStore = dataStore
+		}, {
+			__index = function(self, key)
+				return CombinedDataStore[key] or dataStore[key]
+			end
+		})
+		
+		if not DataStoreCache[player] then
+			DataStoreCache[player] = {}
+		end
+		
+		DataStoreCache[player][dataStoreName] = combinedStore
+		return combinedStore
 	end
 	
 	local dataStore = {}
@@ -577,4 +665,4 @@ local function DataStore2(dataStoreName, player)
 	return dataStore
 end
 
-return DataStore2
+return setmetatable(DataStore2, DataStore2)
