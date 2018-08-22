@@ -531,6 +531,19 @@ do
 		self:_Update()
 	end
 	
+	local function beforeInitGetOrSave(name)
+		CombinedDataStore[name] = function(self, callback)
+			self.combinedStore[name](self, function(value)
+				local new = callback(value[self.combinedName], self)
+				value[self.combinedName] = new
+				return value
+			end)
+		end
+	end
+	
+	beforeInitGetOrSave("BeforeInitialGet")
+	beforeInitGetOrSave("BeforeSave")
+	
 	function CombinedDataStore:OnUpdate(callback)
 		self.combinedStore:OnUpdate(function(value)
 			if value[self.combinedName] == nil then
