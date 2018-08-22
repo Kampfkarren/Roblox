@@ -245,16 +245,20 @@ function DataStore:GetTable(default, ...)
 	assert(default ~= nil, "You must provide a default value with :GetTable.")
 	
 	local result = self:Get(default, ...)
+	local changed = false
 	
 	assert(typeof(result) == "table", ":GetTable was used when the value in the data store isn't a table.")
 	
 	for defaultKey,defaultValue in pairs(default) do
-		if not result[defaultKey] then
+		if result[defaultKey] == nil then
 			result[defaultKey] = defaultValue
+			changed = true
 		end
 	end
 	
-	self:Set(result)
+	if changed then
+		self:Set(result)
+	end
 	
 	return result
 end
