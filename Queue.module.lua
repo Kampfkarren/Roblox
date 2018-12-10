@@ -1,3 +1,4 @@
+--queue, by me (boyned)
 local QueueTemplate = {}
 
 function QueueTemplate:Enqueue(value)
@@ -16,19 +17,19 @@ function QueueTemplate:Back()
 	return self.queue[1]
 end
 
+function QueueTemplate:Length()
+	return #self.queue
+end
+
 local QueueMetatable = {}
 QueueMetatable.__index = QueueTemplate
 
 local Queue = {}
 
-Queue.new = function(tabl)
-	local queue = tabl or {}
-	
-	queue.queue = {}
-	
-	setmetatable(queue, QueueMetatable)
-	
-	return queue
+Queue.new = function(list)
+	return setmetatable({
+		queue = list or {}
+	}, QueueMetatable)
 end
 
 return Queue
