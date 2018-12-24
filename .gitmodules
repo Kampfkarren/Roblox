@@ -1,0 +1,9 @@
+[submodule "Tests/lemur"]
+	path = Tests/lemur
+	url = https://github.com/LPGhatguy/lemur
+[submodule "Tests/testez"]
+	path = Tests/testez
+	url = https://github.com/Roblox/testez
+[submodule "Tests/MockDataStoreService"]
+	path = Tests/MockDataStoreService
+	url = https://github.com/buildthomas/MockDataStoreService
