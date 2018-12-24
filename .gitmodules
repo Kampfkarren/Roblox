@@ -7,3 +7,6 @@
 [submodule "Tests/MockDataStoreService"]
 	path = Tests/MockDataStoreService
 	url = https://github.com/buildthomas/MockDataStoreService
+[submodule "Tests/uuid"]
+	path = Tests/uuid
+	url = https://github.com/Tieske/uuid

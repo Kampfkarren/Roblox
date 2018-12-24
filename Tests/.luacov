@@ -1,4 +1,6 @@
 exclude = {
 	"lemur",
+	"MockDataStoreService",
 	"testez",
+	"uuid",
 }

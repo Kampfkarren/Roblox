@@ -46,28 +46,61 @@ tableModule.Parent = Modules.DataStore2
 
 local MockDataStoreService = habitat:loadFromFs("MockDataStoreService/lib")
 MockDataStoreService.Name = "DataStoreService"
-getmetatable(MockDataStoreService).instance.properties.ClassName = "DataStoreService"
-MockDataStoreService.Parent = habitat.game
 
 local MockDataStoreConstants = habitat:require(MockDataStoreService.MockDataStoreService.MockDataStoreConstants)
 MockDataStoreConstants.BUDGETING_ENABLED = false
+-- MockDataStoreConstants.LOGGING_ENABLED = true
+MockDataStoreConstants.YIELD_TIME_MAX = 0
 
 local gamePrototype = getmetatable(habitat.game).class.prototype
 local oldGetService = gamePrototype.GetService
+
+local bindToClose = lemur.Instance.new("BindableEvent", habitat.game)
+bindToClose.Name = "BIND_TO_CLOSE"
+
+function gamePrototype:BindToClose(callback)
+	bindToClose.Event:Connect(callback)
+end
+
 function gamePrototype:GetService(serviceName)
 	if serviceName == "DataStoreService" then
 		local mockDataStore = habitat:require(MockDataStoreService)
 		return mockDataStore
 	end
+
 	local service = self:FindFirstChildOfClass(serviceName)
 	assert(service, ("Can't find service %s"):format(serviceName))
 	return service
 end
 
--- Redirect DataStoreRequestType:GetEnumItems()
-getmetatable(habitat.environment.Enum.DataStoreRequestType).__index = function()
-	return function() return {} end
+local playerRemoving = lemur.Instance.new("BindableEvent", habitat.game)
+playerRemoving.Name = "PLAYER_REMOVING"
+
+local playersPrototype = getmetatable(habitat.game:GetService("Players")).class.prototype
+playersPrototype.PlayerRemoving = {
+	connect = function(callback)
+		playerRemoving.Event:Connect(callback)
+	end
+}
+
+local runServicePrototype = getmetatable(habitat.game:GetService("RunService")).class.prototype
+function runServicePrototype:IsServer()
+	return true
 end
+
+-- Redirect DataStoreRequestType:GetEnumItems()
+getmetatable(habitat.environment.Enum.DataStoreRequestType).__index = function(_, index)
+	if index == "GetEnumItems" then
+		return function() return {} end
+	else
+		return 0
+	end
+end
+
+habitat.environment.UUID = require("uuid.src.uuid")
+habitat.environment.utf8 = {
+	len = string.len,
+}
 
 local runner = require("luacov.runner")
 runner.init(".luacov")
