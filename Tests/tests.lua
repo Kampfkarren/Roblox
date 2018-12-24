@@ -110,7 +110,11 @@ runner.resume()
 
 local TestEZ = habitat:require(Root.TestEZ)
 
-local results = TestEZ.TestBootstrap:run({Root.Tests, util}, TestEZ.Reporters.TextReports)
+local results = TestEZ.TestBootstrap:run(
+	{Root.Tests, util},
+	TestEZ.Reporters.TextReports, {
+		noXpcallByDefault = true,
+	})
 
 -- luacov: disable
 if results.failureCount > 0 then
