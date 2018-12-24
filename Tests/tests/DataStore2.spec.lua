@@ -96,6 +96,5 @@ return function()
 		store:ClearBackup()
 		local combinedValue = store:Get({})
 		combinedValue[key] = value
-		-- save("DATA", combinedValue)
 	end))
 end
