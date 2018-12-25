@@ -50,6 +50,7 @@ MockDataStoreService.Name = "DataStoreService"
 local MockDataStoreConstants = habitat:require(MockDataStoreService.MockDataStoreService.MockDataStoreConstants)
 MockDataStoreConstants.BUDGETING_ENABLED = false
 -- MockDataStoreConstants.LOGGING_ENABLED = true
+MockDataStoreConstants.WRITE_COOLDOWN = 0
 MockDataStoreConstants.YIELD_TIME_MAX = 0
 
 local gamePrototype = getmetatable(habitat.game).class.prototype
@@ -112,9 +113,8 @@ local TestEZ = habitat:require(Root.TestEZ)
 
 local results = TestEZ.TestBootstrap:run(
 	{Root.Tests, util},
-	TestEZ.Reporters.TextReports, {
-		noXpcallByDefault = true,
-	})
+	TestEZ.Reporters.TextReports
+)
 
 -- luacov: disable
 if results.failureCount > 0 then

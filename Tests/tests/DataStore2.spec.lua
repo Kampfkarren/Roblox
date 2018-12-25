@@ -3,6 +3,22 @@ return function()
 
 	local DataStore2 = require(script:FindFirstAncestor("Root").Modules.DataStore2)
 
+	local function equals(t1, t2)
+		for key, value in pairs(t1) do
+			if t2[key] ~= value then
+				return false
+			end
+		end
+
+		for key, value in pairs(t2) do
+			if t1[key] ~= value then
+				return false
+			end
+		end
+
+		return true
+	end
+
 	local fakePlayer = {}
 	fakePlayer.UserId = 156
 
@@ -73,6 +89,27 @@ return function()
 				dataStore:Save()
 				expect(called).to.equal(true)
 			end)
+
+			it("should give default values for GetTable", function()
+				local dataStore = DataStore2(UUID(), fakePlayer)
+				expect(equals(
+					dataStore:GetTable({ foo = 1 }),
+					{ foo = 1 }
+				))
+				dataStore:Set({ foo = 2 })
+				dataStore:Save()
+				dataStore:ClearBackup()
+
+				expect(equals(
+					dataStore:GetTable({ foo = 1 }),
+					{ foo = 2 }
+				))
+
+				expect(equals(
+					dataStore:GetTable({ foo = 1, bar = 2 }),
+					{ foo = 2, bar = 2 }
+				))
+			end)
 		end
 	end
 
@@ -96,5 +133,6 @@ return function()
 		store:ClearBackup()
 		local combinedValue = store:Get({})
 		combinedValue[key] = value
+		store:Save()
 	end))
 end
