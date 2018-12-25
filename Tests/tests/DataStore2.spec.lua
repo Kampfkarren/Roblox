@@ -120,6 +120,59 @@ return function()
 					{ foo = 2, bar = 2 }
 				))
 			end)
+
+			it("should not conflict multiple data stores", function()
+				local key1, key2 = UUID(), UUID()
+
+				local dataStore1 = DataStore2(key1, fakePlayer)
+				local dataStore2 = DataStore2(key2, fakePlayer)
+
+				dataStore1:Set(10)
+				dataStore2:Set(20)
+
+				dataStore1:Save()
+				dataStore2:Save()
+
+				DataStore2.ClearCache()
+
+				local dataStore1 = DataStore2(key1, fakePlayer)
+				local dataStore2 = DataStore2(key2, fakePlayer)
+
+				expect(dataStore1:Get()).to.equal(10)
+				expect(dataStore2:Get()).to.equal(20)
+			end)
+
+			-- Combined data stores had a problem with this
+			it("should not conflict multiple BeforeSave", function()
+				local key1, key2 = UUID(), UUID()
+
+				local dataStore1 = DataStore2(key1, fakePlayer)
+				dataStore1:BeforeSave(function(value)
+					return value + 1
+				end)
+
+				-- lol dataStore2
+				local dataStore2 = DataStore2(key2, fakePlayer)
+				dataStore2:BeforeSave(function(value)
+					return value - 1
+				end)
+
+				dataStore1:Set(10)
+				dataStore2:Set(20)
+				expect(dataStore1:Get()).to.equal(10)
+				expect(dataStore2:Get()).to.equal(20)
+
+				dataStore1:Save()
+				dataStore2:Save()
+
+				DataStore2.ClearCache()
+
+				local dataStore1 = DataStore2(key1, fakePlayer)
+				local dataStore2 = DataStore2(key2, fakePlayer)
+
+				expect(dataStore1:Get()).to.equal(11)
+				expect(dataStore2:Get()).to.equal(19)
+			end)
 		end
 	end
 

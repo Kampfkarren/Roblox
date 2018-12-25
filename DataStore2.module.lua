@@ -602,13 +602,16 @@ function DataStore2:__call(dataStoreName, player)
 		local dataStore = DataStore2(combinedDataStoreInfo[dataStoreName], player)
 
 		dataStore:BeforeSave(function(combinedData)
-			for key, value in pairs(combinedData) do
+			for key in pairs(combinedData) do
 				if combinedDataStoreInfo[key] then
 					local combinedStore = DataStore2(key, player)
-					if combinedStore.combinedBeforeSave then
-						value = combinedStore.combinedBeforeSave(clone(value))
+					local value = combinedStore:Get()
+					if value ~= nil then
+						if combinedStore.combinedBeforeSave then
+							value = combinedStore.combinedBeforeSave(clone(value))
+						end
+						combinedData[key] = value
 					end
-					combinedData[key] = value
 				end
 			end
 
