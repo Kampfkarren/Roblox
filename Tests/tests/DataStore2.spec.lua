@@ -47,10 +47,13 @@ return function()
 			end)
 
 			it("should save", function()
-				local dataStore = DataStore2(UUID(), fakePlayer)
+				local key = UUID()
+				local dataStore = DataStore2(key, fakePlayer)
 				dataStore:Set(1)
 				dataStore:Save()
-				dataStore:ClearBackup()
+
+				DataStore2.ClearCache()
+				local dataStore = DataStore2(key, fakePlayer)
 				expect(dataStore:Get()).to.equal(1)
 			end)
 
@@ -71,11 +74,14 @@ return function()
 			end)
 
 			it("should serialize", function()
-				local dataStore = DataStore2(UUID(), fakePlayer)
+				local key = UUID()
+				local dataStore = DataStore2(key, fakePlayer)
 				dataStore:BeforeSave(string.upper)
 				dataStore:Set("abc")
 				dataStore:Save()
-				dataStore:ClearBackup()
+
+				DataStore2.ClearCache()
+				local dataStore = DataStore2(key, fakePlayer)
 				expect(dataStore:Get()).to.equal("ABC")
 			end)
 
@@ -91,14 +97,18 @@ return function()
 			end)
 
 			it("should give default values for GetTable", function()
-				local dataStore = DataStore2(UUID(), fakePlayer)
+				local key = UUID()
+
+				local dataStore = DataStore2(key, fakePlayer)
 				expect(equals(
 					dataStore:GetTable({ foo = 1 }),
 					{ foo = 1 }
 				))
 				dataStore:Set({ foo = 2 })
 				dataStore:Save()
-				dataStore:ClearBackup()
+
+				DataStore2.ClearCache()
+				local dataStore = DataStore2(key, fakePlayer)
 
 				expect(equals(
 					dataStore:GetTable({ foo = 1 }),
@@ -125,10 +135,15 @@ return function()
 
 	describe("normal data stores", test(DataStore2, save))
 
-	describe("combined data stores", test(function(key, player)
-		DataStore2.Combine("DATA", key)
-		return DataStore2(key, player)
-	end, function(key, value)
+	local fakeDataStore = setmetatable({}, {
+		__call = function(_, key, player)
+			DataStore2.Combine("DATA", key)
+			return DataStore2(key, player)
+		end,
+		__index = DataStore2,
+	})
+
+	describe("combined data stores", test(fakeDataStore, function(key, value)
 		local store = DataStore2("DATA", fakePlayer)
 		store:ClearBackup()
 		local combinedValue = store:Get({})

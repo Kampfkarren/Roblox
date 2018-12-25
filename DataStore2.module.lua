@@ -125,6 +125,14 @@ function Verifier.warnIfInvalid(input)
 	return isValid
 end
 
+local function clone(value)
+	if typeof(value) == "table" then
+		return table.deep(value)
+	else
+		return value
+	end
+end
+
 --DataStore object
 local DataStore = {}
 
@@ -216,9 +224,7 @@ function DataStore:Get(defaultValue, dontAttemptGet)
 		value = self.value
 	end
 
-	if typeof(value) == "table" then
-		value = table.deep(value)
-	end
+	value = clone(value)
 
 	self.value = value
 
@@ -273,12 +279,7 @@ end
 	</parameter>
 **--]]
 function DataStore:Set(value)
-	if typeof(value) == "table" then
-		self.value = table.deep(value)
-	else
-		self.value = value
-	end
-
+	self.value = clone(value)
 	self:_Update()
 end
 
@@ -431,7 +432,7 @@ function DataStore:Save()
 	end
 
 	if self.value ~= nil then
-		local save = self.value
+		local save = clone(self.value)
 
 		for _,beforeSave in pairs(self.beforeSave) do
 			local success, newSave = pcall(beforeSave, save, self)
@@ -590,6 +591,10 @@ function DataStore2.Combine(mainKey, ...)
 	end
 end
 
+function DataStore2.ClearCache()
+	DataStoreCache = {}
+end
+
 function DataStore2:__call(dataStoreName, player)
 	if DataStoreCache[player] and DataStoreCache[player][dataStoreName] then
 		return DataStoreCache[player][dataStoreName]
@@ -601,8 +606,9 @@ function DataStore2:__call(dataStoreName, player)
 				if combinedDataStoreInfo[key] then
 					local combinedStore = DataStore2(key, player)
 					if combinedStore.combinedBeforeSave then
-						combinedData[key] = combinedStore.combinedBeforeSave(value)
+						value = combinedStore.combinedBeforeSave(clone(value))
 					end
+					combinedData[key] = value
 				end
 			end
 
