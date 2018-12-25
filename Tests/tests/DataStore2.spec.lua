@@ -67,10 +67,13 @@ return function()
 
 			it("should deserialize with a non-nil value", function()
 				local key = UUID()
-				save(key, "abc")
+				save(key, 1)
 				local dataStore = DataStore2(key, fakePlayer)
-				dataStore:BeforeInitialGet(string.upper)
-				expect(dataStore:Get()).to.equal("ABC")
+				dataStore:BeforeInitialGet(function(value)
+					return value + 1
+				end)
+				expect(dataStore:Get()).to.equal(2)
+				expect(dataStore:Get()).to.equal(2)
 			end)
 
 			it("should serialize", function()
@@ -173,6 +176,32 @@ return function()
 				expect(dataStore1:Get()).to.equal(11)
 				expect(dataStore2:Get()).to.equal(19)
 			end)
+
+			it("should work in conjuction with both BeforeInitialGet and BeforeSave", function()
+				local key = UUID()
+				save(key, 10)
+				local dataStore = DataStore2(key, fakePlayer)
+
+				dataStore:BeforeInitialGet(function(value)
+					return value - 1
+				end)
+
+				dataStore:BeforeSave(function(value)
+					return value * 2
+				end)
+
+				expect(dataStore:Get()).to.equal(9)
+				dataStore:Set(11)
+				dataStore:Save() -- Saves as 22
+				dataStore:Save() -- Still 22
+
+				DataStore2.ClearCache()
+				local dataStore = DataStore2(key, fakePlayer)
+				dataStore:BeforeInitialGet(function(value)
+					return value - 1
+				end)
+				expect(dataStore:Get()).to.equal(21)
+			end)
 		end
 	end
 
@@ -203,4 +232,32 @@ return function()
 		combinedValue[key] = value
 		store:Save()
 	end))
+
+	describe("combined data stores specific functionality", function()
+		it("should call BeforeSave on every data store when calling :Save() on one", function()
+			local key1, key2 = UUID(), UUID()
+			DataStore2.Combine(UUID(), key1, key2)
+			local called1, called2 = 0, 0
+
+			local store1 = DataStore2(key1, fakePlayer)
+			store1:BeforeSave(function(value)
+				called1 = called1 + 1
+				return value
+			end)
+			store1:Set(1)
+
+			local store2 = DataStore2(key2, fakePlayer)
+			store2:BeforeSave(function(value)
+				called2 = called2 + 1
+				return value
+			end)
+			store2:Set(1)
+
+			expect(called1).to.equal(0)
+			expect(called2).to.equal(0)
+			store1:Save()
+			expect(called1).to.equal(1)
+			expect(called2).to.equal(1)
+		end)
+	end)
 end
