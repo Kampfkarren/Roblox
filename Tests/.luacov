@@ -3,4 +3,5 @@ exclude = {
 	"MockDataStoreService",
 	"testez",
 	"uuid",
+	"/usr",
 }
