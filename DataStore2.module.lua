@@ -525,18 +525,20 @@ do
 		self.combinedBeforeSave = modifier
 	end
 
-	function CombinedDataStore:Get(defaultValue, ...)
-		local tableResult = self.combinedStore:Get({})
+	function CombinedDataStore:Get(defaultValue, dontAttemptGet)
+		local tableResult = self.combinedStore:Get({}, dontAttemptGet)
 		local tableValue = tableResult[self.combinedName]
 
-		if tableValue == nil then
-			return defaultValue
-		else
-			if self.combinedBeforeInitialGet then
-				tableValue = self.combinedBeforeInitialGet(tableValue)
-			end
+		if not dontAttemptGet then
+			if tableValue == nil then
+				return defaultValue
+			else
+				if self.combinedBeforeInitialGet then
+					tableValue = self.combinedBeforeInitialGet(tableValue)
+				end
 
-			return tableValue
+				return tableValue
+			end
 		end
 
 		return (tableResult or {})[self.combinedName]
@@ -605,7 +607,7 @@ function DataStore2:__call(dataStoreName, player)
 			for key in pairs(combinedData) do
 				if combinedDataStoreInfo[key] then
 					local combinedStore = DataStore2(key, player)
-					local value = combinedStore:Get()
+					local value = combinedStore:Get(nil, true)
 					if value ~= nil then
 						if combinedStore.combinedBeforeSave then
 							value = combinedStore.combinedBeforeSave(clone(value))
