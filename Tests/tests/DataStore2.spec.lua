@@ -204,14 +204,27 @@ return function()
 			end)
 
 			it("should call OnUpdate callbacks", function()
-				local dataStore = DataStore2(UUID(), fakePlayer)
-				local called = false
-				dataStore:OnUpdate(function()
-					called = true
+				local key1, key2 = UUID(), UUID()
+				local called1, called2 = false, false
+
+				local dataStore1 = DataStore2(key1, fakePlayer)
+				dataStore1:OnUpdate(function()
+					called1 = true
 				end)
-				expect(called).to.equal(false)
-				dataStore:Set(10)
-				expect(called).to.equal(true)
+
+				local dataStore2 = DataStore2(key2, fakePlayer)
+				dataStore2:OnUpdate(function()
+					called2 = true
+				end)
+
+				expect(called1).to.equal(false)
+				expect(called2).to.equal(false)
+				dataStore1:Set(10)
+				expect(called1).to.equal(true)
+				expect(called2).to.equal(false)
+				dataStore2:Set(20)
+				expect(called1).to.equal(true)
+				expect(called2).to.equal(true)
 			end)
 		end
 	end
