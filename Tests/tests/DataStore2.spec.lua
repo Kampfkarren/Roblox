@@ -219,6 +219,9 @@ return function()
 
 				expect(called1).to.equal(false)
 				expect(called2).to.equal(false)
+				dataStore1:Get(10) -- :Get should NOT trip OnUpdate
+				expect(called1).to.equal(false)
+				expect(called2).to.equal(false)
 				dataStore1:Set(10)
 				expect(called1).to.equal(true)
 				expect(called2).to.equal(false)

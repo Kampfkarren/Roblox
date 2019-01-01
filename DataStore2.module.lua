@@ -180,9 +180,11 @@ function DataStore:_GetRaw()
 	self.getting = false
 end
 
-function DataStore:_Update()
-	for _,callback in pairs(self.callbacks) do
-		callback(self.value, self)
+function DataStore:_Update(dontCallOnUpdate)
+	if not dontCallOnUpdate then
+		for _,callback in pairs(self.callbacks) do
+			callback(self.value, self)
+		end
 	end
 
 	self.haveValue = true
@@ -298,9 +300,9 @@ end
 	The value
 	</parameter>
 **--]]
-function DataStore:Set(value)
+function DataStore:Set(value, _dontCallOnUpdate)
 	self.value = clone(value)
-	self:_Update()
+	self:_Update(_dontCallOnUpdate)
 end
 
 --[[**
@@ -561,7 +563,7 @@ do
 		end
 
 		tableResult[self.combinedName] = clone(tableValue)
-		self.combinedStore:Set(tableResult)
+		self.combinedStore:Set(tableResult, true)
 		return tableValue
 	end
 
