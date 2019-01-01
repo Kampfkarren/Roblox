@@ -202,6 +202,17 @@ return function()
 				end)
 				expect(dataStore:Get()).to.equal(21)
 			end)
+
+			it("should call OnUpdate callbacks", function()
+				local dataStore = DataStore2(UUID(), fakePlayer)
+				local called = false
+				dataStore:OnUpdate(function()
+					called = true
+				end)
+				expect(called).to.equal(false)
+				dataStore:Set(10)
+				expect(called).to.equal(true)
+			end)
 		end
 	end
 
