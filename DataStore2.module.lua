@@ -44,7 +44,7 @@ local RegularSave = false
 local RegularSaveNum = 300
 local SaveInStudioObject = game:GetService("ServerStorage"):FindFirstChild("SaveInStudio")
 local SaveInStudio = SaveInStudioObject and SaveInStudioObject.Value
-local Debug = true
+local Debug = false
 
 local Verifier = {}
 
