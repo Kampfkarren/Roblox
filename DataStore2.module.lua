@@ -574,6 +574,10 @@ do
 		self:_Update()
 	end
 
+	function CombinedDataStore:Update(updateFunc)
+		self:Set(updateFunc(self:Get()));
+	end
+
 	function CombinedDataStore:OnUpdate(callback)
 		self.combinedStore:OnUpdate(function(value)
 			if value[self.combinedName] == nil then
