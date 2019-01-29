@@ -575,7 +575,7 @@ do
 	end
 
 	function CombinedDataStore:Update(updateFunc)
-		self:Set(updateFunc(self:Get()));
+		self:Set(updateFunc(self:Get()))
 	end
 
 	function CombinedDataStore:OnUpdate(callback)
