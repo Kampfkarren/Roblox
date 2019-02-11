@@ -164,6 +164,7 @@ function DataStore:_GetRaw()
 	if mostRecentKeyPage then
 		local recentKey = mostRecentKeyPage.value
 		self:Debug("most recent key", mostRecentKeyPage)
+		self.mostRecentKey = recentKey
 		self.value = self.dataStore:GetAsync(recentKey)
 	else
 		self:Debug("no recent key")
@@ -469,7 +470,7 @@ function DataStore:Save()
 
 		if not Verifier.warnIfInvalid(save) then return warn("Invalid data while saving") end
 
-		local key = os.time()
+		local key = (self.mostRecentKey or 0) + 1
 		self.dataStore:SetAsync(key, save)
 		self.orderedDataStore:SetAsync(key, key)
 
