@@ -473,6 +473,7 @@ function DataStore:Save()
 		local key = (self.mostRecentKey or 0) + 1
 		self.dataStore:SetAsync(key, save)
 		self.orderedDataStore:SetAsync(key, key)
+		self.mostRecentKey = key
 
 		for _,afterSave in pairs(self.afterSave) do
 			local success, err = pcall(afterSave, save, self)
