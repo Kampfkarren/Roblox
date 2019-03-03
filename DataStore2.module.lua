@@ -712,12 +712,6 @@ function DataStore2:__call(dataStoreName, player)
 
 	DataStoreCache[player][dataStoreName] = dataStore
 
-	spawn(function()
-		while RegularSave and wait(RegularSaveNum) do
-			dataStore:Save()
-		end
-	end)
-
 	return dataStore
 end
 
