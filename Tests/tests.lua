@@ -79,7 +79,7 @@ playerRemoving.Name = "PLAYER_REMOVING"
 
 local playersPrototype = getmetatable(habitat.game:GetService("Players")).class.prototype
 playersPrototype.PlayerRemoving = {
-	connect = function(callback)
+	connect = function(_, callback)
 		playerRemoving.Event:Connect(callback)
 	end
 }

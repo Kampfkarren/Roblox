@@ -3,6 +3,9 @@ return function()
 
 	local DataStore2 = require(script:FindFirstAncestor("Root").Modules.DataStore2)
 
+	local BIND_TO_CLOSE = game.BIND_TO_CLOSE
+	local PLAYER_REMOVING = game.PLAYER_REMOVING
+
 	local function equals(t1, t2)
 		for key, value in pairs(t1) do
 			if t2[key] ~= value then
@@ -51,6 +54,17 @@ return function()
 				local dataStore = DataStore2(key, fakePlayer)
 				dataStore:Set(1)
 				dataStore:Save()
+
+				DataStore2.ClearCache()
+				local dataStore = DataStore2(key, fakePlayer)
+				expect(dataStore:Get()).to.equal(1)
+			end)
+
+			it("should save when the player leaves", function()
+				local key = UUID()
+				local dataStore = DataStore2(key, fakePlayer)
+				dataStore:Set(1)
+				PLAYER_REMOVING:Fire(fakePlayer)
 
 				DataStore2.ClearCache()
 				local dataStore = DataStore2(key, fakePlayer)
