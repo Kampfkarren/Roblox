@@ -219,29 +219,29 @@ return function()
 
 			it("should call OnUpdate callbacks", function()
 				local key1, key2 = UUID(), UUID()
-				local called1, called2 = false, false
+				local timesCalled1, timesCalled2 = 0, 0
 
 				local dataStore1 = DataStore2(key1, fakePlayer)
 				dataStore1:OnUpdate(function()
-					called1 = true
+					timesCalled1 = timesCalled1 + 1
 				end)
 
 				local dataStore2 = DataStore2(key2, fakePlayer)
 				dataStore2:OnUpdate(function()
-					called2 = true
+					timesCalled2 = timesCalled2 + 1
 				end)
 
-				expect(called1).to.equal(false)
-				expect(called2).to.equal(false)
+				expect(timesCalled1).to.equal(0)
+				expect(timesCalled2).to.equal(0)
 				dataStore1:Get(10) -- :Get should NOT trip OnUpdate
-				expect(called1).to.equal(false)
-				expect(called2).to.equal(false)
+				expect(timesCalled1).to.equal(0)
+				expect(timesCalled2).to.equal(0)
 				dataStore1:Set(10)
-				expect(called1).to.equal(true)
-				expect(called2).to.equal(false)
+				expect(timesCalled1).to.equal(1)
+				expect(timesCalled2).to.equal(0)
 				dataStore2:Set(20)
-				expect(called1).to.equal(true)
-				expect(called2).to.equal(true)
+				expect(timesCalled1).to.equal(1)
+				expect(timesCalled2).to.equal(1)
 			end)
 		end
 	end

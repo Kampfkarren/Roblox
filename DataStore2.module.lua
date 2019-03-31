@@ -569,25 +569,34 @@ do
 		return tableValue
 	end
 
-	function CombinedDataStore:Set(value)
+	function CombinedDataStore:Set(value, ...)
 		local tableResult = self.combinedStore:GetTable({})
 		tableResult[self.combinedName] = value
-		self.combinedStore:Set(tableResult)
+		self.combinedStore:Set(tableResult, ...)
 		self:_Update()
 	end
 
 	function CombinedDataStore:Update(updateFunc)
 		self:Set(updateFunc(self:Get()))
+		self:_Update()
 	end
 
 	function CombinedDataStore:OnUpdate(callback)
-		self.combinedStore:OnUpdate(function(value)
-			if value[self.combinedName] == nil then
-				return
-			end
+		if not self.onUpdateCallbacks then
+			self.onUpdateCallbacks = { callback }
+		else
+			self.onUpdateCallbacks[#self.onUpdateCallbacks + 1] = callback
+		end
+	end
 
-			callback(value[self.combinedName], self)
-		end)
+	function CombinedDataStore:_Update(dontCallOnUpdate)
+		if not dontCallOnUpdate then
+			for _, callback in pairs(self.onUpdateCallbacks or {}) do
+				callback(self:Get(), self)
+			end
+		end
+
+		self.combinedStore:_Update(true)
 	end
 end
 
