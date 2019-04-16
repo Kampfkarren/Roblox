@@ -263,6 +263,17 @@ return function()
 				dataStore:Get(true)
 				expect(called).to.equal(false)
 			end)
+
+			it("should not call OnUpdate when using :GetTable() with a default value", function()
+				local dataStore = DataStore2(UUID(), fakePlayer)
+				local called = false
+				dataStore:OnUpdate(function()
+					called = true
+				end)
+				dataStore:Get({})
+				dataStore:GetTable({ Doge = "funny", })
+				expect(called).to.equal(false)
+			end)
 		end
 	end
 

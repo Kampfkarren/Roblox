@@ -286,7 +286,7 @@ function DataStore:GetTable(default, ...)
 	end
 
 	if changed then
-		self:Set(result)
+		self:Set(result, true)
 	end
 
 	return result
@@ -569,11 +569,11 @@ do
 		return tableValue
 	end
 
-	function CombinedDataStore:Set(value, ...)
+	function CombinedDataStore:Set(value, dontCallOnUpdate)
 		local tableResult = self.combinedStore:GetTable({})
 		tableResult[self.combinedName] = value
-		self.combinedStore:Set(tableResult, ...)
-		self:_Update()
+		self.combinedStore:Set(tableResult, dontCallOnUpdate)
+		self:_Update(dontCallOnUpdate)
 	end
 
 	function CombinedDataStore:Update(updateFunc)
