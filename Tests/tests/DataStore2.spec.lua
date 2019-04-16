@@ -264,14 +264,25 @@ return function()
 				expect(called).to.equal(false)
 			end)
 
-			it("should not call OnUpdate when using :GetTable() with a default value", function()
+			it("should call OnUpdate when using :GetTable() with a default value that didn't have the keys before", function()
 				local dataStore = DataStore2(UUID(), fakePlayer)
 				local called = false
 				dataStore:OnUpdate(function()
 					called = true
 				end)
 				dataStore:Get({})
-				dataStore:GetTable({ Doge = "funny", })
+				dataStore:GetTable({ Doge = "funny" })
+				expect(called).to.equal(true)
+			end)
+
+			it("should not call OnUpdate when using :GetTable() with a default value that had all keys before", function()
+				local dataStore = DataStore2(UUID(), fakePlayer)
+				local called = false
+				dataStore:OnUpdate(function()
+					called = true
+				end)
+				dataStore:Get({ Doge = "funny" })
+				expect(dataStore:GetTable({ Doge = "hysterical" }).Doge).to.equal("funny")
 				expect(called).to.equal(false)
 			end)
 		end

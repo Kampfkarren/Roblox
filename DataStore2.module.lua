@@ -278,7 +278,7 @@ function DataStore:GetTable(default, ...)
 
 	assert(typeof(result) == "table", ":GetTable was used when the value in the data store isn't a table.")
 
-	for defaultKey,defaultValue in pairs(default) do
+	for defaultKey, defaultValue in pairs(default) do
 		if result[defaultKey] == nil then
 			result[defaultKey] = defaultValue
 			changed = true
@@ -286,7 +286,7 @@ function DataStore:GetTable(default, ...)
 	end
 
 	if changed then
-		self:Set(result, true)
+		self:Set(result)
 	end
 
 	return result
