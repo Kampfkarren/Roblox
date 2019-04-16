@@ -558,12 +558,12 @@ do
 				tableValue = defaultValue
 			else
 				if self.combinedBeforeInitialGet and not self.combinedInitialGot then
-					self.combinedInitialGot = true
 					tableValue = self.combinedBeforeInitialGet(tableValue)
 				end
 			end
 		end
 
+		self.combinedInitialGot = true
 		tableResult[self.combinedName] = clone(tableValue)
 		self.combinedStore:Set(tableResult, true)
 		return tableValue

@@ -79,6 +79,16 @@ return function()
 				expect(dataStore:Get()).to.equal(nil)
 			end)
 
+			it("should not deserialize if value was nil and then set later", function()
+				local dataStore = DataStore2(UUID(), fakePlayer)
+				dataStore:BeforeInitialGet(function()
+					return "deserialized"
+				end)
+				expect(dataStore:Get()).to.equal(nil)
+				dataStore:Set("doge")
+				expect(dataStore:Get()).to.equal("doge")
+			end)
+
 			it("should deserialize with a non-nil value", function()
 				local key = UUID()
 				save(key, 1)
