@@ -253,6 +253,16 @@ return function()
 				expect(timesCalled1).to.equal(1)
 				expect(timesCalled2).to.equal(1)
 			end)
+
+			it("should not call OnUpdate when using :Get() with a default value", function()
+				local dataStore = DataStore2(UUID(), fakePlayer)
+				local called = false
+				dataStore:OnUpdate(function()
+					called = true
+				end)
+				dataStore:Get(true)
+				expect(called).to.equal(false)
+			end)
 		end
 	end
 
