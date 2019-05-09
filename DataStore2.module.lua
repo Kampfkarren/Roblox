@@ -109,7 +109,7 @@ function Verifier.scanValidity(tbl, passed, path)
 end
 
 function Verifier.getStringPath(path)
-	return table.concat(path, '.')
+	return table.concat(path, ".")
 end
 
 function Verifier.warnIfInvalid(input)
@@ -636,6 +636,7 @@ function DataStore2.ClearCache()
 end
 
 function DataStore2:__call(dataStoreName, player)
+	assert(typeof(dataStoreName) == "string" and typeof(player) == "Instance", "DataStore2() API call expected {string dataStoreName, Instance player}, got {Instance player, string dataStoreName}")
 	if DataStoreCache[player] and DataStoreCache[player][dataStoreName] then
 		return DataStoreCache[player][dataStoreName]
 	elseif combinedDataStoreInfo[dataStoreName] then
