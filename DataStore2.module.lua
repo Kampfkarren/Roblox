@@ -475,7 +475,7 @@ function DataStore:Save()
 		self.orderedDataStore:SetAsync(key, key)
 		self.mostRecentKey = key
 
-		for _,afterSave in pairs(self.afterSave) do
+		for _, afterSave in pairs(self.afterSave) do
 			local success, err = pcall(afterSave, save, self)
 
 			if not success then
@@ -626,7 +626,7 @@ local combinedDataStoreInfo = {}
 	</parameter>
 **--]]
 function DataStore2.Combine(mainKey, ...)
-	for _,name in pairs({...}) do
+	for _, name in pairs({...}) do
 		combinedDataStoreInfo[name] = mainKey
 	end
 end
@@ -698,7 +698,7 @@ function DataStore2:__call(dataStoreName, player)
 
 		local value = dataStore:Get(nil, true)
 
-		for _,bindToClose in pairs(dataStore.bindToClose) do
+		for _, bindToClose in pairs(dataStore.bindToClose) do
 			bindToClose(player, value)
 		end
 	end)
