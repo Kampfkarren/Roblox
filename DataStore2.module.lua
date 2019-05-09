@@ -636,7 +636,7 @@ function DataStore2.ClearCache()
 end
 
 function DataStore2:__call(dataStoreName, player)
-	assert(typeof(dataStoreName) == "string" and typeof(player) == "Instance", "DataStore2() API call expected {string dataStoreName, Instance player}, got {Instance player, string dataStoreName}")
+	assert(typeof(dataStoreName) == "string" and typeof(player) == "Instance", ("DataStore2() API call expected {string dataStoreName, Instance player}, got {%s, %s}"):format(typeof(dataStoreName), typeof(player)))
 	if DataStoreCache[player] and DataStoreCache[player][dataStoreName] then
 		return DataStoreCache[player][dataStoreName]
 	elseif combinedDataStoreInfo[dataStoreName] then
