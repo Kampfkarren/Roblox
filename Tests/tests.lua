@@ -17,6 +17,12 @@ _G.Random = {
 local lemur = require("lemur")
 local habitat = lemur.Habitat.new()
 
+local typeof = habitat.environment.typeof
+habitat.environment.typeof = function(instance)
+	local meta = getmetatable(instance)
+	return (meta and meta["TYPEOF_HACK"]) or typeof(instance)
+end
+
 local Root = lemur.Instance.new("Folder")
 Root.Name = "Root"
 

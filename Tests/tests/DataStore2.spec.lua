@@ -24,6 +24,9 @@ return function()
 
 	local fakePlayer = {}
 	fakePlayer.UserId = 156
+	setmetatable(fakePlayer, {
+		TYPEOF_HACK = "Instance",
+	})
 
 	local function test(DataStore2, save)
 		return function()
