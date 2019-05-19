@@ -288,6 +288,21 @@ return function()
 				expect(dataStore:GetTable({ Doge = "hysterical" }).Doge).to.equal("funny")
 				expect(called).to.equal(false)
 			end)
+
+			it("should use backups when data stores fail", function()
+				local key = UUID()
+				save(key, "backup test")
+
+				game.SET_ERROR_RATE:Fire(1)
+				local errorInfo = {pcall(function()
+					local dataStore = DataStore2(key, fakePlayer)
+					dataStore:SetBackup(5)
+					expect(dataStore:Get("oh no")).to.equal("oh no")
+				end)}
+				game.SET_ERROR_RATE:Fire(0)
+
+				assert(unpack(errorInfo))
+			end)
 		end
 	end
 
@@ -317,6 +332,7 @@ return function()
 		local combinedValue = store:Get({})
 		combinedValue[key] = value
 		store:Save()
+		DataStore2.ClearCache()
 	end))
 
 	describe("combined data stores specific functionality", function()

@@ -10,7 +10,9 @@ package.path = package.path .. ";?/init.lua"
 -- Monkey patches
 _G.Random = {
 	new = function()
-		return {}
+		return {
+			NextNumber = function() return 0 end,
+		}
 	end
 }
 
@@ -55,12 +57,19 @@ MockDataStoreService.Name = "DataStoreService"
 
 local MockDataStoreConstants = habitat:require(MockDataStoreService.MockDataStoreService.MockDataStoreConstants)
 MockDataStoreConstants.BUDGETING_ENABLED = false
--- MockDataStoreConstants.LOGGING_ENABLED = true
+MockDataStoreConstants.LOGGING_ENABLED = false
 MockDataStoreConstants.WRITE_COOLDOWN = 0
 MockDataStoreConstants.YIELD_TIME_MAX = 0
 
 local gamePrototype = getmetatable(habitat.game).class.prototype
 local oldGetService = gamePrototype.GetService
+
+local setErrorRate = lemur.Instance.new("BindableEvent", habitat.game)
+setErrorRate.Name = "SET_ERROR_RATE"
+
+setErrorRate.Event:Connect(function(rate)
+	MockDataStoreConstants.SIMULATE_ERROR_RATE = rate
+end)
 
 local bindToClose = lemur.Instance.new("BindableEvent", habitat.game)
 bindToClose.Name = "BIND_TO_CLOSE"

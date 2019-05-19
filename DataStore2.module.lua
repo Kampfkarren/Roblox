@@ -159,13 +159,27 @@ function DataStore:_GetRaw()
 
 	self.getting = true
 
-	local mostRecentKeyPage = self.orderedDataStore:GetSortedAsync(false, 1):GetCurrentPage()[1]
+	local success, mostRecentKeyPage = pcall(function()
+		return self.orderedDataStore:GetSortedAsync(false, 1):GetCurrentPage()[1]
+	end)
+
+	if not success then
+		self.getting = false
+		error(mostRecentKeyPage)
+	end
 
 	if mostRecentKeyPage then
 		local recentKey = mostRecentKeyPage.value
 		self:Debug("most recent key", mostRecentKeyPage)
 		self.mostRecentKey = recentKey
-		self.value = self.dataStore:GetAsync(recentKey)
+		local success, value = pcall(function()
+			return self.dataStore:GetAsync(recentKey)
+		end)
+		if not success then
+			self.getting = false
+			error(value)
+		end
+		self.value = value
 	else
 		self:Debug("no recent key")
 		self.value = nil
@@ -597,6 +611,10 @@ do
 		end
 
 		self.combinedStore:_Update(true)
+	end
+
+	function CombinedDataStore:SetBackup(retries)
+		self.combinedStore:SetBackup(retries)
 	end
 end
 
