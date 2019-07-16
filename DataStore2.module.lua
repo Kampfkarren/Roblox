@@ -722,9 +722,9 @@ function DataStore2:__call(dataStoreName, player)
 		end
 	end)
 
-	local playerLeavingEvent
-	playerLeavingEvent = player.AncestryChanged:Connect(function()
-		playerLeavingEvent:Disconnect()
+	local playerLeavingConnection
+	playerLeavingConnection = player.AncestryChanged:Connect(function()
+		playerLeavingConnection:Disconnect()
 		dataStore:Save()
 		event:Fire()
 		fired = true
