@@ -724,6 +724,7 @@ function DataStore2:__call(dataStoreName, player)
 
 	local playerLeavingConnection
 	playerLeavingConnection = player.AncestryChanged:Connect(function()
+		if player:IsDescendantOf(game) then return end
 		playerLeavingConnection:Disconnect()
 		dataStore:Save()
 		event:Fire()

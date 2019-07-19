@@ -25,6 +25,7 @@ return function()
 
 	local fakePlayer = {}
 	fakePlayer.AncestryChanged = playerRemovingEvent.Event
+	fakePlayer.IsDescendantOf = function() return false end
 	fakePlayer.UserId = 156
 	setmetatable(fakePlayer, {
 		TYPEOF_HACK = "Instance",
