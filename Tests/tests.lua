@@ -89,16 +89,6 @@ function gamePrototype:GetService(serviceName)
 	return service
 end
 
-local playerRemoving = lemur.Instance.new("BindableEvent", habitat.game)
-playerRemoving.Name = "PLAYER_REMOVING"
-
-local playersPrototype = getmetatable(habitat.game:GetService("Players")).class.prototype
-playersPrototype.PlayerRemoving = {
-	connect = function(_, callback)
-		playerRemoving.Event:Connect(callback)
-	end
-}
-
 local runServicePrototype = getmetatable(habitat.game:GetService("RunService")).class.prototype
 function runServicePrototype:IsServer()
 	return true
