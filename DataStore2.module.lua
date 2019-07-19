@@ -722,16 +722,16 @@ function DataStore2:__call(dataStoreName, player)
 		end
 	end)
 
-	Players.PlayerRemoving:connect(function(playerLeaving)
-		if playerLeaving == player then
-			dataStore:Save()
-			event:Fire()
-			fired = true
+	local playerLeavingConnection
+	playerLeavingConnection = player.AncestryChanged:Connect(function()
+		playerLeavingConnection:Disconnect()
+		dataStore:Save()
+		event:Fire()
+		fired = true
 
-			delay(40, function() --Give a long delay for people who haven't figured out the cache :^(
-				DataStoreCache[playerLeaving] = nil
-			end)
-		end
+		delay(40, function() --Give a long delay for people who haven't figured out the cache :^(
+			DataStoreCache[player] = nil
+		end)
 	end)
 
 	if not DataStoreCache[player] then
