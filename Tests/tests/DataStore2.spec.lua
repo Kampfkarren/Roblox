@@ -303,6 +303,29 @@ return function()
 
 				assert(unpack(errorInfo))
 			end)
+
+			it("should save when the player leaves", function()
+				local key = UUID()
+
+				local dataStore = DataStore2(key, fakePlayer)
+				dataStore:Set(10)
+				game.PLAYER_REMOVING:Fire(fakePlayer)
+				DataStore2.ClearCache()
+
+				local dataStore = DataStore2(key, fakePlayer)
+				expect(dataStore:Get()).to.equal(10)
+			end)
+
+			it("should call OnUpdate on increment", function()
+				local dataStore = DataStore2(UUID(), fakePlayer)
+				local called = false
+				dataStore:OnUpdate(function()
+					called = true
+				end)
+				dataStore:Get(0)
+				dataStore:Increment(1)
+				expect(called).to.equal(true)
+			end)
 		end
 	end
 
