@@ -1,3 +1,5 @@
+-- Written by Coercii
+
 local Verifier = {}
 
 function Verifier.typeValid(data)
