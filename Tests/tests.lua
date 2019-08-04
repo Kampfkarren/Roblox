@@ -38,6 +38,8 @@ local Modules = lemur.Instance.new("Folder")
 Modules.Name = "Modules"
 Modules.Parent = Root
 
+habitat:loadFromFs("../DataStore2").Parent = Modules
+
 for name in lfs.dir("..") do
 	local realName = name:match("(.+)%.module%.lua$")
 	if realName then
@@ -46,11 +48,6 @@ for name in lfs.dir("..") do
 		file.Parent = Modules
 	end
 end
-
--- Edge cases because I messed up the repo lol
-local tableModule = habitat:loadFromFs("../Boilerplate/table.module.lua")
-tableModule.Name = "table"
-tableModule.Parent = Modules.DataStore2
 
 local MockDataStoreService = habitat:loadFromFs("MockDataStoreService/lib")
 MockDataStoreService.Name = "DataStoreService"
