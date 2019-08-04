@@ -23,12 +23,14 @@ function OrderedBackups:Get()
 	end
 
 	if value then
+		local mostRecentKeyPage = value
+
 		local recentKey = mostRecentKeyPage.value
 		self.dataStore2:Debug("most recent key", mostRecentKeyPage)
 		self.mostRecentKey = recentKey
 
 		local success, value = pcall(function()
-			self.dataStore:GetAsync(recentKey)
+			return self.dataStore:GetAsync(recentKey)
 		end)
 
 		if not success then

@@ -75,8 +75,8 @@ function DataStore:_GetRaw()
 
 	local success, value = self.savingMethod:Get()
 
+	self.getting = false
 	if not success then
-		self.getting = false
 		error(value)
 	end
 
@@ -353,12 +353,12 @@ end
 **--]]
 function DataStore:Save()
 	if not self.valueUpdated then
-		warn(("Data store %s was not saved as it was not updated."):format(self.name))
+		warn(("Data store %s was not saved as it was not updated."):format(self.Name))
 		return
 	end
 
 	if RunService:IsStudio() and not SaveInStudio then
-		warn(("Data store %s attempted to save in studio while SaveInStudio is false."):format(self.name))
+		warn(("Data store %s attempted to save in studio while SaveInStudio is false."):format(self.Name))
 		if not SaveInStudioObject then
 			warn("You can set the value of this by creating a BoolValue named SaveInStudio in ServerStorage.")
 		end
@@ -401,7 +401,7 @@ function DataStore:Save()
 			end
 		end
 
-		print("saved "..self.name)
+		print("saved "..self.Name)
 	end
 end
 
