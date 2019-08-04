@@ -45,16 +45,20 @@ end
 function OrderedBackups:Set(value)
 	local key = (self.mostRecentKey or 0) + 1
 
-	if not pcall(function()
+	local success, problem = pcall(function()
 		self.dataStore:SetAsync(key, value)
-	end) then
-		return false
+	end)
+
+	if not success then
+		return false, problem
 	end
 
-	if not pcall(function()
+	local success, problem = pcall(function()
 		self.orderedDataStore:SetAsync(key, key)
-	end) then
-		return false
+	end)
+
+	if not success then
+		return false, problem
 	end
 
 	self.mostRecentKey = key

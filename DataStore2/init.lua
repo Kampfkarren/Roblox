@@ -52,7 +52,7 @@ local DataStore = {}
 
 --Internal functions
 function DataStore:Debug(...)
-	if self.debug then
+	if true then
 		print(...)
 	end
 end
@@ -75,8 +75,6 @@ function DataStore:_GetRaw()
 
 	local success, value = self.savingMethod:Get()
 
-	self.getting = false
-
 	if not success then
 		self.getting = false
 		error(value)
@@ -91,7 +89,6 @@ function DataStore:_GetRaw()
 
 	self.getQueue = {}
 	self.haveValue = true
-	self.getting = false
 end
 
 function DataStore:_Update(dontCallOnUpdate)
@@ -389,7 +386,12 @@ function DataStore:Save()
 
 		if not Verifier.warnIfInvalid(save) then return warn("Invalid data while saving") end
 
-		local success = self.savingMethod:Set(save)
+		local success, problem = self.savingMethod:Set(save)
+
+		if not success then
+			-- TODO: Something more robust than this
+			error("save error!", problem)
+		end
 
 		for _, afterSave in pairs(self.afterSave) do
 			local success, err = pcall(afterSave, save, self)
