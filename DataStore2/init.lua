@@ -52,7 +52,7 @@ local DataStore = {}
 
 --Internal functions
 function DataStore:Debug(...)
-	if true then
+	if self.debug then
 		print(...)
 	end
 end
