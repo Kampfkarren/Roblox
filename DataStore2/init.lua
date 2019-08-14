@@ -12,6 +12,7 @@
 	- BeforeInitialGet(modifier)
 	- BeforeSave(modifier)
 	- Save()
+	- SaveAsync()
 	- OnUpdate(callback)
 	- BindToClose(callback)
 
@@ -403,6 +404,67 @@ function DataStore:Save()
 
 		print("saved "..self.Name)
 	end
+end
+
+--[[**
+	<description>
+	Asynchronously saves the data to the data store.
+	</description>
+**--]]
+function DataStore:SaveAsync()
+	coroutine.wrap(function()
+		if not self.valueUpdated then
+			warn(("Data store %s was not saved as it was not updated."):format(self.Name))
+			return
+		end
+	
+		if RunService:IsStudio() and not SaveInStudio then
+			warn(("Data store %s attempted to save in studio while SaveInStudio is false."):format(self.Name))
+			if not SaveInStudioObject then
+				warn("You can set the value of this by creating a BoolValue named SaveInStudio in ServerStorage.")
+			end
+			return
+		end
+	
+		if self.backup then
+			warn("This data store is a backup store, and thus will not be saved.")
+			return
+		end
+	
+		if self.value ~= nil then
+			local save = clone(self.value)
+	
+			if self.beforeSave then
+				local success, newSave = pcall(self.beforeSave, save, self)
+	
+				if success then
+					save = newSave
+				else
+					warn("Error on BeforeSave: "..newSave)
+					return
+				end
+			end
+	
+			if not Verifier.warnIfInvalid(save) then return warn("Invalid data while saving") end
+	
+			local success, problem = self.savingMethod:Set(save)
+	
+			if not success then
+				-- TODO: Something more robust than this
+				error("save error!", problem)
+			end
+	
+			for _, afterSave in pairs(self.afterSave) do
+				local success, err = pcall(afterSave, save, self)
+	
+				if not success then
+					warn("Error on AfterSave: "..err)
+				end
+			end
+	
+			print("saved "..self.Name)
+		end
+	end)()
 end
 
 --[[**
