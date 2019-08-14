@@ -12,6 +12,7 @@
 	- BeforeInitialGet(modifier)
 	- BeforeSave(modifier)
 	- Save()
+	- SaveAsync()
 	- OnUpdate(callback)
 	- BindToClose(callback)
 
@@ -403,6 +404,15 @@ function DataStore:Save()
 
 		print("saved "..self.Name)
 	end
+end
+
+--[[**
+	<description>
+	Asynchronously saves the data to the data store.
+	</description>
+**--]]
+function DataStore:SaveAsync()
+	coroutine.wrap(DataStore.Save)(self)
 end
 
 --[[**
