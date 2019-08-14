@@ -77,7 +77,7 @@ function DataStore:_GetRaw()
 
 	self.getting = false
 	if not success then
-		error(value)
+		error(tostring(value))
 	end
 
 	self.value = value
@@ -390,7 +390,7 @@ function DataStore:Save()
 
 		if not success then
 			-- TODO: Something more robust than this
-			error("save error!", problem)
+			error("save error! " .. tostring(problem))
 		end
 
 		for _, afterSave in pairs(self.afterSave) do
