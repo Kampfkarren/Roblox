@@ -60,14 +60,12 @@ end
 
 function DataStore:_GetRaw()
 	if not self.getQueue then
-		self.getQueue = {}
+		self.getQueue = Instance.new("BindableEvent")
 	end
 
 	if self.getting then
 		self:Debug("A _GetRaw is already in motion, just wait until it's done")
-		local event = Instance.new("BindableEvent")
-		self.getQueue[#self.getQueue + 1] = event
-		event.Event:wait()
+		self.getQueue.Event:wait()
 		self:Debug("Aaand we're back")
 		return
 	end
@@ -83,12 +81,9 @@ function DataStore:_GetRaw()
 
 	self.value = value
 
-	for _, waiting in pairs(self.getQueue) do
-		self:Debug("resuming in queue", waiting)
-		waiting:Fire()
-	end
+	self:Debug("value received")
+	self.getQueue:Fire()
 
-	self.getQueue = {}
 	self.haveValue = true
 end
 

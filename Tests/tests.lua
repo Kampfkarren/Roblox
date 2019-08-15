@@ -42,7 +42,7 @@ habitat:loadFromFs("../DataStore2").Parent = Modules
 
 for name in lfs.dir("..") do
 	local realName = name:match("(.+)%.module%.lua$")
-	if realName then
+	if realName and realName ~= "DataStore2" then
 		local file = habitat:loadFromFs("../" .. name)
 		file.Name = realName
 		file.Parent = Modules
