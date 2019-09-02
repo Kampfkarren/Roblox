@@ -329,6 +329,12 @@ return function()
 				dataStore:Increment(1)
 				expect(called).to.equal(true)
 			end)
+
+			it("should not return an identical value for default values", function()
+				local dataStore = DataStore2(UUID(), fakePlayer)
+				local data = {}
+				expect(dataStore:Get(data)).to.never.equal(data)
+			end)
 		end
 	end
 

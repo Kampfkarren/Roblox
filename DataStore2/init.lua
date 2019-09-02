@@ -489,7 +489,7 @@ do
 		self.combinedInitialGot = true
 		tableResult[self.combinedName] = clone(tableValue)
 		self.combinedStore:Set(tableResult, true)
-		return tableValue
+		return clone(tableValue)
 	end
 
 	function CombinedDataStore:Set(value, dontCallOnUpdate)
