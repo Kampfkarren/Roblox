@@ -373,6 +373,9 @@ return function()
 				dataStore:Set(2)
 				dataStore:Save()
 				expect(timesCalled).to.equal(2)
+
+				dataStore:Save()
+				expect(timesCalled).to.equal(2)
 			end)
 		end
 	end

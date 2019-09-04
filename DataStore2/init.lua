@@ -509,6 +509,10 @@ do
 		self:_Update()
 	end
 
+	function CombinedDataStore:Save()
+		self.combinedStore:Save()
+	end
+
 	function CombinedDataStore:OnUpdate(callback)
 		if not self.onUpdateCallbacks then
 			self.onUpdateCallbacks = { callback }
@@ -525,7 +529,6 @@ do
 		end
 
 		self.combinedStore:_Update(true)
-		self.valueUpdated = true
 	end
 
 	function CombinedDataStore:SetBackup(retries)
