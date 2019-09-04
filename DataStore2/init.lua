@@ -620,6 +620,7 @@ function DataStore2:__call(dataStoreName, player)
 
 	game:BindToClose(function()
 		if not fired then
+			player.Parent = nil -- Forces AncestryChanged to fire and save the data
 			event.Event:wait()
 		end
 
