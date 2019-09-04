@@ -1,11 +1,20 @@
 --[[
 	berezaa's method of saving data (from the dev forum):
 
-	What I do and this might seem a little over-the-top but it's fine as long as you're not using datastores excessively elsewhere is have a datastore and an ordereddatastore for each player. When you perform a save, add a key (can be anything) with the value of os.time() to the ordereddatastore and save a key with the os.time() and the value of the player's data to the regular datastore. Then, when loading data, get the highest number from the ordered data store (most recent save) and load the data with that as a key.
+	What I do and this might seem a little over-the-top but it's fine as long as you're not using datastores
+	excessively elsewhere is have a datastore and an ordereddatastore for each player. When you perform a save,
+	add a key (can be anything) with the value of os.time() to the ordereddatastore and save a key with the os.time()
+	and the value of the player's data to the regular datastore. Then, when loading data, get the highest number from
+	the ordered data store (most recent save) and load the data with that as a key.
 
-	Ever since I implemented this, pretty much no one has ever lost data. There's no caches to worry about either because you're never overriding any keys. Plus, it has the added benefit of allowing you to restore lost data, since every save doubles as a backup which can be easily found with the ordereddatastore
+	Ever since I implemented this, pretty much no one has ever lost data. There's no caches to worry about either
+	because you're never overriding any keys. Plus, it has the added benefit of allowing you to restore lost data,
+	since every save doubles as a backup which can be easily found with the ordereddatastore
 
-	edit: while there's no official comment on this, many developers including myself have noticed really bad cache times and issues with using the same datastore keys to save data across multiple places in the same game. With this method, data is almost always instantly accessible immediately after a player teleports, making it useful for multi-place games.
+	edit: while there's no official comment on this, many developers including myself have noticed really bad cache
+	times and issues with using the same datastore keys to save data across multiple places in the same game. With
+	this method, data is almost always instantly accessible immediately after a player teleports, making it useful
+	for multi-place games.
 --]]
 
 local DataStoreService = game:GetService("DataStoreService")

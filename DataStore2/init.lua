@@ -27,9 +27,6 @@
 	coinStore:Get()
 --]]
 
---Required components
-local DataStoreService = game:GetService("DataStoreService")
-local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
@@ -264,7 +261,8 @@ end
 
 --[[**
 	<description>
-	Takes a function to be called when :Get() is first called and there is a value in the data store. This function must return a value to set to. Used for deserializing.
+	Takes a function to be called when :Get() is first called and there is a value in the data store.
+	This function must return a value to set to. Used for deserializing.
 	</description>
 
 	<parameter name = "modifier">
@@ -277,7 +275,8 @@ end
 
 --[[**
 	<description>
-	Takes a function to be called before :Save(). This function must return a value that will be saved in the data store. Used for serializing.
+	Takes a function to be called before :Save(). This function must return a value
+	that will be saved in the data store. Used for serializing.
 	</description>
 
 	<parameter name = "modifier">
@@ -447,7 +446,8 @@ end
 
 --[[**
 	<description>
-	Sets the value of the result in the database with the key and the new value. Attempts to get the value from the data store. Does not call functions fired on update.
+	Sets the value of the result in the database with the key and the new value.
+	Attempts to get the value from the data store. Does not call functions fired on update.
 	</description>
 
 	<parameter name = "key">
@@ -575,8 +575,16 @@ function DataStore2.SaveAll(player)
 	end
 end
 
-function DataStore2:__call(dataStoreName, player)
-	assert(typeof(dataStoreName) == "string" and typeof(player) == "Instance", ("DataStore2() API call expected {string dataStoreName, Instance player}, got {%s, %s}"):format(typeof(dataStoreName), typeof(player)))
+function DataStore2.__call(_, dataStoreName, player)
+	assert(
+		typeof(dataStoreName) == "string" and typeof(player) == "Instance",
+		("DataStore2() API call expected {string dataStoreName, Instance player}, got {%s, %s}")
+		:format(
+			typeof(dataStoreName),
+			typeof(player)
+		)
+	)
+
 	if DataStoreCache[player] and DataStoreCache[player][dataStoreName] then
 		return DataStoreCache[player][dataStoreName]
 	elseif combinedDataStoreInfo[dataStoreName] then
@@ -603,7 +611,7 @@ function DataStore2:__call(dataStoreName, player)
 			combinedName = dataStoreName,
 			combinedStore = dataStore
 		}, {
-			__index = function(self, key)
+			__index = function(_, key)
 				return CombinedDataStore[key] or dataStore[key]
 			end
 		})

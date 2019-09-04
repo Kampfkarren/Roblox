@@ -14,7 +14,7 @@ function Verifier.scanValidity(tbl, passed, path)
 	passed[tbl] = true
 	local tblType
 	do
-		local key, value = next(tbl)
+		local key = next(tbl)
 		if type(key) == "number" then
 			tblType = "Array"
 		else
