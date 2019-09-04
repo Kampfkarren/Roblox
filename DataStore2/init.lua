@@ -619,6 +619,7 @@ function DataStore2:__call(dataStoreName, player)
 	local event, fired = Instance.new("BindableEvent"), false
 
 	game:BindToClose(function()
+		player.Parent = nil
 		if not fired then
 			event.Event:wait()
 		end
