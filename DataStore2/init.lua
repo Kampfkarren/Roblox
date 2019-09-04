@@ -397,6 +397,8 @@ function DataStore:Save()
 			end
 		end
 
+		self.valueUpdated = false
+
 		print("saved "..self.Name)
 	end
 end

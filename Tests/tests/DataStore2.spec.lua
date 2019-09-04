@@ -336,7 +336,7 @@ return function()
 				expect(dataStore:Get(data)).to.never.equal(data)
 			end)
 
-			it("should save all data stores", function()
+			it("should save all data stores when using SaveAll", function()
 				local dataStore1 = DataStore2(UUID(), fakePlayer)
 				local dataStore2 = DataStore2(UUID(), fakePlayer)
 				local dataStore3 = DataStore2(UUID(), fakePlayer)
@@ -351,6 +351,21 @@ return function()
 				expect(dataStore1:Get()).to.equal(1)
 				expect(dataStore2:Get()).to.equal(2)
 				expect(dataStore3:Get()).to.equal(3)
+			end)
+
+			it("should not truly save after calling Save without updating", function()
+				local dataStore = DataStore2(UUID(), fakePlayer)
+				local timesCalled = 0
+
+				dataStore:AfterSave(function()
+					timesCalled = timesCalled + 1
+				end)
+
+				dataStore:Set(1)
+				dataStore:Save()
+				expect(timesCalled).to.equal(1)
+				dataStore:Save()
+				expect(timesCalled).to.equal(1)
 			end)
 		end
 	end
