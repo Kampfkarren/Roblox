@@ -27,6 +27,7 @@
 	coinStore:Get()
 --]]
 
+local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
@@ -574,7 +575,9 @@ end
 function DataStore2.SaveAll(player)
 	if DataStoreCache[player] then
 		for _, dataStore in pairs(DataStoreCache[player]) do
-			dataStore:Save()
+			if dataStore.combinedStore == nil then
+				dataStore:Save()
+			end
 		end
 	end
 end
@@ -645,7 +648,10 @@ function DataStore2.__call(_, dataStoreName, player)
 
 	game:BindToClose(function()
 		if not fired then
-			player.Parent = nil -- Forces AncestryChanged to fire and save the data
+			spawn(function()
+				player.Parent = nil -- Forces AncestryChanged to fire and save the data
+			end)
+
 			event.Event:wait()
 		end
 
