@@ -562,6 +562,14 @@ function DataStore2.ClearCache()
 	DataStoreCache = {}
 end
 
+function DataStore2.SaveAll(player)
+	if DataStoreCache[player] then
+		for _, dataStore in pairs(DataStoreCache[player]) do
+			dataStore:Save()
+		end
+	end
+end
+
 function DataStore2:__call(dataStoreName, player)
 	assert(typeof(dataStoreName) == "string" and typeof(player) == "Instance", ("DataStore2() API call expected {string dataStoreName, Instance player}, got {%s, %s}"):format(typeof(dataStoreName), typeof(player)))
 	if DataStoreCache[player] and DataStoreCache[player][dataStoreName] then

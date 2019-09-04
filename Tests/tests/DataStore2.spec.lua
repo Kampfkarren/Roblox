@@ -335,6 +335,23 @@ return function()
 				local data = {}
 				expect(dataStore:Get(data)).to.never.equal(data)
 			end)
+
+			it("should save all data stores", function()
+				local dataStore1 = DataStore2(UUID(), fakePlayer)
+				local dataStore2 = DataStore2(UUID(), fakePlayer)
+				local dataStore3 = DataStore2(UUID(), fakePlayer)
+
+				dataStore1:Set(1)
+				dataStore2:Set(2)
+				dataStore3:Set(3)
+
+				DataStore2.SaveAll(fakePlayer)
+				DataStore2.ClearCache()
+
+				expect(dataStore1:Get()).to.equal(1)
+				expect(dataStore2:Get()).to.equal(2)
+				expect(dataStore3:Get()).to.equal(3)
+			end)
 		end
 	end
 
