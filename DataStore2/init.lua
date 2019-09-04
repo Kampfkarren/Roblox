@@ -353,11 +353,6 @@ function DataStore:Save()
 		return
 	end
 
-	if not Verifier.warnIfInvalid(save) then
-		warn("Invalid data while saving")
-		return
-	end
-
 	if RunService:IsStudio() and not SaveInStudio then
 		warn(("Data store %s attempted to save in studio while SaveInStudio is false."):format(self.Name))
 		if not SaveInStudioObject then
@@ -383,6 +378,11 @@ function DataStore:Save()
 				warn("Error on BeforeSave: "..newSave)
 				return
 			end
+		end
+
+		if not Verifier.warnIfInvalid(save) then
+			warn("Invalid data while saving")
+			return
 		end
 
 		local success, problem = self.savingMethod:Set(save)
