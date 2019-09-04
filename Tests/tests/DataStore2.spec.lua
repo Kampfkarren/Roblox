@@ -364,8 +364,15 @@ return function()
 				dataStore:Set(1)
 				dataStore:Save()
 				expect(timesCalled).to.equal(1)
+
+				-- Data hasn't been updated
 				dataStore:Save()
 				expect(timesCalled).to.equal(1)
+
+				-- Data has been updated, truly save
+				dataStore:Set(2)
+				dataStore:Save()
+				expect(timesCalled).to.equal(2)
 			end)
 		end
 	end

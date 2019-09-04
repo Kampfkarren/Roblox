@@ -525,6 +525,7 @@ do
 		end
 
 		self.combinedStore:_Update(true)
+		self.valueUpdated = true
 	end
 
 	function CombinedDataStore:SetBackup(retries)
