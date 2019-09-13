@@ -253,6 +253,12 @@ function DataStore:Increment(value, defaultValue)
 	self:Set(self:Get(defaultValue) + value)
 end
 
+function DataStore:IncrementAsync(add, defaultValue)
+	self:GetAsync(defaultValue):andThen(function(value)
+		self:Set(value + add)
+	end)
+end
+
 --[[**
 	<description>
 	Takes a function to be called whenever the cached result updates.
@@ -418,7 +424,13 @@ end
 	</description>
 **--]]
 function DataStore:SaveAsync()
-	coroutine.wrap(DataStore.Save)(self)
+	return Promise.new(function(resolve)
+		local success, result = self:Save()
+		if not success then
+			error(result)
+		end
+		resolve()
+	end)
 end
 
 --[[**
