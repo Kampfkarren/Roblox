@@ -425,7 +425,7 @@
 </ul>
 <p>In normal data stores, you'd save all your data into one giant player data table to minimize data loss/throttling. In DataStore2, this is a built in feature! Simply use <code>DataStore2.Combine("DATA", "any", "keys", "here")</code>, or call it multiple times (<code>DataStore2.Combine("DATA", "coins"); DataStore2.Combine("DATA", "guns")</code>).</p>
 <p>These are called "combined data stores", they save all your data into one big table but without the cost of ergonomics (you don't have to get the entire data just to manipulate one part of it).</p>
-<p>The "DATA" is what the data will combine under internally. If you are migrating an existing game (and have made sure to set your <a href="../advanced/saving_methods/">saving method</a> to Standard), this will be whatever your large data table is already called.</p>
+<p>The "DATA" is what the data will combine under internally. If you are migrating an existing game (and have made sure to set your <a href="../../advanced/saving_methods/">saving method</a> to Standard), this will be whatever your large data table is already called.</p>
 <p>In the future, combined data stores will become the default, but for now you must explicitly define every key you use, or be at risk of heavy throttling.</p>
                 
                   
