@@ -1,0 +1,1127 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+        <link rel="canonical" href="https://kampfkarren.github.io/Roblox/api/">
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.2.0">
+    
+    
+      
+        <title>API - DataStore2</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application.572ca0f0.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/application-palette.22915126.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#03a9f4">
+      
+    
+    
+      <script src="../assets/javascripts/modernizr.8c900955.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
+    
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="light-blue" data-md-color-accent="light-blue">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="__github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#global-methods" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://kampfkarren.github.io/Roblox" title="DataStore2" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                DataStore2
+              </span>
+              <span class="md-header-nav__topic">
+                API
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/Kampfkarren/Roblox/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      Kampfkarren/Roblox
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://kampfkarren.github.io/Roblox" title="DataStore2" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    DataStore2
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/Kampfkarren/Roblox/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      Kampfkarren/Roblox
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Guide
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Guide
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guide/installation/" title="Installation" class="md-nav__link">
+      Installation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guide/basic_usage/" title="Basic Usage" class="md-nav__link">
+      Basic Usage
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guide/simulator/" title="Basic Example: Simulator" class="md-nav__link">
+      Basic Example: Simulator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guide/gotchas/" title="Gotchas" class="md-nav__link">
+      Gotchas
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Advanced
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Advanced
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../advanced/saving_methods/" title="Saving Methods" class="md-nav__link">
+      Saving Methods
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../advanced/backups/" title="Backups" class="md-nav__link">
+      Backups
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../advanced/serde/" title="Serialization" class="md-nav__link">
+      Serialization
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        API
+      </label>
+    
+    <a href="./" title="API" class="md-nav__link md-nav__link--active">
+      API
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#global-methods" title="Global Methods" class="md-nav__link">
+    Global Methods
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#datastore2" title="DataStore2" class="md-nav__link">
+    DataStore2
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastore2combine" title="DataStore2.Combine" class="md-nav__link">
+    DataStore2.Combine
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastore2clearcache" title="DataStore2.ClearCache" class="md-nav__link">
+    DataStore2.ClearCache
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastore2patchglobalsettings" title="DataStore2.PatchGlobalSettings" class="md-nav__link">
+    DataStore2.PatchGlobalSettings
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-settings" title="Current Settings" class="md-nav__link">
+    Current Settings
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastore2saveall" title="DataStore2.SaveAll" class="md-nav__link">
+    DataStore2.SaveAll
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#datastore-api" title="DataStore API" class="md-nav__link">
+    DataStore API
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#datastoreget" title="DataStore:Get" class="md-nav__link">
+    DataStore:Get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoreset" title="DataStore:Set" class="md-nav__link">
+    DataStore:Set
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoresave" title="DataStore:Save" class="md-nav__link">
+    DataStore:Save
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoreupdate" title="DataStore:Update" class="md-nav__link">
+    DataStore:Update
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoregettable" title="DataStore:GetTable" class="md-nav__link">
+    DataStore:GetTable
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoreincrement" title="DataStore:Increment" class="md-nav__link">
+    DataStore:Increment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoreonupdate" title="DataStore:OnUpdate" class="md-nav__link">
+    DataStore:OnUpdate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoresetbackup" title="DataStore:SetBackup" class="md-nav__link">
+    DataStore:SetBackup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoreisbackup" title="DataStore:IsBackup" class="md-nav__link">
+    DataStore:IsBackup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoreclearbackup" title="DataStore:ClearBackup" class="md-nav__link">
+    DataStore:ClearBackup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastorebeforeinitialget" title="DataStore:BeforeInitialGet" class="md-nav__link">
+    DataStore:BeforeInitialGet
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastorebeforesave" title="DataStore:BeforeSave" class="md-nav__link">
+    DataStore:BeforeSave
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoreaftersave" title="DataStore:AfterSave" class="md-nav__link">
+    DataStore:AfterSave
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoregetasync" title="DataStore:GetAsync" class="md-nav__link">
+    DataStore:GetAsync
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoresaveasync" title="DataStore:SaveAsync" class="md-nav__link">
+    DataStore:SaveAsync
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoregettableasync" title="DataStore:GetTableAsync" class="md-nav__link">
+    DataStore:GetTableAsync
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoreincrementasync" title="DataStore:IncrementAsync" class="md-nav__link">
+    DataStore:IncrementAsync
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#global-methods" title="Global Methods" class="md-nav__link">
+    Global Methods
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#datastore2" title="DataStore2" class="md-nav__link">
+    DataStore2
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastore2combine" title="DataStore2.Combine" class="md-nav__link">
+    DataStore2.Combine
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastore2clearcache" title="DataStore2.ClearCache" class="md-nav__link">
+    DataStore2.ClearCache
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastore2patchglobalsettings" title="DataStore2.PatchGlobalSettings" class="md-nav__link">
+    DataStore2.PatchGlobalSettings
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-settings" title="Current Settings" class="md-nav__link">
+    Current Settings
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastore2saveall" title="DataStore2.SaveAll" class="md-nav__link">
+    DataStore2.SaveAll
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#datastore-api" title="DataStore API" class="md-nav__link">
+    DataStore API
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#datastoreget" title="DataStore:Get" class="md-nav__link">
+    DataStore:Get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoreset" title="DataStore:Set" class="md-nav__link">
+    DataStore:Set
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoresave" title="DataStore:Save" class="md-nav__link">
+    DataStore:Save
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoreupdate" title="DataStore:Update" class="md-nav__link">
+    DataStore:Update
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoregettable" title="DataStore:GetTable" class="md-nav__link">
+    DataStore:GetTable
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoreincrement" title="DataStore:Increment" class="md-nav__link">
+    DataStore:Increment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoreonupdate" title="DataStore:OnUpdate" class="md-nav__link">
+    DataStore:OnUpdate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoresetbackup" title="DataStore:SetBackup" class="md-nav__link">
+    DataStore:SetBackup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoreisbackup" title="DataStore:IsBackup" class="md-nav__link">
+    DataStore:IsBackup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoreclearbackup" title="DataStore:ClearBackup" class="md-nav__link">
+    DataStore:ClearBackup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastorebeforeinitialget" title="DataStore:BeforeInitialGet" class="md-nav__link">
+    DataStore:BeforeInitialGet
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastorebeforesave" title="DataStore:BeforeSave" class="md-nav__link">
+    DataStore:BeforeSave
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoreaftersave" title="DataStore:AfterSave" class="md-nav__link">
+    DataStore:AfterSave
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoregetasync" title="DataStore:GetAsync" class="md-nav__link">
+    DataStore:GetAsync
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoresaveasync" title="DataStore:SaveAsync" class="md-nav__link">
+    DataStore:SaveAsync
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoregettableasync" title="DataStore:GetTableAsync" class="md-nav__link">
+    DataStore:GetTableAsync
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datastoreincrementasync" title="DataStore:IncrementAsync" class="md-nav__link">
+    DataStore:IncrementAsync
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/Kampfkarren/Roblox/edit/master/docs/api.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                  <h1>API</h1>
+                
+                <h2 id="global-methods">Global Methods</h2>
+<h3 id="datastore2">DataStore2</h3>
+<div class="codehilite"><pre><span></span>DataStore2(dataStoreName, player) -&gt; DataStore
+</pre></div>
+
+
+<p>Will create a <a href="#datastore-api">DataStore</a> instance for the player with that specific name. If one already exists, will retrieve that one.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not use the master key that you use in combined data stores, this behavior is not defined!</p>
+</div>
+<h3 id="datastore2combine">DataStore2.Combine</h3>
+<div class="codehilite"><pre><span></span>DataStore2.Combine(masterKey, ...keysToCombine)
+</pre></div>
+
+
+<p>Combines all the keys under <code>keysToCombine</code> under the <code>masterKey</code>. Internally, will save all data under those keys into the <code>masterKey</code> as one large dictionary. You can learn more about combined data stores and why you should use them in the <a href="../guide/gotchas/">gotchas page</a>. Can be called multiple times without overriding previously combined keys.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You should never use data stores without combining them or at the very least, replicating the behavior by creating one large dictionary yourself! Combined data stores will <a href="https://github.com/Kampfkarren/Roblox/issues/38">soon be the default way to use DataStore2</a>.</p>
+</div>
+<h3 id="datastore2clearcache">DataStore2.ClearCache</h3>
+<div class="codehilite"><pre><span></span>DataStore2.ClearCache()
+</pre></div>
+
+
+<p>Clears the DataStore2 cache, so using <code>DataStore2</code> again will give you fresh data stores. This is mostly for internal use or for unit testing.</p>
+<h3 id="datastore2patchglobalsettings">DataStore2.PatchGlobalSettings</h3>
+<div class="codehilite"><pre><span></span>DataStore2.PatchGlobalSettings({
+    SavingMethod?: &quot;Standard&quot; | &quot;OrderedBackups&quot;,
+})
+</pre></div>
+
+
+<p>Will override the global settings by patching it with ones you provide. This means if you do not specify a setting, it will not be changed.</p>
+<h4 id="current-settings">Current Settings</h4>
+<ul>
+<li>SavingMethod (Default: "OrderedBackups")<ul>
+<li>Controls how the data should be saved. Read more in the <a href="../advanced/saving_methods">saving methods page</a>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="datastore2saveall">DataStore2.SaveAll</h3>
+<div class="codehilite"><pre><span></span>DataStore2.SaveAll(player)
+</pre></div>
+
+
+<p>Will save all the data stores of the player. This is the recommended way to save combined data stores.</p>
+<h2 id="datastore-api">DataStore API</h2>
+<h3 id="datastoreget">DataStore:Get</h3>
+<div class="codehilite"><pre><span></span>Get(defaultValue?: any, dontAttemptGet?: bool) -&gt; any
+</pre></div>
+
+
+<p>Will return the value cached in the data store, if it exists. If it does not exist, will then attempt to get the value from Roblox data stores. This function will only yield if there is no value in the data store.</p>
+<p>When a <code>defaultValue</code> is passed in, that value will be used if the player has no data.</p>
+<p>When <code>dontAttemptGet</code> is <code>true</code>, will return the cached value and will not attempt to get it from Roblox if it does not exist. Ignores the value of <code>defaultValue</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>:Get() returns a deep copy of whatever the data is, thus if the value is a table, then <code>dataStore:Get() ~= dataStore:Get()</code>. This may be lifted in the future for "pure" data stores.</p>
+</div>
+<h3 id="datastoreset">DataStore:Set</h3>
+<div class="codehilite"><pre><span></span>Set(newValue: any)
+</pre></div>
+
+
+<p>Will set the cached value in the data store to <code>newValue</code>. Does not make any data store calls, and so will never yield.</p>
+<h3 id="datastoresave">DataStore:Save</h3>
+<div class="codehilite"><pre><span></span>Save()
+</pre></div>
+
+
+<p>Saves the data in the current data store to Roblox. This function yields.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Currently, Save() does not attempt to retry if it fails the first time. Save() <em>can</em> error if data stores are down or your data is invalid.</p>
+</div>
+<h3 id="datastoreupdate">DataStore:Update</h3>
+<div class="codehilite"><pre><span></span>Update(updateCallback: (any) =&gt; any)
+</pre></div>
+
+
+<p>Will set the data store value to the return of <code>updateCallback</code> when passed with the current value.</p>
+<div class="admonition bug">
+<p class="admonition-title">Bug</p>
+<p><code>Update</code> currently does not attempt to get the value from the Roblox data store. <a href="https://github.com/Kampfkarren/Roblox/issues/57">This will be fixed in a future update.</a></p>
+</div>
+<div class="admonition notice">
+<p class="admonition-title">Notice</p>
+<p>You may see people talk about how <code>UpdateAsync</code> is more reliable than <code>SetAsync</code> in normal Roblox data stores. In DataStore2, this doesn't matter since neither actually call Roblox data store methods, so use <code>:Set</code> when you don't need the old value.</p>
+</div>
+<h3 id="datastoregettable">DataStore:GetTable</h3>
+<div class="codehilite"><pre><span></span>GetTable(default: Dictionary&lt;any, any&gt;) -&gt; Dictionary&lt;any, any&gt;
+</pre></div>
+
+
+<p>Will get the value (either from the cache or Roblox data stores), and patch it with the default value if it doesn't have the keys. For example, if you have the data:</p>
+<div class="codehilite"><pre><span></span><span class="p">{</span>
+    <span class="n">coins</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">swords</span> <span class="o">=</span> <span class="p">{},</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>...and want to add a <code>gems</code> field, just appending on that to the default value for <a href="#datastoreget"><code>Get</code></a> won't work the way you might want it too--it won't add the key!</p>
+<div class="codehilite"><pre><span></span><span class="c1">-- Oops! The player already has data, so it doesn&#39;t try to use the default value!</span>
+<span class="n">dataStore</span><span class="p">:</span><span class="n">Get</span><span class="p">({</span>
+    <span class="n">coins</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">gems</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">swords</span> <span class="o">=</span> <span class="p">{},</span>
+<span class="p">})</span>
+</pre></div>
+
+
+<p>You can, however, use <code>GetTable</code>:</p>
+<div class="codehilite"><pre><span></span><span class="c1">-- Much better! It&#39;ll check if they have each key rather than just if they have data.</span>
+<span class="n">dataStore</span><span class="p">:</span><span class="n">GetTable</span><span class="p">({</span>
+    <span class="n">coins</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">gems</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">swords</span> <span class="o">=</span> <span class="p">{},</span>
+<span class="p">})</span>
+</pre></div>
+
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is not necessary to use tables with DataStore2. You can save/retrieve tables just like any other piece of data.</p>
+</div>
+<h3 id="datastoreincrement">DataStore:Increment</h3>
+<div class="codehilite"><pre><span></span>Increment(add: number, defaultValue?: number)
+</pre></div>
+
+
+<p>Will increment the current value (cached or from Roblox data stores) with the value provided in <code>add</code>. If a value does not exist, will use <code>defaultValue</code>, then add.</p>
+<h3 id="datastoreonupdate">DataStore:OnUpdate</h3>
+<div class="codehilite"><pre><span></span>OnUpdate(callback: (value: any) =&gt; void)
+</pre></div>
+
+
+<p>Will call the callback provided whenever the cached value is updated. Is <em>not</em> called on the initial get.</p>
+<h3 id="datastoresetbackup">DataStore:SetBackup</h3>
+<div class="codehilite"><pre><span></span>SetBackup(retries: number, alternativeDefaultValue?: any)
+</pre></div>
+
+
+<p>Will set the number of retries for <code>:Get()</code> to attempt to retrieve a Roblox data store value before giving up and marking the data store as a backup. If <code>alternativeDefaultValue</code> is provided, then that value will be given to <code>:Get()</code>, otherwise normal rules apply while assuming the player actually doesn't have any data. Learn more on the <a href="../advanced/backups/">backups page</a>.</p>
+<h3 id="datastoreisbackup">DataStore:IsBackup</h3>
+<div class="codehilite"><pre><span></span>IsBackup() -&gt; bool
+</pre></div>
+
+
+<p>Returns whether the current data store is a backup data store or not. Learn more on the <a href="../advanced/backups/">backups page</a>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You don't need to know if a data store is a backup when <a href="#datastoresave">saving</a>. Backup data stores will never save.</p>
+</div>
+<h3 id="datastoreclearbackup">DataStore:ClearBackup</h3>
+<div class="codehilite"><pre><span></span>ClearBackup()
+</pre></div>
+
+
+<p>Unmarks the current data store as a backup data store. The next time <code>Get()</code> is called, it'll attempt to get the value inside Roblox data stores again. Learn more on the <a href="../advanced/backups/">backups page</a>.</p>
+<h3 id="datastorebeforeinitialget">DataStore:BeforeInitialGet</h3>
+<div class="codehilite"><pre><span></span>BeforeInitialGet(modifier: (dataValue: any) =&gt; any)
+</pre></div>
+
+
+<p>Called after a value is received from Roblox data stores. The value returned is what <code>:Get()</code> will receive. Primarily used for deserialization. Learn more on the <a href="../advanced/serde/">serialization page</a>.</p>
+<div class="admonition bug">
+<p class="admonition-title">Bug</p>
+<p>BeforeInitialGet is known to cause issues with combined data stores. If you can reproduce these issues, please <a href="https://github.com/Kampfkarren/Roblox/issues">file an issue on GitHub</a>!</p>
+</div>
+<h3 id="datastorebeforesave">DataStore:BeforeSave</h3>
+<div class="codehilite"><pre><span></span>BeforeSave(modifier: (dataValue: any) =&gt; any)
+</pre></div>
+
+
+<p>Called before a value is saved into Roblox data stores. The value returned is what will be saved. Primarily used for serialization. Learn more on the <a href="../advanced/serde/">serialization page</a>.</p>
+<h3 id="datastoreaftersave">DataStore:AfterSave</h3>
+<div class="codehilite"><pre><span></span>AfterSave(callback: (savedValue: any) =&gt; void)
+</pre></div>
+
+
+<p>Will call the callback after data is successfully saved into Roblox data stores.</p>
+<h3 id="datastoregetasync">DataStore:GetAsync</h3>
+<div class="codehilite"><pre><span></span>GetAsync(defaultValue?: any, dontAttemptGet?: bool) -&gt; Promise&lt;any&gt;
+</pre></div>
+
+
+<p>Same as <a href="#datastoreget"><code>Get</code></a>, but will instead return a <a href="https://eryn.io/roblox-lua-promise/"><code>Promise</code></a> instead of yielding.</p>
+<h3 id="datastoresaveasync">DataStore:SaveAsync</h3>
+<div class="codehilite"><pre><span></span>SaveAsync() -&gt; Promise&lt;bool, any&gt;
+</pre></div>
+
+
+<p>Same as <a href="#datastoresave"><code>Save</code></a>, but will instead return a <a href="https://eryn.io/roblox-lua-promise/"><code>Promise</code></a> instead of yielding. On rejection, will return the error that caused the reject. On resolution, will return whether the data <em>actually</em> saved. This is false in the case of being in studio, data not being updated or the data store being a backup store.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you only want to be notified when the data is truly saved, use <a href="#datastoreaftersave"><code>AfterSave</code></a>.</p>
+</div>
+<h3 id="datastoregettableasync">DataStore:GetTableAsync</h3>
+<div class="codehilite"><pre><span></span>GetTableAsync(default: Dictionary&lt;any, any&gt;) -&gt; Promise&lt;Dictionary&lt;any, any&gt;&gt;
+</pre></div>
+
+
+<p>Same as <a href="#datastoregettable"><code>GetTable</code></a>, but will instead return a <a href="https://eryn.io/roblox-lua-promise/"><code>Promise</code></a> instead of yielding.</p>
+<h3 id="datastoreincrementasync">DataStore:IncrementAsync</h3>
+<div class="codehilite"><pre><span></span>IncrementAsync(add: number, defaultValue?: number) -&gt; Promise&lt;void&gt;
+</pre></div>
+
+
+<p>Same as <a href="#datastoreincrement"><code>Increment</code></a>, but will instead return a <a href="https://eryn.io/roblox-lua-promise/"><code>Promise</code></a> instead of yielding.</p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../advanced/serde/" title="Serialization" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Serialization
+              </span>
+            </div>
+          </a>
+        
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/application.b41f3d20.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
+      
+    
+    
+      
+    
+  </body>
+</html>
