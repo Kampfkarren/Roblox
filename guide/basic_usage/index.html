@@ -417,10 +417,12 @@
                   <h1>Basic Usage</h1>
                 
                 <p>DataStore2 is meant to be easy to use. The basic usage can be seen from the following example code.</p>
-<p>The code below does the following:
-- Fires a remote event called "CoinAmount" to players when they join and when their amount of coins updates.
-- Listens for a "BuyProduct" remote to let players buy products.
-- Buying products reduces their amount of coins, which will then fire the remote event.</p>
+<p>The code below does the following:</p>
+<ul>
+<li>Fires a remote event called "CoinAmount" to players when they join and when their amount of coins updates.</li>
+<li>Listens for a "BuyProduct" remote to let players buy products.</li>
+<li>Buying products reduces their amount of coins, which will then fire the remote event.</li>
+</ul>
 <div class="codehilite"><pre><span></span><span class="kd">local</span> <span class="n">ReplicatedStorage</span> <span class="o">=</span> <span class="n">game</span><span class="p">:</span><span class="n">GetService</span><span class="p">(</span><span class="s2">&quot;ReplicatedStorage&quot;</span><span class="p">)</span>
 <span class="kd">local</span> <span class="n">Players</span> <span class="o">=</span> <span class="n">game</span><span class="p">:</span><span class="n">GetService</span><span class="p">(</span><span class="s2">&quot;Players&quot;</span><span class="p">)</span>
 <span class="kd">local</span> <span class="n">ServerScriptService</span> <span class="o">=</span> <span class="n">game</span><span class="p">:</span><span class="n">GetService</span><span class="p">(</span><span class="s2">&quot;ServerScriptService&quot;</span><span class="p">)</span>
