@@ -18,39 +18,28 @@
 --]]
 
 local DataStoreService = game:GetService("DataStoreService")
+local Promise = require(script.Parent.Parent.Promise)
 
 local OrderedBackups = {}
 OrderedBackups.__index = OrderedBackups
 
 function OrderedBackups:Get()
-	local success, value = pcall(function()
-		return self.orderedDataStore:GetSortedAsync(false, 1):GetCurrentPage()[1]
-	end)
+	return Promise.async(function(resolve)
+		resolve(self.orderedDataStore:GetSortedAsync(false, 1):GetCurrentPage()[1])
+	end):andThen(function(mostRecentKeyPage)
+		if mostRecentKeyPage then
+			local recentKey = mostRecentKeyPage.value
+			self.dataStore2:Debug("most recent key", mostRecentKeyPage)
+			self.mostRecentKey = recentKey
 
-	if not success then
-		return false, value
-	end
-
-	if value then
-		local mostRecentKeyPage = value
-
-		local recentKey = mostRecentKeyPage.value
-		self.dataStore2:Debug("most recent key", mostRecentKeyPage)
-		self.mostRecentKey = recentKey
-
-		local success, value = pcall(function()
-			return self.dataStore:GetAsync(recentKey)
-		end)
-
-		if not success then
-			return false, value
+			return Promise.async(function(resolve)
+				resolve(self.dataStore:GetAsync(recentKey))
+			end)
+		else
+			self.dataStore2:Debug("no recent key")
+			return nil
 		end
-
-		return true, value
-	else
-		self.dataStore2:Debug("no recent key")
-		return true, nil
-	end
+	end)
 end
 
 function OrderedBackups:Set(value)

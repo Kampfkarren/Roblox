@@ -57,32 +57,19 @@ function DataStore:Debug(...)
 end
 
 function DataStore:_GetRaw()
-	if not self.getQueue then
-		self.getQueue = Instance.new("BindableEvent")
+	if self.getRawPromise then
+		return self.getRawPromise
 	end
 
-	if self.getting then
-		self:Debug("A _GetRaw is already in motion, just wait until it's done")
-		self.getQueue.Event:wait()
-		self:Debug("Aaand we're back")
-		return
-	end
+	self.getRawPromise = self.savingMethod:Get():andThen(function(value)
+		self.value = value
+		self:Debug("value received")
+		self.haveValue = true
+	end):finally(function()
+		self.getting = false
+	end)
 
-	self.getting = true
-
-	local success, value = self.savingMethod:Get()
-
-	self.getting = false
-	if not success then
-		error(tostring(value))
-	end
-
-	self.value = value
-
-	self:Debug("value received")
-	self.getQueue:Fire()
-
-	self.haveValue = true
+	return self.getRawPromise
 end
 
 function DataStore:_Update(dontCallOnUpdate)
@@ -124,7 +111,7 @@ function DataStore:Get(defaultValue, dontAttemptGet)
 
 	if not self.haveValue then
 		while not self.haveValue do
-			local success, error = pcall(self._GetRaw, self)
+			local success, error = self:_GetRaw():await()
 
 			if not success then
 				if self.backupRetries then
@@ -616,7 +603,7 @@ function DataStore2.__call(_, dataStoreName, player)
 
 		local combinedStore = setmetatable({
 			combinedName = dataStoreName,
-			combinedStore = dataStore
+			combinedStore = dataStore,
 		}, {
 			__index = function(_, key)
 				return CombinedDataStore[key] or dataStore[key]
