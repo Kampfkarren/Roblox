@@ -207,6 +207,40 @@ return function()
 				expect(dataStore2:Get()).to.equal(19)
 			end)
 
+			it("should not conflict multiple BeforeInitialGet", function()
+				local key1, key2, key3 = UUID(), UUID(), UUID()
+
+				local dataStore1 = DataStore2(key1, fakePlayer)
+				local dataStore2 = DataStore2(key2, fakePlayer)
+				local dataStore3 = DataStore2(key3, fakePlayer)
+
+				dataStore1:Set(1)
+				dataStore2:Set(3)
+				dataStore3:Set(10)
+
+				DataStore2.SaveAll(fakePlayer)
+				DataStore2.ClearCache()
+
+				local dataStore1 = DataStore2(key1, fakePlayer)
+				local dataStore2 = DataStore2(key2, fakePlayer)
+
+				dataStore1:BeforeInitialGet(function(x)
+					return x + 1
+				end)
+				expect(dataStore1:Get()).to.equal(2)
+				expect(dataStore1:Get()).to.equal(2)
+
+				local dataStore2 = DataStore2(key2, fakePlayer)
+				dataStore2:BeforeInitialGet(function(x)
+					return x * 2
+				end)
+				expect(dataStore2:Get()).to.equal(6)
+				expect(dataStore2:Get()).to.equal(6)
+
+				expect(dataStore3:Get()).to.equal(10)
+				expect(dataStore2:Get()).to.equal(6)
+			end)
+
 			it("should work in conjuction with both BeforeInitialGet and BeforeSave", function()
 				local key = UUID()
 				save(key, 10)
@@ -337,9 +371,11 @@ return function()
 			end)
 
 			it("should save all data stores when using SaveAll", function()
-				local dataStore1 = DataStore2(UUID(), fakePlayer)
-				local dataStore2 = DataStore2(UUID(), fakePlayer)
-				local dataStore3 = DataStore2(UUID(), fakePlayer)
+				local key1, key2, key3 = UUID(), UUID(), UUID()
+
+				local dataStore1 = DataStore2(key1, fakePlayer)
+				local dataStore2 = DataStore2(key2, fakePlayer)
+				local dataStore3 = DataStore2(key3, fakePlayer)
 
 				dataStore1:Set(1)
 				dataStore2:Set(2)

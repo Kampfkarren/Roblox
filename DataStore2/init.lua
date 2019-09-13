@@ -31,6 +31,7 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
+local Promise = require(script.Promise)
 local SavingMethods = require(script.SavingMethods)
 local TableUtil = require(script.TableUtil)
 local Verifier = require(script.Verifier)
@@ -57,32 +58,19 @@ function DataStore:Debug(...)
 end
 
 function DataStore:_GetRaw()
-	if not self.getQueue then
-		self.getQueue = Instance.new("BindableEvent")
+	if self.getRawPromise then
+		return self.getRawPromise
 	end
 
-	if self.getting then
-		self:Debug("A _GetRaw is already in motion, just wait until it's done")
-		self.getQueue.Event:wait()
-		self:Debug("Aaand we're back")
-		return
-	end
+	self.getRawPromise = self.savingMethod:Get():andThen(function(value)
+		self.value = value
+		self:Debug("value received")
+		self.haveValue = true
+	end):finally(function()
+		self.getting = false
+	end)
 
-	self.getting = true
-
-	local success, value = self.savingMethod:Get()
-
-	self.getting = false
-	if not success then
-		error(tostring(value))
-	end
-
-	self.value = value
-
-	self:Debug("value received")
-	self.getQueue:Fire()
-
-	self.haveValue = true
+	return self.getRawPromise
 end
 
 function DataStore:_Update(dontCallOnUpdate)
@@ -124,7 +112,7 @@ function DataStore:Get(defaultValue, dontAttemptGet)
 
 	if not self.haveValue then
 		while not self.haveValue do
-			local success, error = pcall(self._GetRaw, self)
+			local success, error = self:_GetRaw():await()
 
 			if not success then
 				if self.backupRetries then
@@ -164,6 +152,13 @@ function DataStore:Get(defaultValue, dontAttemptGet)
 	return value
 end
 
+function DataStore:GetAsync(...)
+	local args = { ... }
+	return Promise.async(function(resolve)
+		resolve(self:Get(unpack(args)))
+	end)
+end
+
 --[[**
 	<description>
 	The same as :Get only it'll check to make sure all keys in the default data provided
@@ -181,25 +176,36 @@ end
 	</returns>
 **--]]
 function DataStore:GetTable(default, ...)
-	assert(default ~= nil, "You must provide a default value with :GetTable.")
-
-	local result = self:Get(default, ...)
-	local changed = false
-
-	assert(typeof(result) == "table", ":GetTable was used when the value in the data store isn't a table.")
-
-	for defaultKey, defaultValue in pairs(default) do
-		if result[defaultKey] == nil then
-			result[defaultKey] = defaultValue
-			changed = true
-		end
+	local success, result = self:GetTableAsync(default, ...):await()
+	if not success then
+		error(result)
 	end
-
-	if changed then
-		self:Set(result)
-	end
-
 	return result
+end
+
+function DataStore:GetTableAsync(default, ...)
+	assert(default ~= nil, "You must provide a default value.")
+
+	return self:GetAsync(default, ...):andThen(function(result)
+		local changed = false
+		assert(
+			typeof(result) == "table",
+			":GetTable/:GetTableAsync was used when the value in the data store isn't a table."
+		)
+
+		for defaultKey, defaultValue in pairs(default) do
+			if result[defaultKey] == nil then
+				result[defaultKey] = defaultValue
+				changed = true
+			end
+		end
+
+		if changed then
+			self:Set(result)
+		end
+
+		return result
+	end)
 end
 
 --[[**
@@ -245,6 +251,12 @@ end
 **--]]
 function DataStore:Increment(value, defaultValue)
 	self:Set(self:Get(defaultValue) + value)
+end
+
+function DataStore:IncrementAsync(add, defaultValue)
+	self:GetAsync(defaultValue):andThen(function(value)
+		self:Set(value + add)
+	end)
 end
 
 --[[**
@@ -412,7 +424,13 @@ end
 	</description>
 **--]]
 function DataStore:SaveAsync()
-	coroutine.wrap(DataStore.Save)(self)
+	return Promise.new(function(resolve)
+		local success, result = self:Save()
+		if not success then
+			error(result)
+		end
+		resolve()
+	end)
 end
 
 --[[**
@@ -616,7 +634,7 @@ function DataStore2.__call(_, dataStoreName, player)
 
 		local combinedStore = setmetatable({
 			combinedName = dataStoreName,
-			combinedStore = dataStore
+			combinedStore = dataStore,
 		}, {
 			__index = function(_, key)
 				return CombinedDataStore[key] or dataStore[key]
