@@ -8,6 +8,6 @@ In normal data stores, you'd save all your data into one giant player data table
 
 These are called "combined data stores", they save all your data into one big table but without the cost of ergonomics (you don't have to get the entire data just to manipulate one part of it).
 
-The "DATA" is what the data will combine under internally. If you are migrating an existing game (and have made sure to set your [saving method](../advanced/saving_methods/) to Standard), this will be whatever your large data table is already called.
+The "DATA" is what the data will combine under internally. If you are migrating an existing game (and have made sure to set your [saving method](../../advanced/saving_methods/) to Standard), this will be whatever your large data table is already called.
 
 In the future, combined data stores will become the default, but for now you must explicitly define every key you use, or be at risk of heavy throttling.
