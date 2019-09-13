@@ -45,24 +45,16 @@ end
 function OrderedBackups:Set(value)
 	local key = (self.mostRecentKey or 0) + 1
 
-	local success, problem = pcall(function()
+	return Promise.async(function(resolve)
 		self.dataStore:SetAsync(key, value)
+		resolve()
+	end):andThen(function()
+		return Promise.promisify(function()
+			self.orderedDataStore:SetAsync(key, key)
+		end)()
+	end):andThen(function()
+		self.mostRecentKey = key
 	end)
-
-	if not success then
-		return false, problem
-	end
-
-	local success, problem = pcall(function()
-		self.orderedDataStore:SetAsync(key, key)
-	end)
-
-	if not success then
-		return false, problem
-	end
-
-	self.mostRecentKey = key
-	return true
 end
 
 function OrderedBackups.new(dataStore2)

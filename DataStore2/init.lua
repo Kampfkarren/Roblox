@@ -31,6 +31,7 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
+local Constants = require(script.Constants)
 local Promise = require(script.Promise)
 local SavingMethods = require(script.SavingMethods)
 local TableUtil = require(script.TableUtil)
@@ -360,61 +361,12 @@ end
 	</description>
 **--]]
 function DataStore:Save()
-	if not self.valueUpdated then
-		warn(("Data store %s was not saved as it was not updated."):format(self.Name))
-		return
-	end
+	local success, result = self:SaveAsync():await()
 
-	if RunService:IsStudio() and not SaveInStudio then
-		warn(("Data store %s attempted to save in studio while SaveInStudio is false."):format(self.Name))
-		if not SaveInStudioObject then
-			warn("You can set the value of this by creating a BoolValue named SaveInStudio in ServerStorage.")
-		end
-		return
-	end
-
-	if self.backup then
-		warn("This data store is a backup store, and thus will not be saved.")
-		return
-	end
-
-	if self.value ~= nil then
-		local save = clone(self.value)
-
-		if self.beforeSave then
-			local success, newSave = pcall(self.beforeSave, save, self)
-
-			if success then
-				save = newSave
-			else
-				warn("Error on BeforeSave: "..newSave)
-				return
-			end
-		end
-
-		if not Verifier.warnIfInvalid(save) then
-			warn("Invalid data while saving")
-			return
-		end
-
-		local success, problem = self.savingMethod:Set(save)
-
-		if not success then
-			-- TODO: Something more robust than this
-			error("save error! " .. tostring(problem))
-		end
-
-		for _, afterSave in pairs(self.afterSave) do
-			local success, err = pcall(afterSave, save, self)
-
-			if not success then
-				warn("Error on AfterSave: "..err)
-			end
-		end
-
-		self.valueUpdated = false
-
-		print("saved "..self.Name)
+	if success then
+		print("saved " .. self.Name)
+	else
+		error(result)
 	end
 end
 
@@ -424,12 +376,64 @@ end
 	</description>
 **--]]
 function DataStore:SaveAsync()
-	return Promise.new(function(resolve)
-		local success, result = self:Save()
-		if not success then
-			error(result)
+	return Promise.async(function(resolve, reject)
+		if not self.valueUpdated then
+			warn(("Data store %s was not saved as it was not updated."):format(self.Name))
+			resolve(false)
+			return
 		end
-		resolve()
+
+		if RunService:IsStudio() and not SaveInStudio then
+			warn(("Data store %s attempted to save in studio while SaveInStudio is false."):format(self.Name))
+			if not SaveInStudioObject then
+				warn("You can set the value of this by creating a BoolValue named SaveInStudio in ServerStorage.")
+			end
+			resolve(false)
+			return
+		end
+
+		if self.backup then
+			warn("This data store is a backup store, and thus will not be saved.")
+			resolve(false)
+			return
+		end
+
+		if self.value ~= nil then
+			local save = clone(self.value)
+
+			if self.beforeSave then
+				local success, result = pcall(self.beforeSave, save, self)
+
+				if success then
+					save = result
+				else
+					reject(result, Constants.BeforeSaveError)
+					return
+				end
+			end
+
+			local problem = Verifier.testValidity(save)
+			if problem then
+				reject(problem, Constants.InvalidData)
+				return
+			end
+
+			return self.savingMethod:Set(save):andThen(function()
+				resolve(true, save)
+			end)
+		end
+	end):andThen(function(saved, save)
+		if saved then
+			for _, afterSave in pairs(self.afterSave) do
+				local success, err = pcall(afterSave, save, self)
+
+				if not success then
+					warn("Error on AfterSave: "..err)
+				end
+			end
+
+			self.valueUpdated = false
+		end
 	end)
 end
 
@@ -684,9 +688,13 @@ function DataStore2.__call(_, dataStoreName, player)
 	playerLeavingConnection = player.AncestryChanged:Connect(function()
 		if player:IsDescendantOf(game) then return end
 		playerLeavingConnection:Disconnect()
-		dataStore:Save()
-		event:Fire()
-		fired = true
+		dataStore:SaveAsync():catch(function(error)
+			-- TODO: Something more elegant
+			warn("error when player left! " .. error)
+		end):finally(function()
+			event:Fire()
+			fired = true
+		end)
 
 		delay(40, function() --Give a long delay for people who haven't figured out the cache :^(
 			DataStoreCache[player] = nil
@@ -701,5 +709,7 @@ function DataStore2.__call(_, dataStoreName, player)
 
 	return dataStore
 end
+
+DataStore2.Constants = Constants
 
 return setmetatable(DataStore2, DataStore2)
