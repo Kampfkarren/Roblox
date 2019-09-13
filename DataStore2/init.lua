@@ -34,6 +34,7 @@ local ServerStorage = game:GetService("ServerStorage")
 local Constants = require(script.Constants)
 local Promise = require(script.Promise)
 local SavingMethods = require(script.SavingMethods)
+local Settings = require(script.Settings)
 local TableUtil = require(script.TableUtil)
 local Verifier = require(script.Verifier)
 
@@ -604,6 +605,14 @@ function DataStore2.SaveAll(player)
 	end
 end
 
+function DataStore2.PatchGlobalSettings(patch)
+	for key, value in pairs(patch) do
+		assert(Settings[key] ~= nil, "No such key exists: " .. key)
+		-- TODO: Implement type checking with this when osyris' t is in
+		Settings[key] = value
+	end
+end
+
 function DataStore2.__call(_, dataStoreName, player)
 	assert(
 		typeof(dataStoreName) == "string" and typeof(player) == "Instance",
@@ -662,7 +671,7 @@ function DataStore2.__call(_, dataStoreName, player)
 	dataStore.beforeInitialGet = {}
 	dataStore.afterSave = {}
 	dataStore.bindToClose = {}
-	dataStore.savingMethod = SavingMethods.OrderedBackups.new(dataStore)
+	dataStore.savingMethod = SavingMethods[Settings.SavingMethod].new(dataStore)
 
 	setmetatable(dataStore, DataStoreMetatable)
 
@@ -688,7 +697,9 @@ function DataStore2.__call(_, dataStoreName, player)
 	playerLeavingConnection = player.AncestryChanged:Connect(function()
 		if player:IsDescendantOf(game) then return end
 		playerLeavingConnection:Disconnect()
-		dataStore:SaveAsync():catch(function(error)
+		dataStore:SaveAsync():andThen(function()
+			print("player left, saved " .. dataStoreName)
+		end):catch(function(error)
 			-- TODO: Something more elegant
 			warn("error when player left! " .. error)
 		end):finally(function()
