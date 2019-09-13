@@ -1,6 +1,7 @@
 DataStore2 is meant to be easy to use. The basic usage can be seen from the following example code.
 
 The code below does the following:
+
 - Fires a remote event called "CoinAmount" to players when they join and when their amount of coins updates.
 - Listens for a "BuyProduct" remote to let players buy products.
 - Buying products reduces their amount of coins, which will then fire the remote event.
