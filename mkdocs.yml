@@ -1,0 +1,27 @@
+site_name: DataStore2
+site_url: https://kampfkarren.github.io/Roblox
+repo_name: Kampfkarren/Roblox
+repo_url: https://github.com/Kampfkarren/Roblox
+
+theme:
+  name: material
+  palette:
+    primary: "Light Blue"
+    accent: "Light Blue"
+
+nav:
+  - Home: index.md
+  - Guide:
+    - Installation: guide/installation.md
+    - Basic Usage: guide/basic_usage.md
+    - "Basic Example: Simulator": guide/simulator.md
+    - Gotchas: guide/gotchas.md
+  - Advanced:
+    - Saving Methods: advanced/saving_methods.md
+    - Backups: advanced/backups.md
+    - Serialization: advanced/serde.md
+  - API: api.md
+
+markdown_extensions:
+  - admonition
+  - codehilite
