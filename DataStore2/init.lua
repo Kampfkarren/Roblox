@@ -176,25 +176,36 @@ end
 	</returns>
 **--]]
 function DataStore:GetTable(default, ...)
-	assert(default ~= nil, "You must provide a default value with :GetTable.")
-
-	local result = self:Get(default, ...)
-	local changed = false
-
-	assert(typeof(result) == "table", ":GetTable was used when the value in the data store isn't a table.")
-
-	for defaultKey, defaultValue in pairs(default) do
-		if result[defaultKey] == nil then
-			result[defaultKey] = defaultValue
-			changed = true
-		end
+	local success, result = self:GetTableAsync(default, ...):await()
+	if not success then
+		error(result)
 	end
-
-	if changed then
-		self:Set(result)
-	end
-
 	return result
+end
+
+function DataStore:GetTableAsync(default, ...)
+	assert(default ~= nil, "You must provide a default value.")
+
+	return self:GetAsync(default, ...):andThen(function(result)
+		local changed = false
+		assert(
+			typeof(result) == "table",
+			":GetTable/:GetTableAsync was used when the value in the data store isn't a table."
+		)
+
+		for defaultKey, defaultValue in pairs(default) do
+			if result[defaultKey] == nil then
+				result[defaultKey] = defaultValue
+				changed = true
+			end
+		end
+
+		if changed then
+			self:Set(result)
+		end
+
+		return result
+	end)
 end
 
 --[[**
