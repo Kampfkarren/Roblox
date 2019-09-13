@@ -31,6 +31,7 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
+local Promise = require(script.Promise)
 local SavingMethods = require(script.SavingMethods)
 local TableUtil = require(script.TableUtil)
 local Verifier = require(script.Verifier)
@@ -149,6 +150,13 @@ function DataStore:Get(defaultValue, dontAttemptGet)
 	self.value = value
 
 	return value
+end
+
+function DataStore:GetAsync(...)
+	local args = { ... }
+	return Promise.async(function(resolve)
+		resolve(self:Get(unpack(args)))
+	end)
 end
 
 --[[**
