@@ -193,7 +193,9 @@ end
 
 function DataStore:IncrementAsync(add, defaultValue)
 	self:GetAsync(defaultValue):andThen(function(value)
-		self:Set(value + add)
+		return Promise.promisify(function()
+			self:Set(value + add)
+		end)()
 	end)
 end
 
