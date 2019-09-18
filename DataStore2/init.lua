@@ -27,7 +27,6 @@
 	coinStore:Get()
 --]]
 
-local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
@@ -77,7 +76,7 @@ end
 
 function DataStore:_Update(dontCallOnUpdate)
 	if not dontCallOnUpdate then
-		for _,callback in pairs(self.callbacks) do
+		for _, callback in ipairs(self.callbacks) do
 			callback(self.value, self)
 		end
 	end
@@ -116,7 +115,7 @@ function DataStore:Get(defaultValue, dontAttemptGet)
 		end
 
 		if self.value ~= nil then
-			for _,modifier in pairs(self.beforeInitialGet) do
+			for _, modifier in ipairs(self.beforeInitialGet) do
 				self.value = modifier(self.value, self)
 			end
 		end
@@ -138,9 +137,10 @@ function DataStore:Get(defaultValue, dontAttemptGet)
 end
 
 function DataStore:GetAsync(...)
-	local args = { ... }
+	local length = select("#", ...)
+	local args = {...}
 	return Promise.async(function(resolve)
-		resolve(self:Get(unpack(args)))
+		resolve(self:Get(unpack(args, 1, length)))
 	end)
 end
 
@@ -267,7 +267,7 @@ function DataStore:Save()
 	local success, result = self:SaveAsync():await()
 
 	if success then
-		print("saved " .. self.Name)
+		print("saved", self.Name)
 	else
 		error(result)
 	end
@@ -327,11 +327,11 @@ function DataStore:SaveAsync()
 		end
 	end):andThen(function(saved, save)
 		if saved then
-			for _, afterSave in pairs(self.afterSave) do
+			for _, afterSave in ipairs(self.afterSave) do
 				local success, err = pcall(afterSave, save, self)
 
 				if not success then
-					warn("Error on AfterSave: "..err)
+					warn("Error on AfterSave:", err)
 				end
 			end
 
@@ -405,15 +405,15 @@ do
 
 	function CombinedDataStore:OnUpdate(callback)
 		if not self.onUpdateCallbacks then
-			self.onUpdateCallbacks = { callback }
+			self.onUpdateCallbacks = {callback}
 		else
-			self.onUpdateCallbacks[#self.onUpdateCallbacks + 1] = callback
+			table.insert(self.onUpdateCallbacks, callback)
 		end
 	end
 
 	function CombinedDataStore:_Update(dontCallOnUpdate)
 		if not dontCallOnUpdate then
-			for _, callback in pairs(self.onUpdateCallbacks or {}) do
+			for _, callback in ipairs(self.onUpdateCallbacks or {}) do
 				callback(self:Get(), self)
 			end
 		end
@@ -452,7 +452,7 @@ local combinedDataStoreInfo = {}
 	</parameter>
 **--]]
 function DataStore2.Combine(mainKey, ...)
-	for _, name in pairs({...}) do
+	for _, name in ipairs({...}) do
 		combinedDataStoreInfo[name] = mainKey
 	end
 end
@@ -517,7 +517,7 @@ function DataStore2.__call(_, dataStoreName, player)
 		}, {
 			__index = function(_, key)
 				return CombinedDataStore[key] or dataStore[key]
-			end
+			end,
 		})
 
 		if not DataStoreCache[player] then
@@ -528,15 +528,15 @@ function DataStore2.__call(_, dataStoreName, player)
 		return combinedStore
 	end
 
-	local dataStore = {}
+	local dataStore = {
+		Name = dataStoreName,
+		UserId = player.UserId,
+		callbacks = {},
+		beforeInitialGet = {},
+		afterSave = {},
+		bindToClose = {},
+	}
 
-	dataStore.Name = dataStoreName
-	dataStore.UserId = player.UserId
-
-	dataStore.callbacks = {}
-	dataStore.beforeInitialGet = {}
-	dataStore.afterSave = {}
-	dataStore.bindToClose = {}
 	dataStore.savingMethod = SavingMethods[Settings.SavingMethod].new(dataStore)
 
 	setmetatable(dataStore, DataStoreMetatable)
@@ -549,12 +549,12 @@ function DataStore2.__call(_, dataStoreName, player)
 				player.Parent = nil -- Forces AncestryChanged to fire and save the data
 			end)
 
-			event.Event:wait()
+			event.Event:Wait()
 		end
 
 		local value = dataStore:Get(nil, true)
 
-		for _, bindToClose in pairs(dataStore.bindToClose) do
+		for _, bindToClose in ipairs(dataStore.bindToClose) do
 			bindToClose(player, value)
 		end
 	end)
@@ -564,10 +564,10 @@ function DataStore2.__call(_, dataStoreName, player)
 		if player:IsDescendantOf(game) then return end
 		playerLeavingConnection:Disconnect()
 		dataStore:SaveAsync():andThen(function()
-			print("player left, saved " .. dataStoreName)
+			print("player left, saved", dataStoreName)
 		end):catch(function(error)
 			-- TODO: Something more elegant
-			warn("error when player left! " .. error)
+			warn("error when player left!", error)
 		end):finally(function()
 			event:Fire()
 			fired = true
