@@ -137,10 +137,9 @@ function DataStore:Get(defaultValue, dontAttemptGet)
 end
 
 function DataStore:GetAsync(...)
-	local length = select("#", ...)
-	local args = {...}
+	local args = { ... }
 	return Promise.async(function(resolve)
-		resolve(self:Get(unpack(args, 1, length)))
+		resolve(self:Get(unpack(args)))
 	end)
 end
 
