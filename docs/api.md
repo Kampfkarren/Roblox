@@ -46,6 +46,13 @@ DataStore2.SaveAll(player)
 
 Will save all the data stores of the player. This is the recommended way to save combined data stores.
 
+### DataStore2.SaveAllAsync
+```
+DataStore2.SaveAllAsync(player) -> Promise<void>
+```
+
+Same as [`SaveAllAsync`](#datastore2saveall), but will instead return a [`Promise`](https://eryn.io/roblox-lua-promise/) instead of yielding.
+
 ## DataStore API
 
 ### DataStore:Get

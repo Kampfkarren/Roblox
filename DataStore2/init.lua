@@ -472,6 +472,8 @@ function DataStore2.SaveAll(player)
 	end
 end
 
+DataStore2.SaveAllAsync = Promise.promisify(DataStore2.SaveAll)
+
 function DataStore2.PatchGlobalSettings(patch)
 	for key, value in pairs(patch) do
 		assert(Settings[key] ~= nil, "No such key exists: " .. key)

@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- Added `DataStore2.SaveAllAsync`.
 - Fix `:IncrementAsync` throwing an error on combined data stores.
 - Fix `:Set` on combined data stores having the potential to yield.
 
