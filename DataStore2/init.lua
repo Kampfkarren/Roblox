@@ -387,12 +387,11 @@ do
 	end
 
 	function CombinedDataStore:Set(value, dontCallOnUpdate)
-		coroutine.wrap(function()
-			local tableResult = self.combinedStore:GetTable({})
+		return self.combinedStore:GetAsync({}):andThen(function(tableResult)
 			tableResult[self.combinedName] = value
 			self.combinedStore:Set(tableResult, dontCallOnUpdate)
 			self:_Update(dontCallOnUpdate)
-		end)()
+		end)
 	end
 
 	function CombinedDataStore:Update(updateFunc)
