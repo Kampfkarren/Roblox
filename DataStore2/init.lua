@@ -136,12 +136,7 @@ function DataStore:Get(defaultValue, dontAttemptGet)
 	return value
 end
 
-function DataStore:GetAsync(...)
-	local args = { ... }
-	return Promise.async(function(resolve)
-		resolve(self:Get(unpack(args)))
-	end)
-end
+DataStore.GetAsync = Promise.promisify(DataStore.Get)
 
 function DataStore:GetTable(default, ...)
 	local success, result = self:GetTableAsync(default, ...):await()
@@ -155,26 +150,24 @@ function DataStore:GetTableAsync(default, ...)
 	assert(default ~= nil, "You must provide a default value.")
 
 	return self:GetAsync(default, ...):andThen(function(result)
-		return Promise.async(function(resolve)
-			local changed = false
-			assert(
-				typeof(result) == "table",
-				":GetTable/:GetTableAsync was used when the value in the data store isn't a table."
-			)
+		local changed = false
+		assert(
+			typeof(result) == "table",
+			":GetTable/:GetTableAsync was used when the value in the data store isn't a table."
+		)
 
-			for defaultKey, defaultValue in pairs(default) do
-				if result[defaultKey] == nil then
-					result[defaultKey] = defaultValue
-					changed = true
-				end
+		for defaultKey, defaultValue in pairs(default) do
+			if result[defaultKey] == nil then
+				result[defaultKey] = defaultValue
+				changed = true
 			end
+		end
 
-			if changed then
-				self:Set(result)
-			end
-
-			resolve(result)
-		end)
+		if changed then
+			return self:Set(result)
+		else
+			return result
+		end
 	end)
 end
 
