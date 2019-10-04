@@ -496,7 +496,9 @@ function DataStore2.__call(_, dataStoreName, player)
 					local value = combinedStore:Get(nil, true)
 					if value ~= nil then
 						if combinedStore.combinedBeforeSave then
-							value = combinedStore.combinedBeforeSave(clone(value))
+							if typeof(value) == "table" then
+								value = combinedStore.combinedBeforeSave(clone(value))
+							end
 						end
 						combinedData[key] = value
 					end
