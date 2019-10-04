@@ -490,20 +490,22 @@ function DataStore2.__call(_, dataStoreName, player)
 		local dataStore = DataStore2(combinedDataStoreInfo[dataStoreName], player)
 
 		dataStore:BeforeSave(function(combinedData)
-			for key in pairs(combinedData) do
-				if combinedDataStoreInfo[key] then
-					local combinedStore = DataStore2(key, player)
-					local value = combinedStore:Get(nil, true)
-					if value ~= nil then
-						if combinedStore.combinedBeforeSave then
-							value = combinedStore.combinedBeforeSave(clone(value))
+			if typeof(combinedData) == "table" then
+				for key in pairs(combinedData) do
+					if combinedDataStoreInfo[key] then
+						local combinedStore = DataStore2(key, player)
+						local value = combinedStore:Get(nil, true)
+						if value ~= nil then
+							if combinedStore.combinedBeforeSave then
+								value = combinedStore.combinedBeforeSave(clone(value))
+							end
+							combinedData[key] = value
 						end
-						combinedData[key] = value
 					end
 				end
-			end
 
-			return combinedData
+				return combinedData
+			end
 		end)
 
 		local combinedStore = setmetatable({
