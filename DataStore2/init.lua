@@ -74,10 +74,10 @@ function DataStore:_GetRaw()
 	return self.getRawPromise
 end
 
-function DataStore:_Update(dontCallOnUpdate)
+function DataStore:_Update(dontCallOnUpdate, oldVal)
 	if not dontCallOnUpdate then
 		for _, callback in ipairs(self.callbacks) do
-			callback(self.value, self)
+			callback(self.value, self, oldVal)
 		end
 	end
 
@@ -172,13 +172,15 @@ function DataStore:GetTableAsync(default, ...)
 end
 
 function DataStore:Set(value, _dontCallOnUpdate)
+	local oldVal = self.value
 	self.value = clone(value)
-	self:_Update(_dontCallOnUpdate)
+	self:_Update(_dontCallOnUpdate, oldVal)
 end
 
 function DataStore:Update(updateFunc)
+	local oldVal = self.value
 	self.value = updateFunc(self.value)
-	self:_Update()
+	self:_Update(nil, oldVal)
 end
 
 function DataStore:Increment(value, defaultValue)
@@ -381,15 +383,17 @@ do
 
 	function CombinedDataStore:Set(value, dontCallOnUpdate)
 		return self.combinedStore:GetAsync({}):andThen(function(tableResult)
+			local oldVal = tableResult[self.combinedName]
 			tableResult[self.combinedName] = value
 			self.combinedStore:Set(tableResult, dontCallOnUpdate)
-			self:_Update(dontCallOnUpdate)
+			self:_Update(dontCallOnUpdate, oldVal)
 		end)
 	end
 
 	function CombinedDataStore:Update(updateFunc)
+		local oldVal = self:Get()
 		self:Set(updateFunc(self:Get()))
-		self:_Update()
+		self:_Update(nil, oldVal)
 	end
 
 	function CombinedDataStore:Save()
@@ -404,10 +408,10 @@ do
 		end
 	end
 
-	function CombinedDataStore:_Update(dontCallOnUpdate)
+	function CombinedDataStore:_Update(dontCallOnUpdate, oldVal)
 		if not dontCallOnUpdate then
 			for _, callback in ipairs(self.onUpdateCallbacks or {}) do
-				callback(self:Get(), self)
+				callback(self:Get(), self, oldVal)
 			end
 		end
 
