@@ -12,7 +12,7 @@ local boughtGamePasses = WeakInstanceTable()
 
 local listeningPasses = {}
 
-MarketplaceService.PromptGamePassPurchaseFinished:connect(function(player, gamePassId, purchased)
+MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, gamePassId, purchased)
 	if not purchased then return end
 	boughtGamePasses[player] = boughtGamePasses[player] or {}
 	boughtGamePasses[player][gamePassId] = true
@@ -20,22 +20,29 @@ end)
 
 local GamePasses = {}
 
+local function userOwnsGamePassAsync(player, gamePassId)
+	local success, doesOwn = pcall(MarketplaceService.UserOwnsGamePassAsync, MarketplaceService, player.UserId, gamePassId)
+	return success and doesOwn or false
+end
+
 function GamePasses.ListenForPass(gamePassId)
 	if listeningPasses[gamePassId] then return end
 	listeningPasses[gamePassId] = true
 
 	local function checkGamePassOwnership(player)
 		boughtGamePasses[player] = boughtGamePasses[player] or {}
-		boughtGamePasses[player][gamePassId] = MarketplaceService:UserOwnsGamePassAsync(player.UserId, gamePassId)
+		boughtGamePasses[player][gamePassId] = userOwnsGamePassAsync(player, gamePassId)
 	end
 
 	if RunService:IsServer() then
-		Players.PlayerAdded:connect(checkGamePassOwnership)
-		for _, player in pairs(Players:GetPlayers()) do
-			coroutine.wrap(checkGamePassOwnership)(player)
+		Players.PlayerAdded:Connect(checkGamePassOwnership)
+		for _, player in ipairs(Players:GetPlayers()) do
+			local thread = coroutine.create(checkGamePassOwnership)
+			coroutine.resume(thread, player)
 		end
 	else
-		coroutine.wrap(checkGamePassOwnership)(Players.LocalPlayer)
+		local thread = coroutine.create(checkGamePassOwnership)
+		coroutine.resume(thread, Players.LocalPlayer)
 	end
 end
 
@@ -45,4 +52,3 @@ function GamePasses.PlayerOwnsPass(player, gamePassId)
 end
 
 return GamePasses
-
