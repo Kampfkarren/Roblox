@@ -4,14 +4,12 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-    - name: Download selene
+    - uses: actions/checkout@v1
+    - name: Run selene
       run: |
         curl -s https://api.github.com/repos/Kampfkarren/selene/releases/latest |
         grep -oP --color=never "(https://(?:.+)/download/(?:.+)/selene\")" |
         sed s/.$// |
         xargs wget
-    - uses: actions/checkout@v1
-    - name: Run selene
-      run: |
         chmod +x ./selene
         ./selene .
