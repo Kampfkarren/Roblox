@@ -3,8 +3,6 @@ return function()
 
 	local DataStore2 = require(script:FindFirstAncestor("Root").Modules.DataStore2)
 
-	local BIND_TO_CLOSE = game.BIND_TO_CLOSE
-
 	local playerRemovingEvent = Instance.new("BindableEvent")
 
 	local function equals(t1, t2)
@@ -25,7 +23,9 @@ return function()
 
 	local fakePlayer = {}
 	fakePlayer.AncestryChanged = playerRemovingEvent.Event
-	fakePlayer.IsDescendantOf = function() return false end
+	fakePlayer.IsDescendantOf = function()
+		return false
+	end
 	fakePlayer.UserId = 156
 	setmetatable(fakePlayer, {
 		TYPEOF_HACK = "Instance",
@@ -222,7 +222,6 @@ return function()
 				DataStore2.ClearCache()
 
 				local dataStore1 = DataStore2(key1, fakePlayer)
-				local dataStore2 = DataStore2(key2, fakePlayer)
 
 				dataStore1:BeforeInitialGet(function(x)
 					return x + 1

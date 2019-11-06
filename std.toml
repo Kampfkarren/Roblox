@@ -1,0 +1,27 @@
+# TestEZ
+[[describe.args]]
+type = "string"
+
+[[describe.args]]
+type = "function"
+
+[[expect.args]]
+type = "any"
+
+[[it.args]]
+type = "string"
+
+[[it.args]]
+type = "function"
+
+# Exposed as a global during tests
+[UUID]
+args = []
+
+# Used during tests
+[[os.exit.args]]
+type = "number"
+
+[package.path]
+property = true
+writable = "overridden"
