@@ -12,6 +12,6 @@ jobs:
         xargs wget
     - uses: actions/checkout@v1
     - name: Run selene
-      run: /
+      run: |
         chmod +x ./selene
         ./selene .
