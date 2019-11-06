@@ -59,7 +59,6 @@ MockDataStoreConstants.WRITE_COOLDOWN = 0
 MockDataStoreConstants.YIELD_TIME_MAX = 0
 
 local gamePrototype = getmetatable(habitat.game).class.prototype
-local oldGetService = gamePrototype.GetService
 
 local setErrorRate = lemur.Instance.new("BindableEvent", habitat.game)
 setErrorRate.Name = "SET_ERROR_RATE"
@@ -71,7 +70,7 @@ end)
 local bindToClose = lemur.Instance.new("BindableEvent", habitat.game)
 bindToClose.Name = "BIND_TO_CLOSE"
 
-function gamePrototype:BindToClose(callback)
+function gamePrototype.BindToClose(_, callback)
 	bindToClose.Event:Connect(callback)
 end
 
@@ -87,14 +86,16 @@ function gamePrototype:GetService(serviceName)
 end
 
 local runServicePrototype = getmetatable(habitat.game:GetService("RunService")).class.prototype
-function runServicePrototype:IsServer()
+runServicePrototype.IsServer = function()
 	return true
 end
 
 -- Redirect DataStoreRequestType:GetEnumItems()
 getmetatable(habitat.environment.Enum.DataStoreRequestType).__index = function(_, index)
 	if index == "GetEnumItems" then
-		return function() return {} end
+		return function()
+			return {}
+		end
 	else
 		return 0
 	end
@@ -114,7 +115,7 @@ runner.resume()
 local TestEZ = habitat:require(Root.TestEZ)
 
 local results = TestEZ.TestBootstrap:run(
-	{Root.Tests, util},
+	{ Root.Tests },
 	TestEZ.Reporters.TextReports
 )
 

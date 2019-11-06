@@ -1,0 +1,5 @@
+std = "roblox+std"
+
+[rules]
+global_usage = "allow" # _G is used for _G.Random in tests, when specific line ignoring is added, remove this.
+shadowing = "allow"

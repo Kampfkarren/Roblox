@@ -1,4 +1,4 @@
-local function commaSeparated(list)
+return function(list)
 	if #list == 1 then
 		return tostring(list[1])
 	elseif #list == 2 then
