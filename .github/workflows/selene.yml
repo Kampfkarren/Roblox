@@ -1,0 +1,17 @@
+name: Run selene
+on: [push]
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download selene
+      run: |
+        curl -s https://api.github.com/repos/Kampfkarren/selene/releases/latest |
+        grep -oP --color=never "(https://(?:.+)/download/(?:.+)/selene\")" |
+        sed s/.$// |
+        xargs wget
+    - uses: actions/checkout@v1
+    - name: Run selene
+      run: /
+        chmod +x ./selene
+        ./selene .
