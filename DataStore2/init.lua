@@ -164,10 +164,10 @@ function DataStore:GetTableAsync(default, ...)
 		end
 
 		if changed then
-			return self:Set(result)
-		else
-			return result
+			self:Set(result)
 		end
+
+		return result
 	end)
 end
 
