@@ -14,14 +14,8 @@ type = "string"
 [[it.args]]
 type = "function"
 
-# Exposed as a global during tests
-[UUID]
+[HACK_NO_XPCALL]
 args = []
 
-# Used during tests
-[[os.exit.args]]
-type = "number"
-
-[package.path]
+[__LEMUR__]
 property = true
-writable = "overridden"

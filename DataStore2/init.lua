@@ -31,6 +31,7 @@ local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
 local Constants = require(script.Constants)
+local IsPlayer = require(script.IsPlayer)
 local Promise = require(script.Promise)
 local SavingMethods = require(script.SavingMethods)
 local Settings = require(script.Settings)
@@ -54,7 +55,7 @@ local DataStore = {}
 --Internal functions
 function DataStore:Debug(...)
 	if self.debug then
-		print(...)
+		print("[DataStore2.Debug]", ...)
 	end
 end
 
@@ -67,8 +68,12 @@ function DataStore:_GetRaw()
 		self.value = value
 		self:Debug("value received")
 		self.haveValue = true
-	end):finally(function()
+	end):finally(function(status)
 		self.getting = false
+
+		if status == Promise.Status.Rejected then
+			return Promise.reject()
+		end
 	end)
 
 	return self.getRawPromise
@@ -136,7 +141,11 @@ function DataStore:Get(defaultValue, dontAttemptGet)
 	return value
 end
 
-DataStore.GetAsync = Promise.promisify(DataStore.Get)
+function DataStore:GetAsync(...)
+	return Promise.promisify(function(...)
+		return self:Get(...)
+	end)(...)
+end
 
 function DataStore:GetTable(default, ...)
 	local success, result = self:GetTableAsync(default, ...):await()
@@ -239,6 +248,7 @@ function DataStore:ClearBackup()
 	self.backup = nil
 	self.haveValue = false
 	self.value = nil
+	self.getRawPromise = nil
 end
 
 --[[**
@@ -318,6 +328,7 @@ function DataStore:SaveAsync()
 			end)
 		end
 	end):andThen(function(saved, save)
+		print(saved, save)
 		if saved then
 			for _, afterSave in ipairs(self.afterSave) do
 				local success, err = pcall(afterSave, save, self)
@@ -476,8 +487,8 @@ end
 
 function DataStore2.__call(_, dataStoreName, player)
 	assert(
-		typeof(dataStoreName) == "string" and typeof(player) == "Instance",
-		("DataStore2() API call expected {string dataStoreName, Instance player}, got {%s, %s}")
+		typeof(dataStoreName) == "string" and IsPlayer.Check(player),
+		("DataStore2() API call expected {string dataStoreName, Player player}, got {%s, %s}")
 		:format(
 			typeof(dataStoreName),
 			typeof(player)

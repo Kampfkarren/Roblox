@@ -1,0 +1,42 @@
+{
+	"name": "tests",
+	"tree": {
+		"$className": "DataModel",
+		"HttpService": {
+			"$className": "HttpService",
+			"$properties": {
+				"HttpEnabled": true
+			}
+		},
+		"ServerScriptService": {
+			"$className": "ServerScriptService",
+			"Modules": {
+				"$className": "Folder",
+				"DataStore2": {
+					"$path": "DataStore2"
+				}
+			},
+			"Tests": {
+				"$className": "Folder",
+				"MockDataStoreService": {
+					"$path": "Tests/MockDataStoreService/lib"
+				},
+				"TestEZ": {
+					"$path": "Tests/testez/lib"
+				},
+				"Tests": {
+					"$path": "Tests/tests"
+				}
+			}
+		},
+		"ServerStorage": {
+			"$className": "ServerStorage",
+			"SaveInStudio": {
+				"$className": "BoolValue",
+				"$properties": {
+					"Value": true
+				}
+			}
+		}
+	}
+}

@@ -1,13 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 - Added `DataStore2.SaveAllAsync`.
 - Fix `:IncrementAsync` throwing an error on combined data stores.
 - Fix `:Set` on combined data stores having the potential to yield.
+- Fix a crash relating to backups.
+- Fix `GetTable` not working appropriately when using different default table keys.
+- Fix `GetTable` not working appropriately when using combined data stores.
 
 ## [1.3.0]
 - Added :GetAsync(), :GetTableAsync, and :IncrementAsync(), which are [promise](https://github.com/evaera/roblox-lua-promise) versions of their non-async counterparts.

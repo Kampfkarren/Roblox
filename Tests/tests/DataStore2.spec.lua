@@ -1,7 +1,24 @@
 return function()
-	local DataStoreService = game:GetService("DataStoreService")
+	local HttpService = game:GetService("HttpService")
+	local RunService = game:GetService("RunService")
+	local ServerScriptService = game:GetService("ServerScriptService")
 
-	local DataStore2 = require(script:FindFirstAncestor("Root").Modules.DataStore2)
+	local moduleDataStore2 = ServerScriptService.Modules.DataStore2
+
+	local MockDataStoreServiceConstants = require(
+		ServerScriptService
+			.Tests
+			.MockDataStoreService
+			.MockDataStoreService
+			.MockDataStoreConstants
+	)
+
+	MockDataStoreServiceConstants.BUDGETING_ENABLED = false
+	MockDataStoreServiceConstants.LOGGING_ENABLED = false
+	MockDataStoreServiceConstants.WRITE_COOLDOWN = 0
+	MockDataStoreServiceConstants.YIELD_TIME_MAX = 0
+
+	local MockDataStoreService = require(ServerScriptService.Tests.MockDataStoreService)
 
 	local playerRemovingEvent = Instance.new("BindableEvent")
 
@@ -21,18 +38,31 @@ return function()
 		return true
 	end
 
+	local function UUID()
+		return HttpService:GenerateGUID()
+	end
+
 	local fakePlayer = {}
 	fakePlayer.AncestryChanged = playerRemovingEvent.Event
 	fakePlayer.IsDescendantOf = function()
 		return false
 	end
 	fakePlayer.UserId = 156
-	setmetatable(fakePlayer, {
-		TYPEOF_HACK = "Instance",
-	})
+
+	require(moduleDataStore2.IsPlayer).Check = function(object)
+		return object == fakePlayer
+	end
+
+	require(moduleDataStore2.DataStoreServiceRetriever).Get = function()
+		return MockDataStoreService
+	end
+
+	local DataStore2 = require(moduleDataStore2)
 
 	local function test(DataStore2, save)
 		return function()
+			HACK_NO_XPCALL()
+
 			it("should return whatever the data store value is the first time", function()
 				expect(DataStore2(UUID(), fakePlayer):Get()).to.equal(nil)
 
@@ -71,6 +101,10 @@ return function()
 				local dataStore = DataStore2(key, fakePlayer)
 				dataStore:Set(1)
 				playerRemovingEvent:Fire()
+
+				-- Give Promise.async time to resolve
+				RunService.Heartbeat:wait()
+				RunService.Heartbeat:wait()
 
 				DataStore2.ClearCache()
 				local dataStore = DataStore2(key, fakePlayer)
@@ -329,27 +363,18 @@ return function()
 				local key = UUID()
 				save(key, "backup test")
 
-				game.SET_ERROR_RATE:Fire(1)
+				MockDataStoreServiceConstants.SIMULATE_ERROR_RATE = 1
+
+				local dataStore
 				local errorInfo = {pcall(function()
-					local dataStore = DataStore2(key, fakePlayer)
+					dataStore = DataStore2(key, fakePlayer)
 					dataStore:SetBackup(5)
 					expect(dataStore:Get("oh no")).to.equal("oh no")
 				end)}
-				game.SET_ERROR_RATE:Fire(0)
+				MockDataStoreServiceConstants.SIMULATE_ERROR_RATE = 0
+				dataStore:ClearBackup()
 
 				assert(unpack(errorInfo))
-			end)
-
-			it("should save when the player leaves", function()
-				local key = UUID()
-
-				local dataStore = DataStore2(key, fakePlayer)
-				dataStore:Set(10)
-				playerRemovingEvent:Fire()
-				DataStore2.ClearCache()
-
-				local dataStore = DataStore2(key, fakePlayer)
-				expect(dataStore:Get()).to.equal(10)
 			end)
 
 			it("should call OnUpdate on increment", function()
@@ -417,8 +442,8 @@ return function()
 
 	local function save(key, value)
 		local dataKey = key .. "/" .. fakePlayer.UserId
-		local dataStore = DataStoreService:GetDataStore(dataKey)
-		local orderedDataStore = DataStoreService:GetOrderedDataStore(dataKey)
+		local dataStore = MockDataStoreService:GetDataStore(dataKey)
+		local orderedDataStore = MockDataStoreService:GetOrderedDataStore(dataKey)
 
 		local timeKey = os.time()
 		dataStore:SetAsync(timeKey, value)
@@ -445,6 +470,8 @@ return function()
 	end))
 
 	describe("combined data stores specific functionality", function()
+		HACK_NO_XPCALL()
+
 		it("should call BeforeSave on every data store when calling :Save() on one", function()
 			local key1, key2 = UUID(), UUID()
 			DataStore2.Combine(UUID(), key1, key2)

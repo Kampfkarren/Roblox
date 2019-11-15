@@ -3646,6 +3646,15 @@ struct = "EnumItem"
 
 [Enum.DataStoreRequestType.UpdateAsync]
 struct = "EnumItem"
+[Enum.DateTimeKind.GetEnumItems]
+args = []
+method = true
+
+[Enum.DateTimeKind.Local]
+struct = "EnumItem"
+
+[Enum.DateTimeKind.Utc]
+struct = "EnumItem"
 [Enum.DevCameraOcclusionMode.GetEnumItems]
 args = []
 method = true
@@ -7547,7 +7556,7 @@ struct = "EnumItem"
 [Enum.ZIndexBehavior.Sibling]
 struct = "EnumItem"
 [[Instance.new.args]]
-type = ["Accoutrement", "Accessory", "Hat", "AdvancedDragger", "Animation", "AnimationController", "Animator", "Attachment", "Backpack", "HopperBin", "Tool", "Flag", "Beam", "BindableEvent", "BindableFunction", "BodyAngularVelocity", "BodyForce", "BodyGyro", "BodyPosition", "BodyThrust", "BodyVelocity", "RocketPropulsion", "Camera", "BodyColors", "CharacterMesh", "Pants", "Shirt", "ShirtGraphic", "Skin", "ClickDetector", "Configuration", "AlignOrientation", "AlignPosition", "AngularVelocity", "BallSocketConstraint", "HingeConstraint", "LineForce", "RodConstraint", "RopeConstraint", "CylindricalConstraint", "PrismaticConstraint", "SpringConstraint", "Torque", "VectorForce", "HumanoidController", "SkateboardController", "VehicleController", "CustomEvent", "CustomEventReceiver", "BlockMesh", "CylinderMesh", "FileMesh", "SpecialMesh", "DebugSettings", "DebuggerWatch", "Dialog", "DialogChoice", "Dragger", "Explosion", "Decal", "Texture", "Hole", "MotorFeature", "Fire", "FlyweightService", "CSGDictionaryService", "NonReplicatedCSGDictionaryService", "Folder", "ForceField", "FunctionalTest", "GameSettings", "GoogleAnalyticsConfiguration", "Frame", "ImageButton", "TextButton", "ImageLabel", "TextLabel", "ScrollingFrame", "TextBox", "ViewportFrame", "BillboardGui", "ScreenGui", "GuiMain", "SurfaceGui", "FloorWire", "BoxHandleAdornment", "ConeHandleAdornment", "CylinderHandleAdornment", "ImageHandleAdornment", "LineHandleAdornment", "SphereHandleAdornment", "ParabolaAdornment", "SelectionBox", "SelectionSphere", "ArcHandles", "Handles", "SurfaceSelection", "SelectionPartLasso", "SelectionPointLasso", "Humanoid", "HumanoidDescription", "RotateP", "RotateV", "Glue", "ManualGlue", "ManualWeld", "Motor", "Motor6D", "Rotate", "Snap", "VelocityMotor", "Weld", "Keyframe", "KeyframeMarker", "KeyframeSequence", "PointLight", "SpotLight", "SurfaceLight", "LocalizationTable", "LuaSettings", "Script", "LocalScript", "ModuleScript", "Message", "Hint", "NetworkSettings", "NoCollisionConstraint", "CornerWedgePart", "Part", "FlagStand", "Seat", "SkateboardPlatform", "SpawnLocation", "WedgePart", "MeshPart", "PartOperation", "NegateOperation", "UnionOperation", "TrussPart", "VehicleSeat", "Model", "PartOperationAsset", "ParticleEmitter", "PhysicsSettings", "Player", "PluginAction", "Pose", "BloomEffect", "BlurEffect", "ColorCorrectionEffect", "SunRaysEffect", "ReflectionMetadata", "ReflectionMetadataCallbacks", "ReflectionMetadataClasses", "ReflectionMetadataEnums", "ReflectionMetadataEvents", "ReflectionMetadataFunctions", "ReflectionMetadataClass", "ReflectionMetadataEnum", "ReflectionMetadataEnumItem", "ReflectionMetadataMember", "ReflectionMetadataProperties", "ReflectionMetadataYieldFunctions", "RemoteEvent", "RemoteFunction", "RenderSettings", "RenderingTest", "Sky", "Smoke", "Sound", "ChorusSoundEffect", "CompressorSoundEffect", "DistortionSoundEffect", "EchoSoundEffect", "EqualizerSoundEffect", "FlangeSoundEffect", "PitchShiftSoundEffect", "ReverbSoundEffect", "TremoloSoundEffect", "SoundGroup", "Sparkles", "StandalonePluginScripts", "StarterGear", "Studio", "TaskScheduler", "Team", "TerrainRegion", "TestService", "Trail", "Tween", "UIAspectRatioConstraint", "UISizeConstraint", "UITextSizeConstraint", "UIGridLayout", "UIInlineLayout", "UIListLayout", "UIPageLayout", "UITableLayout", "UIPadding", "UIScale", "UserGameSettings", "BinaryStringValue", "BoolValue", "BrickColorValue", "CFrameValue", "Color3Value", "DoubleConstrainedValue", "IntConstrainedValue", "IntValue", "NumberValue", "ObjectValue", "RayValue", "StringValue", "Vector3Value", "VirtualInputManager", "WeldConstraint"]
+type = ["Accoutrement", "Accessory", "Hat", "AdvancedDragger", "Animation", "AnimationController", "Animator", "Attachment", "Backpack", "HopperBin", "Tool", "Flag", "Beam", "BindableEvent", "BindableFunction", "BodyAngularVelocity", "BodyForce", "BodyGyro", "BodyPosition", "BodyThrust", "BodyVelocity", "RocketPropulsion", "Camera", "BodyColors", "CharacterMesh", "Pants", "Shirt", "ShirtGraphic", "Skin", "ClickDetector", "Configuration", "AlignOrientation", "AlignPosition", "AngularVelocity", "BallSocketConstraint", "HingeConstraint", "LineForce", "RodConstraint", "RopeConstraint", "CylindricalConstraint", "PrismaticConstraint", "SpringConstraint", "Torque", "VectorForce", "HumanoidController", "SkateboardController", "VehicleController", "CustomEvent", "CustomEventReceiver", "BlockMesh", "CylinderMesh", "FileMesh", "SpecialMesh", "DebugSettings", "DebuggerWatch", "Dialog", "DialogChoice", "Dragger", "Explosion", "Decal", "Texture", "Hole", "MotorFeature", "Fire", "FlyweightService", "CSGDictionaryService", "NonReplicatedCSGDictionaryService", "Folder", "ForceField", "FunctionalTest", "GameSettings", "GoogleAnalyticsConfiguration", "Frame", "ImageButton", "TextButton", "ImageLabel", "TextLabel", "ScrollingFrame", "TextBox", "ViewportFrame", "BillboardGui", "ScreenGui", "GuiMain", "SurfaceGui", "FloorWire", "BoxHandleAdornment", "ConeHandleAdornment", "CylinderHandleAdornment", "ImageHandleAdornment", "LineHandleAdornment", "SphereHandleAdornment", "ParabolaAdornment", "SelectionBox", "SelectionSphere", "ArcHandles", "Handles", "SurfaceSelection", "SelectionPartLasso", "SelectionPointLasso", "Humanoid", "HumanoidDescription", "RotateP", "RotateV", "Glue", "ManualGlue", "ManualWeld", "Motor", "Motor6D", "Rotate", "Snap", "VelocityMotor", "Weld", "Keyframe", "KeyframeMarker", "KeyframeSequence", "PointLight", "SpotLight", "SurfaceLight", "LocalizationTable", "LuaSettings", "Script", "LocalScript", "ModuleScript", "Message", "Hint", "NetworkSettings", "NoCollisionConstraint", "CornerWedgePart", "Part", "FlagStand", "Seat", "SkateboardPlatform", "SpawnLocation", "WedgePart", "MeshPart", "PartOperation", "NegateOperation", "UnionOperation", "TrussPart", "VehicleSeat", "Model", "WorldModel", "PartOperationAsset", "ParticleEmitter", "PhysicsSettings", "Player", "PluginAction", "Pose", "BloomEffect", "BlurEffect", "ColorCorrectionEffect", "SunRaysEffect", "ReflectionMetadata", "ReflectionMetadataCallbacks", "ReflectionMetadataClasses", "ReflectionMetadataEnums", "ReflectionMetadataEvents", "ReflectionMetadataFunctions", "ReflectionMetadataClass", "ReflectionMetadataEnum", "ReflectionMetadataEnumItem", "ReflectionMetadataMember", "ReflectionMetadataProperties", "ReflectionMetadataYieldFunctions", "RemoteEvent", "RemoteFunction", "RenderSettings", "RenderingTest", "Sky", "Smoke", "Sound", "ChorusSoundEffect", "CompressorSoundEffect", "DistortionSoundEffect", "EchoSoundEffect", "EqualizerSoundEffect", "FlangeSoundEffect", "PitchShiftSoundEffect", "ReverbSoundEffect", "TremoloSoundEffect", "SoundGroup", "Sparkles", "StandalonePluginScripts", "StarterGear", "Studio", "TaskScheduler", "Team", "TerrainRegion", "TestService", "Trail", "Tween", "UIAspectRatioConstraint", "UISizeConstraint", "UITextSizeConstraint", "UIGridLayout", "UIInlineLayout", "UIListLayout", "UIPageLayout", "UITableLayout", "UIPadding", "UIScale", "UserGameSettings", "BinaryStringValue", "BoolValue", "BrickColorValue", "CFrameValue", "Color3Value", "DoubleConstrainedValue", "IntConstrainedValue", "IntValue", "NumberValue", "ObjectValue", "RayValue", "StringValue", "Vector3Value", "VirtualInputManager", "WeldConstraint"]
 [[NumberSequence.new.args]]
 type = "any"
 
@@ -7711,68 +7720,155 @@ type = "number"
 [[Vector3int16.new.args]]
 required = false
 type = "number"
+
+[_G]
+property = true
+writable = "new-fields"
+
+[_VERSION]
+property = true
+[[assert.args]]
+type = "any"
+
+[[assert.args]]
+required = false
+type = "any"
+[[bit32.arshift.args]]
+type = "number"
+
+[[bit32.arshift.args]]
+type = "number"
+[[bit32.band.args]]
+type = "number"
+[[bit32.bnot.args]]
+type = "number"
+[[bit32.bor.args]]
+type = "..."
+[[bit32.btest.args]]
+type = "..."
+[[bit32.bxor.args]]
+type = "..."
+[[bit32.extract.args]]
+type = "number"
+
+[[bit32.extract.args]]
+type = "number"
+
+[[bit32.extract.args]]
+required = false
+type = "number"
+[[bit32.lrotate.args]]
+type = "number"
+
+[[bit32.lrotate.args]]
+type = "number"
+[[bit32.lshift.args]]
+type = "number"
+
+[[bit32.lshift.args]]
+type = "number"
+[[bit32.replace.args]]
+type = "number"
+
+[[bit32.replace.args]]
+type = "number"
+
+[[bit32.replace.args]]
+required = false
+type = "number"
+[[bit32.rrotate.args]]
+type = "number"
+
+[[bit32.rrotate.args]]
+type = "number"
+[[bit32.rshift.args]]
+type = "number"
+
+[[bit32.rshift.args]]
+type = "number"
 [[collectgarbage.args]]
 type = ["count"]
-[debug.debug]
-removed = true
+[[coroutine.create.args]]
+type = "function"
+[[coroutine.resume.args]]
+[coroutine.resume.args.type]
+display = "coroutine"
 
-[debug.getfenv]
-removed = true
+[[coroutine.resume.args]]
+required = false
+type = "..."
 
-[debug.gethook]
-removed = true
+[coroutine.running]
+args = []
+[[coroutine.status.args]]
+[coroutine.status.args.type]
+display = "coroutine"
+[[coroutine.wrap.args]]
+type = "function"
+[[coroutine.yield.args]]
+required = false
 
-[debug.getinfo]
-removed = true
-
-[debug.getmetatable]
-removed = true
-
-[debug.getregistry]
-removed = true
-
-[debug.getupvalue]
-removed = true
+[coroutine.yield.args.type]
+display = "coroutine"
 [[debug.profilebegin.args]]
 type = "string"
 
 [debug.profileend]
 args = []
+[[debug.traceback.args]]
+required = false
+type = "function"
 
-[debug.setfenv]
-removed = true
+[[debug.traceback.args]]
+required = false
+type = "string"
 
-[debug.sethook]
-removed = true
-
-[debug.setlocal]
-removed = true
-
-[debug.setmetatable]
-removed = true
-
-[debug.setupvalue]
-removed = true
+[[debug.traceback.args]]
+required = false
+type = "number"
 [[delay.args]]
 type = "number"
 
 [[delay.args]]
 type = "function"
+[[error.args]]
+required = "Erroring without a message is unhelpful to users."
+type = "string"
 
-[dofile]
-removed = true
+[[error.args]]
+required = false
+type = "number"
 
 [game]
 struct = "DataModel"
+[[getfenv.args]]
+required = false
+type = "any"
+[[getmetatable.args]]
+type = "table"
+[[ipairs.args]]
+type = "table"
+[[loadstring.args]]
+type = "string"
 
-[io]
-removed = true
+[[loadstring.args]]
+required = false
+type = "string"
+[[math.abs.args]]
+type = "number"
+[[math.acos.args]]
+type = "number"
+[[math.asin.args]]
+type = "number"
+[[math.atan.args]]
+type = "number"
+[[math.atan2.args]]
+type = "number"
 
-[load]
-removed = true
-
-[loadfile]
-removed = true
+[[math.atan2.args]]
+type = "number"
+[[math.ceil.args]]
+type = "number"
 [[math.clamp.args]]
 type = "number"
 
@@ -7780,41 +7876,165 @@ type = "number"
 type = "number"
 
 [[math.clamp.args]]
+type = "number"
+[[math.cos.args]]
+type = "number"
+[[math.deg.args]]
+type = "number"
+[[math.exp.args]]
+type = "number"
+[[math.floor.args]]
+type = "number"
+[[math.fmod.args]]
+type = "number"
+
+[[math.fmod.args]]
+type = "number"
+[[math.frexp.args]]
+type = "number"
+
+[math.huge]
+property = true
+[[math.ldexp.args]]
+type = "number"
+
+[[math.ldexp.args]]
+type = "number"
+[[math.log.args]]
+type = "number"
+[[math.log10.args]]
+type = "number"
+[[math.max.args]]
+type = "number"
+
+[[math.max.args]]
+required = "use of max only makes sense with more than 1 parameter"
+type = "..."
+[[math.min.args]]
+type = "number"
+
+[[math.min.args]]
+required = "use of min only makes sense with more than 1 parameter"
+type = "..."
+[[math.modf.args]]
+type = "number"
+[[math.noise.args]]
+type = "number"
+
+[[math.noise.args]]
+required = false
+type = "number"
+
+[[math.noise.args]]
+required = false
+type = "number"
+
+[math.pi]
+property = true
+[[math.pow.args]]
+type = "number"
+
+[[math.pow.args]]
+type = "number"
+[[math.rad.args]]
+type = "number"
+[[math.random.args]]
+required = false
+type = "number"
+
+[[math.random.args]]
+required = false
+type = "number"
+[[math.randomseed.args]]
 type = "number"
 [[math.sign.args]]
 type = "number"
+[[math.sin.args]]
+type = "number"
+[[math.sinh.args]]
+type = "number"
+[[math.sqrt.args]]
+type = "number"
+[[math.tan.args]]
+type = "number"
+[[math.tanh.args]]
+type = "number"
+[[newproxy.args]]
+required = false
+type = "bool"
+[[next.args]]
+type = "table"
 
-[module]
-removed = true
-[os.clock]
-removed = true
+[[next.args]]
+required = false
+type = "number"
+[[os.date.args]]
+required = false
+type = "string"
 
-[os.execute]
-removed = true
+[[os.date.args]]
+required = false
+type = "number"
+[[os.difftime.args]]
+type = "number"
 
-[os.exit]
-removed = true
+[[os.difftime.args]]
+type = "number"
+[[os.time.args]]
+required = false
+type = "table"
+[[pairs.args]]
+type = "table"
+[[pcall.args]]
+type = "function"
 
-[os.getenv]
-removed = true
-
-[os.remove]
-removed = true
-
-[os.rename]
-removed = true
-
-[os.setlocale]
-removed = true
-
-[os.tmpname]
-removed = true
+[[pcall.args]]
+required = false
+type = "..."
 
 [plugin]
 struct = "Plugin"
+[[print.args]]
+required = false
+type = "..."
+[[rawequal.args]]
+type = "any"
+
+[[rawequal.args]]
+type = "any"
+[[rawget.args]]
+type = "any"
+
+[[rawget.args]]
+type = "any"
+[[rawset.args]]
+type = "any"
+
+[[rawset.args]]
+type = "any"
+
+[[rawset.args]]
+type = "any"
+[[require.args]]
+type = "string"
 
 [script]
 struct = "Script"
+[[select.args]]
+type = "any"
+
+[[select.args]]
+type = "..."
+[[setfenv.args]]
+type = "any"
+
+[[setfenv.args]]
+type = "table"
+[[setmetatable.args]]
+type = "table"
+
+[[setmetatable.args]]
+type = "table"
 
 [settings]
 args = []
@@ -7824,14 +8044,150 @@ property = true
 writable = "new-fields"
 [[spawn.args]]
 type = "function"
+[[string.byte.args]]
+type = "string"
+
+[[string.byte.args]]
+required = false
+type = "number"
+
+[[string.byte.args]]
+required = false
+type = "number"
+[[string.char.args]]
+type = "..."
+[[string.dump.args]]
+type = "function"
+[[string.find.args]]
+type = "string"
+
+[[string.find.args]]
+type = "string"
+
+[[string.find.args]]
+required = false
+type = "number"
+
+[[string.find.args]]
+required = false
+type = "bool"
+[[string.format.args]]
+type = "string"
+
+[[string.format.args]]
+required = "string.format should only be used for strings that need formatting"
+type = "..."
+[[string.gmatch.args]]
+type = "string"
+
+[[string.gmatch.args]]
+type = "string"
+[[string.gsub.args]]
+type = "string"
+
+[[string.gsub.args]]
+type = "string"
+
+[[string.gsub.args]]
+type = "string"
+
+[[string.gsub.args]]
+required = false
+type = "number"
+[[string.len.args]]
+type = "string"
+[[string.lower.args]]
+type = "string"
+[[string.match.args]]
+type = "string"
+
+[[string.match.args]]
+type = "string"
+
+[[string.match.args]]
+required = false
+type = "number"
+[[string.rep.args]]
+type = "string"
+
+[[string.rep.args]]
+type = "number"
+[[string.sub.args]]
+type = "string"
+
+[[string.sub.args]]
+type = "number"
+
+[[string.sub.args]]
+required = false
+type = "number"
+[[string.upper.args]]
+type = "string"
+[[table.concat.args]]
+type = "table"
+
+[[table.concat.args]]
+required = false
+type = "string"
+
+[[table.concat.args]]
+required = false
+type = "number"
+
+[[table.concat.args]]
+required = false
+type = "number"
+[[table.insert.args]]
+type = "table"
+
+[[table.insert.args]]
+type = "any"
+
+[[table.insert.args]]
+required = false
+type = "any"
+[[table.maxn.args]]
+type = "table"
+[[table.remove.args]]
+type = "table"
+
+[[table.remove.args]]
+required = false
+type = "number"
+[[table.sort.args]]
+type = "table"
+
+[[table.sort.args]]
+required = false
+type = "function"
 
 [tick]
 args = []
 
 [time]
 args = []
+[[tonumber.args]]
+type = "any"
+
+[[tonumber.args]]
+required = false
+type = "number"
+[[tostring.args]]
+type = "any"
+[[type.args]]
+type = "any"
 [[typeof.args]]
 type = "any"
+[[unpack.args]]
+type = "table"
+
+[[unpack.args]]
+required = false
+type = "number"
+
+[[unpack.args]]
+required = false
+type = "number"
 [[wait.args]]
 required = false
 type = "number"
@@ -7844,4 +8200,8 @@ type = "..."
 
 [workspace]
 struct = "Workspace"
+[[xpcall.args]]
+type = "function"
 
+[[xpcall.args]]
+type = "function"

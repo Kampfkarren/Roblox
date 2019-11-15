@@ -1,7 +1,7 @@
 -- Standard saving of data stores
 -- The key you provide to DataStore2 is the name of the store with GetDataStore
 -- GetAsync/UpdateAsync are then called based on the user ID
-local DataStoreService = game:GetService("DataStoreService")
+local DataStoreServiceRetriever = require(script.Parent.Parent.DataStoreServiceRetriever)
 local Promise = require(script.Parent.Parent.Promise)
 
 local Standard = {}
@@ -25,7 +25,7 @@ end
 
 function Standard.new(dataStore2)
 	return setmetatable({
-		dataStore = DataStoreService:GetDataStore(dataStore2.Name),
+		dataStore = DataStoreServiceRetriever.Get():GetDataStore(dataStore2.Name),
 		userId = dataStore2.UserId,
 	}, Standard)
 end
