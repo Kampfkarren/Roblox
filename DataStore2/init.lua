@@ -548,7 +548,6 @@ function DataStore2.__call(_, dataStoreName, player)
 	local event, fired = Instance.new("BindableEvent"), false
 
 	game:BindToClose(function()
-		if true then return end
 		if not fired then
 			spawn(function()
 				player.Parent = nil -- Forces AncestryChanged to fire and save the data
