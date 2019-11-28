@@ -68,12 +68,11 @@ function DataStore:_GetRaw()
 		self.value = value
 		self:Debug("value received")
 		self.haveValue = true
-	end):finally(function(status)
 		self.getting = false
-
-		if status == Promise.Status.Rejected then
-			return Promise.reject()
-		end
+	end):catch(function(reason)
+		self.getting = false
+		self.getRawPromise = nil
+		return Promise.reject(reason)
 	end)
 
 	return self.getRawPromise
@@ -328,7 +327,6 @@ function DataStore:SaveAsync()
 			end)
 		end
 	end):andThen(function(saved, save)
-		print(saved, save)
 		if saved then
 			for _, afterSave in ipairs(self.afterSave) do
 				local success, err = pcall(afterSave, save, self)
@@ -550,6 +548,7 @@ function DataStore2.__call(_, dataStoreName, player)
 	local event, fired = Instance.new("BindableEvent"), false
 
 	game:BindToClose(function()
+		if true then return end
 		if not fired then
 			spawn(function()
 				player.Parent = nil -- Forces AncestryChanged to fire and save the data

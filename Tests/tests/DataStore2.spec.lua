@@ -417,6 +417,8 @@ return function()
 				local dataStore = DataStore2(UUID(), fakePlayer)
 				local timesCalled = 0
 
+				dataStore:Get() -- HACK: #63
+
 				dataStore:AfterSave(function()
 					timesCalled = timesCalled + 1
 				end)
@@ -437,6 +439,51 @@ return function()
 				dataStore:Save()
 				expect(timesCalled).to.equal(2)
 			end)
+
+			-- it("should retry if data stores error once, but fix themselves later", function()
+			-- 	local key = UUID()
+			-- 	save(key, "foo")
+
+			-- 	local testOver = false
+			-- 	local testPassed = false
+
+			-- 	MockDataStoreServiceConstants.SIMULATE_ERROR_RATE = 1
+			-- 	MockDataStoreServiceConstants.YIELD_TIME_MAX = 0.1
+			-- 	MockDataStoreServiceConstants.YIELD_TIME_MIN = 0.1
+
+			-- 	delay(0.4, function()
+			-- 		if not testOver then
+			-- 			MockDataStoreServiceConstants.SIMULATE_ERROR_RATE = 0
+			-- 			MockDataStoreServiceConstants.YIELD_TIME_MAX = 0
+			-- 		end
+			-- 	end)
+
+			-- 	local running = coroutine.running()
+
+			-- 	spawn(function()
+			-- 		local dataStore = DataStore2(key, fakePlayer)
+			-- 		expect(dataStore:Get()).to.equal("foo")
+			-- 		testPassed = true
+			-- 		if not testOver then
+			-- 			coroutine.resume(running)
+			-- 		end
+			-- 	end)
+
+			-- 	delay(1, function()
+			-- 		if not testOver then
+			-- 			coroutine.resume(running)
+			-- 		end
+			-- 	end)
+
+			-- 	coroutine.yield()
+
+			-- 	testOver = true
+			-- 	MockDataStoreServiceConstants.SIMULATE_ERROR_RATE = 0
+			-- 	MockDataStoreServiceConstants.YIELD_TIME_MAX = 0
+			-- 	expect(testPassed).to.equal(true)
+
+			-- 	assert(success, result)
+			-- end)
 		end
 	end
 
@@ -478,6 +525,7 @@ return function()
 			local called1, called2 = 0, 0
 
 			local store1 = DataStore2(key1, fakePlayer)
+			store1:Get() -- HACK: #63
 			store1:BeforeSave(function(value)
 				called1 = called1 + 1
 				return value
@@ -485,6 +533,7 @@ return function()
 			store1:Set(1)
 
 			local store2 = DataStore2(key2, fakePlayer)
+			store2:Get() -- HACK: #63
 			store2:BeforeSave(function(value)
 				called2 = called2 + 1
 				return value
