@@ -45,7 +45,7 @@ Click "Play", and look at the top right of your screen. You should see this:
 Now, we have to let the player actually get points. Write the following code after the connection:
 
 ```lua
-Workspace.PointsPart.ClickDetector.MouseClick:Connect(function(player)
+workspace.PointsPart.ClickDetector.MouseClick:Connect(function(player)
 	local pointsStore = DataStore2("points", player)
 	pointsStore:Increment(1) -- Give them 1 point
 end)
