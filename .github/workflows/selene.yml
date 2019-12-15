@@ -1,5 +1,11 @@
 name: Run selene
-on: [push]
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
 jobs:
   generate:
     runs-on: ubuntu-latest
@@ -7,9 +13,6 @@ jobs:
     - uses: actions/checkout@v1
     - name: Run selene
       run: |
-        curl -s https://api.github.com/repos/Kampfkarren/selene/releases/latest |
-        grep -oP --color=never "(https://(?:.+)/download/(?:.+)/selene\")" |
-        sed s/.$// |
-        xargs wget
+        wget -O selene https://github.com/Kampfkarren/selene/releases/latest/download/selene-linux
         chmod +x ./selene
         ./selene .
