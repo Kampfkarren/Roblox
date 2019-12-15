@@ -1,5 +1,11 @@
 name: Run selene
-on: [push]
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
 jobs:
   generate:
     runs-on: ubuntu-latest
