@@ -327,6 +327,21 @@ return function()
 				expect(timesCalled2).to.equal(1)
 			end)
 
+			it("should call OnUpdate callbacks when using Update", function()
+				local dataStore = DataStore2(UUID(), fakePlayer)
+				
+				local timesCalled = 0
+				dataStore:OnUpdate(function()
+					timesCalled = timesCalled + 1
+				end)
+
+				dataStore:Update(function(oldValue)
+					return (oldValue or 0) + 1
+				end)
+
+				expect(timesCalled).to.equal(1)
+			end)
+
 			it("should not call OnUpdate when using :Get() with a default value", function()
 				local dataStore = DataStore2(UUID(), fakePlayer)
 				local called = false

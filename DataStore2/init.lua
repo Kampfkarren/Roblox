@@ -398,7 +398,6 @@ do
 
 	function CombinedDataStore:Update(updateFunc)
 		self:Set(updateFunc(self:Get()))
-		self:_Update()
 	end
 
 	function CombinedDataStore:Save()
