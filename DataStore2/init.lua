@@ -158,18 +158,12 @@ function DataStore:GetTableAsync(default, ...)
 	assert(default ~= nil, "You must provide a default value.")
 
 	return self:GetAsync(default, ...):andThen(function(result)
-		local changed = false
 		assert(
 			typeof(result) == "table",
 			":GetTable/:GetTableAsync was used when the value in the data store isn't a table."
 		)
 
-		for defaultKey, defaultValue in pairs(default) do
-			if result[defaultKey] == nil then
-				result[defaultKey] = defaultValue
-				changed = true
-			end
-		end
+		local changed = TableUtil.sync(result, default)
 
 		if changed then
 			self:Set(result)
@@ -177,7 +171,7 @@ function DataStore:GetTableAsync(default, ...)
 
 		return result
 	end)
-end
+endd
 
 function DataStore:Set(value, _dontCallOnUpdate)
 	self.value = clone(value)
