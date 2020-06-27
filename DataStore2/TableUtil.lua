@@ -17,17 +17,17 @@ end
 function TableUtil.sync(tbl, default)
 	local changed = false
 
-	for key, value in pairs(default) do
-		if not tbl[key] then
-			if typeof(value) == "table" then
-				tbl[key] = TableUtil.copy(value)
+	for defaultKey, defaultValue in pairs(default) do
+		if tbl[defaultKey] == nil then
+			if typeof(defaultValue) == "table" then
+				tbl[defaultKey] = TableUtil.copy(defaultValue)
 			else
-				tbl[key] = value
+				tbl[defaultKey] = defaultValue
 			end
 
 			changed = true
-		elseif typeof(tbl[key]) == "table" then
-			TableUtil.sync(tbl[key], value)
+		elseif typeof(tbl[defaultKey]) == "table" then
+			TableUtil.sync(tbl[defaultKey], defaultValue)
 		end
 	end
 
