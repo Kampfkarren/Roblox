@@ -171,7 +171,7 @@ function DataStore:GetTableAsync(default, ...)
 
 		return result
 	end)
-endd
+end
 
 function DataStore:Set(value, _dontCallOnUpdate)
 	self.value = clone(value)
