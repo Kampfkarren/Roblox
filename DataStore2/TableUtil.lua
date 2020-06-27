@@ -14,4 +14,24 @@ function TableUtil.clone(tbl)
 	return clone
 end
 
+function TableUtil.sync(tbl, default)
+	local changed = false
+
+	for key, value in pairs(default) do
+		if not tbl[key] then
+			if typeof(value) == "table" then
+				tbl[key] = TableUtil.copy(value)
+			else
+				tbl[key] = value
+			end
+
+			changed = true
+		elseif typeof(tbl[key]) == "table" then
+			TableUtil.sync(tbl[key], value)
+		end
+	end
+
+	return changed
+end
+
 return TableUtil
