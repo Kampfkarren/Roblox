@@ -9,6 +9,7 @@
 	- Set(value)
 	- Update(updateFunc)
 	- Increment(value, defaultValue)
+	- Subtract(value, defaultValue)
 	- BeforeInitialGet(modifier)
 	- BeforeSave(modifier)
 	- Save()
@@ -193,10 +194,22 @@ function DataStore:Increment(value, defaultValue)
 	self:Set(self:Get(defaultValue) + value)
 end
 
+function DataStore:Subtract(value, defaultValue)
+	self:Set(self:Get(defaultValue) - value)
+end
+
 function DataStore:IncrementAsync(add, defaultValue)
 	return self:GetAsync(defaultValue):andThen(function(value)
 		return Promise.promisify(function()
 			self:Set(value + add)
+		end)()
+	end)
+end
+
+function DataStore:SubtractAsync(sub, defaultValue)
+	return self:GetAsync(defaultValue):andThen(function(value)
+		return Promise.promisify(function()
+			self:Set(value - sub)
 		end)()
 	end)
 end
