@@ -81,7 +81,7 @@ end
 function DataStore:_Update(dontCallOnUpdate)
 	if not dontCallOnUpdate then
 		for _, callback in ipairs(self.callbacks) do
-			callback(self, self.value)
+			callback(self.value)
 		end
 	end
 

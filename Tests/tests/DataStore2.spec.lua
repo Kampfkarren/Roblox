@@ -363,6 +363,23 @@ return function()
 				expect(called).to.equal(true)
 			end)
 
+			it("should call OnUpdate with the new value", function()
+				local dataStore = DataStore2(UUID(), fakePlayer)
+
+				local newValue = 5
+				local updatedValue
+				dataStore:Get(0)
+
+				dataStore:OnUpdate(function(newStoreValue, other)
+					print(newStoreValue, other)
+					updatedValue = newStoreValue
+				end)
+				dataStore:Set(newValue)
+
+				print(newValue, updatedValue)
+				expect(updatedValue).to.equal(newValue)
+			end)
+
 			it("should not call OnUpdate when using :GetTable() with a default value that had all keys before", function()
 				local dataStore = DataStore2(UUID(), fakePlayer)
 				local called = false
