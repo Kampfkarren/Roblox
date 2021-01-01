@@ -12,7 +12,7 @@ local spawns, spawnEvent = {}, Instance.new("BindableEvent")
 spawnEvent.Event:connect(function()
 	local callback = table.remove(spawns)
 	callback()
-	assert(#spawns == 0)
+	assert(#spawns == 0, "There were leftover tasks after spawn")
 end)
 
 function TaskScheduler.Heartbeat(step)
