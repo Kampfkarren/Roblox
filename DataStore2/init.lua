@@ -188,9 +188,9 @@ function DataStore:SetValidator(validator)
 end
 
 local function assertValidatorWithDefaultError(validator, input, defaultError)
-	local isValid = validator(input)
+	local isValid, message = validator(input)
 	if not isValid then
-		error(defaultError) 
+		error(message or defaultError) 
 	end
 end
 
