@@ -15,5 +15,8 @@ jobs:
       with:
         version: "^1.0.0"
         token: ${{ secrets.GITHUB_TOKEN }}
+    # std chaining with roblox is broken
+    - name: Generate standard library
+      run: selene generate-roblox-std
     - name: Run Selene
       run: selene .
