@@ -19,7 +19,7 @@ jobs:
       with:
         version: "^1.0.0"
         token: ${{ secrets.GITHUB_TOKEN }}
-    - uses: OrbitalOwen/roblox-win-installer-action@1.0
+    - uses: OrbitalOwen/roblox-win-installer-action@1.1
       with:
         cookie: ${{ secrets.ROBLOSECURITY }}
         token: ${{ secrets.GITHUB_TOKEN }}
