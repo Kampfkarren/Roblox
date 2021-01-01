@@ -208,7 +208,7 @@ end
 
 function DataStore:Update(updateFunc)
 	local updateFuncReturn = updateFunc(self.value)
-	if self.validator then
+	if self.validator ~= nil then
 		assertValidatorWithDefaultError(
 			self.validator,
 			updateFuncReturn,
