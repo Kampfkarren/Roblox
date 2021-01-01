@@ -85,7 +85,7 @@ return function()
 					if dataToValidate == "yepp" then
 						return true
 					elseif dataToValidate == "definitelyNot" then
-						error("A validation error message")
+						return false, "A validation error message"
 					end
 					return false
 				end
@@ -101,7 +101,7 @@ return function()
 					if dataToValidate == "yepp" then
 						return true
 					elseif dataToValidate == "definitelyNot" then
-						error("A validation error message")
+						return false, "A validation error message"
 					end
 					return false
 				end
@@ -114,7 +114,7 @@ return function()
 				expect(dataStore:Update(function()
 					return "definitelyNot"
 				end)).to.throw("A validation error message")
-				
+
 				expect(dataStore:Update(function()
 					return "yepp"
 				end)).to.be.ok()
