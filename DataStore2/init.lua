@@ -182,7 +182,7 @@ end
 function DataStore:SetValidator(validator)
 	assert(
 		type(validator) == "function",
-		"function expected, got "..type(validator)
+		"function expected, got " .. type(validator)
 	)
 	self.validator = validator
 end
