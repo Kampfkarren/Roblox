@@ -95,7 +95,7 @@ return function()
 				expect(dataStore:Set("yepp")).to.be.ok()
 			end)
 
-			it("should validate update", function()
+			it("should validate Update", function()
 				local dataStore = DataStore2(UUID(), fakePlayer)
 				local function testValidator(dataToValidate)
 					if dataToValidate == "yepp" then
