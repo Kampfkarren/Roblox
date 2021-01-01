@@ -195,7 +195,7 @@ local function assertValidatorWithDefaultError(validator, input, defaultError)
 end
 
 function DataStore:Set(value, _dontCallOnUpdate)
-	if self.validator then
+	if self.validator ~= nil then
 		assertValidatorWithDefaultError(
 			self.validator,
 			value,
