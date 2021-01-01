@@ -81,14 +81,17 @@ return function()
 
 			it("should validate Set", function()
 				local dataStore = DataStore2(UUID(), fakePlayer)
+
 				local function testValidator(dataToValidate)
 					if dataToValidate == "yepp" then
 						return true
 					elseif dataToValidate == "definitelyNot" then
 						return false, "A validation error message"
 					end
+
 					return false
 				end
+
 				dataStore:SetValidator(testValidator)
 				expect(dataStore:Set("nope")).to.throw("Attempted to set datastore to an invalid value")
 				expect(dataStore:Set("definitelyNot")).to.throw("A validation error message")
@@ -97,14 +100,17 @@ return function()
 
 			it("should validate Update", function()
 				local dataStore = DataStore2(UUID(), fakePlayer)
+
 				local function testValidator(dataToValidate)
 					if dataToValidate == "yepp" then
 						return true
 					elseif dataToValidate == "definitelyNot" then
 						return false, "A validation error message"
 					end
+
 					return false
 				end
+
 				dataStore:SetValidator(testValidator)
 
 				expect(dataStore:Update(function()

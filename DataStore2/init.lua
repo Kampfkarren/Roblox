@@ -184,6 +184,7 @@ function DataStore:SetValidator(validator)
 		type(validator) == "function",
 		"function expected, got " .. typeof(validator)
 	)
+
 	self.validator = validator
 end
 
@@ -202,12 +203,14 @@ function DataStore:Set(value, _dontCallOnUpdate)
 			"Attempted to set data store to an invalid value during :Set"
 		)
 	end
+
 	self.value = clone(value)
 	self:_Update(_dontCallOnUpdate)
 end
 
 function DataStore:Update(updateFunc)
 	local updateFuncReturn = updateFunc(self.value)
+
 	if self.validator ~= nil then
 		assertValidatorWithDefaultError(
 			self.validator,
@@ -215,6 +218,7 @@ function DataStore:Update(updateFunc)
 			"Attempted to set data store to an invalid value during :Update"
 		)
 	end
+
 	self.value = updateFuncReturn
 	self:_Update()
 end
