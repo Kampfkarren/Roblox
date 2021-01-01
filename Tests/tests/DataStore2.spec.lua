@@ -79,6 +79,20 @@ return function()
 				expect(DataStore2(nonNilKey, fakePlayer):Get("badDefault")).to.equal("abc")
 			end)
 
+			it("should validate the data", function()
+				local dataStore = DataStore2(UUID(), fakePlayer)
+				local function testValidator(dataToValidate)
+					if dataToValidate == "yepp" then
+						return true
+					end
+					return false
+				end
+				dataStore:SetValidator(testValidator)
+				expect(dataStore.validator).to.be.a("function")
+				expect(dataStore:Set("nope")).to.throw()
+				expect(dataStore:Set("yepp")).to.equal(true)
+			end)
+
 			it("should set", function()
 				local dataStore = DataStore2(UUID(), fakePlayer)
 				dataStore:Set(1)
