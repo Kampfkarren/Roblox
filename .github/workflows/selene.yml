@@ -11,8 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Run selene
-      run: |
-        wget -O selene https://github.com/Kampfkarren/selene/releases/latest/download/selene-linux
-        chmod +x ./selene
-        ./selene .
+    - uses: Roblox/setup-foreman@v1
+      with:
+        version: "^1.0.0"
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Run Selene
+      run: selene .
