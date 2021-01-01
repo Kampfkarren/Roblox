@@ -16,6 +16,3 @@ type = "function"
 
 [HACK_NO_XPCALL]
 args = []
-
-[__LEMUR__]
-property = true
