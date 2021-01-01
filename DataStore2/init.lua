@@ -199,7 +199,7 @@ function DataStore:Set(value, _dontCallOnUpdate)
 		assertValidatorWithDefaultError(
 			self.validator,
 			value,
-			"Invalid data"
+			"Attempted to set datastore to an invalid value"
 		)
 	end
 	self.value = clone(value)
@@ -212,7 +212,7 @@ function DataStore:Update(updateFunc)
 		assertValidatorWithDefaultError(
 			self.validator,
 			updateFuncReturn,
-			"Invalid data"
+			"Attempted to update datastore to an invalid value"
 		)
 	end
 	self.value = updateFuncReturn
