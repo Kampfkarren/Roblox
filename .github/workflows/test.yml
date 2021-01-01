@@ -1,0 +1,21 @@
+name: Run tests
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+jobs:
+  generate:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: Roblox/setup-foreman@v1
+      with:
+        version: "^1.0.0"
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build tests
+      run: rojo build tests.project.json --output tests.rbxlx
+    - name: Run tests
+      run: run-in-roblox --place tests.rbxlx --script Tests/tests/TestRunner.server.lua
