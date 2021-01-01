@@ -84,12 +84,15 @@ return function()
 				local function testValidator(dataToValidate)
 					if dataToValidate == "yepp" then
 						return true
+					elseif dataToValidate == "definitelyNot" then
+						error("A validation error message")
 					end
 					return false
 				end
 				dataStore:SetValidator(testValidator)
 				expect(dataStore.validator).to.be.a("function")
-				expect(dataStore:Set("nope")).to.throw()
+				expect(dataStore:Set("nope")).to.equal(false)
+				expect(dataStore:Set("definitelyNot")).to.throw("A validation error message")
 				expect(dataStore:Set("yepp")).to.equal(true)
 			end)
 
