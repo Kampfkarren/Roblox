@@ -179,13 +179,34 @@ function DataStore:GetTableAsync(default, ...)
 	end)
 end
 
+function DataStore:SetValidator(validator)
+	assert(
+		type(validator) == "function",
+		"function expected, got "..type(validator)
+	)
+	self.validator = validator
+end
+
 function DataStore:Set(value, _dontCallOnUpdate)
+	if self.validator then
+		assert(
+			self.validator(value),
+			"Invalid data"
+		)
+	end
 	self.value = clone(value)
 	self:_Update(_dontCallOnUpdate)
 end
 
 function DataStore:Update(updateFunc)
-	self.value = updateFunc(self.value)
+	local updateFuncReturn = updateFunc(self.value)
+	if self.validator then
+		assert(
+			self.validator(updateFuncReturn),
+			"Invalid data"
+		)
+	end
+	self.value = updateFuncReturn
 	self:_Update()
 end
 
