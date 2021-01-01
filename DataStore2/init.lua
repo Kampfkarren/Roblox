@@ -212,7 +212,7 @@ function DataStore:Update(updateFunc)
 		assertValidatorWithDefaultError(
 			self.validator,
 			updateFuncReturn,
-			"Attempted to update datastore to an invalid value"
+			"Attempted to set data store to an invalid value during :Update"
 		)
 	end
 	self.value = updateFuncReturn
