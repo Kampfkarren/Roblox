@@ -3,6 +3,6 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local TestEZ = require(ServerScriptService.Tests.TestEZ)
 
 TestEZ.TestBootstrap:run(
-	{ script.Parent },
+	{ ServerScriptService.Tests },
 	TestEZ.Reporters.TextReports
 )

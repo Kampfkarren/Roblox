@@ -22,7 +22,7 @@
 					"$path": "Tests/MockDataStoreService/lib"
 				},
 				"TestEZ": {
-					"$path": "Tests/testez/lib"
+					"$path": "Tests/testez/src"
 				},
 				"Tests": {
 					"$path": "Tests/tests"
