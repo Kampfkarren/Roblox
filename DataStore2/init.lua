@@ -187,10 +187,23 @@ function DataStore:SetValidator(validator)
 	self.validator = validator
 end
 
+local function AssertValidatorWithDefaultError(validator, input, defaultError)
+    local success, err = pcall(validator, input)
+
+    -- if success but result is false
+    if success and err ~= true then
+        error(defaultError)
+    -- if not success and there is an error message
+    elseif not success and err ~= nil then
+        error(err)
+    end
+end
+
 function DataStore:Set(value, _dontCallOnUpdate)
 	if self.validator then
-		assert(
-			self.validator(value),
+		AssertValidatorWithDefaultError(
+			self.validator,
+			value,
 			"Invalid data"
 		)
 	end
@@ -201,8 +214,9 @@ end
 function DataStore:Update(updateFunc)
 	local updateFuncReturn = updateFunc(self.value)
 	if self.validator then
-		assert(
-			self.validator(updateFuncReturn),
+		AssertValidatorWithDefaultError(
+			self.validator,
+			updateFuncReturn,
 			"Invalid data"
 		)
 	end
