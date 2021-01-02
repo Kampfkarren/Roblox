@@ -93,7 +93,7 @@ return function()
 				end
 
 				dataStore:SetValidator(testValidator)
-				expect(dataStore:Set("nope")).to.throw("Attempted to set datastore to an invalid value")
+				expect(dataStore:Set("nope")).to.throw("Attempted to set data store to an invalid value during :Set")
 				expect(dataStore:Set("definitelyNot")).to.throw("A validation error message")
 				expect(dataStore:Set("yepp")).to.be.ok()
 			end)
@@ -115,7 +115,7 @@ return function()
 
 				expect(dataStore:Update(function()
 					return "nope"
-				end)).to.throw("Attempted to set datastore to an invalid value")
+				end)).to.throw("Attempted to set data store to an invalid value during :Update")
 
 				expect(dataStore:Update(function()
 					return "definitelyNot"
