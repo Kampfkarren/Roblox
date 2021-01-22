@@ -567,7 +567,7 @@ function DataStore2.__call(_, dataStoreName, player)
 		if player:IsDescendantOf(game) then return end
 		playerLeavingConnection:Disconnect()
 		dataStore:SaveAsync():andThen(function()
-			print("player left, saved", dataStoreName)
+			print("player left, saved", dataStoreName, dataStore["savingMethod"]["mostRecentKey"])
 		end):catch(function(error)
 			-- TODO: Something more elegant
 			warn("error when player left!", error)
