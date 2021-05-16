@@ -1,6 +1,5 @@
 --[[
-	DataStore2: A wrapper for data stores that caches, saves player's data, and uses berezaa's method of saving data.
-	Use require(1936396537) to have an updated version of DataStore2.
+	DataStore2: A wrapper for data stores that caches and saves player's data.
 
 	DataStore2(dataStoreName, player) - Returns a DataStore2 DataStore
 
