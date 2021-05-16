@@ -548,7 +548,10 @@ function DataStore2.__call(_, dataStoreName, player)
 
 	local bindToCloseCallback = function()
 		if not isSaveFinished then
-			bindToCloseEvent:Fire()
+			-- Defer to avoid a race between connecting and firing "saveFinishedEvent"
+			Promise.defer(function()
+				bindToCloseEvent:Fire() -- Resolves the Promise.race to save the data
+			end)
 
 			saveFinishedEvent.Event:Wait()
 		end
