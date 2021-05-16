@@ -545,7 +545,7 @@ function DataStore2.__call(_, dataStoreName, player)
 
 	local event, fired = Instance.new("BindableEvent"), false
 
-	game:BindToClose(function()
+	local bindToCloseCallback = function()
 		if not fired then
 			spawn(function()
 				player.Parent = nil -- Forces AncestryChanged to fire and save the data
@@ -559,6 +559,14 @@ function DataStore2.__call(_, dataStoreName, player)
 		for _, bindToClose in ipairs(dataStore.bindToClose) do
 			bindToClose(player, value)
 		end
+	end
+
+	game:BindToClose(function()
+		if bindToCloseCallback == nil then
+			return
+		end
+
+		bindToCloseCallback()
 	end)
 
 	local playerLeavingConnection
@@ -577,6 +585,7 @@ function DataStore2.__call(_, dataStoreName, player)
 
 		delay(40, function() --Give a long delay for people who haven't figured out the cache :^(
 			DataStoreCache[player] = nil
+			bindToCloseCallback = nil
 		end)
 	end)
 
