@@ -594,8 +594,6 @@ function DataStore2.__call(_, dataStoreName, player)
 			DataStoreCache[player] = nil
 			bindToCloseCallback = nil
 		end)
-	end):catch(function(errorMessage)
-		warn("DataStore2 could not save data when the player left", errorMessage)
 	end)
 
 	if not DataStoreCache[player] then
