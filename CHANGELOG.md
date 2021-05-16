@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Fix `GetTable` not working appropriately when using combined data stores.
 - Fix `:IncrementAsync` not returning a Promise.
 - Fix `OnUpdate` being fired twice when using `Update` to update data.
+- Fix `BindToClose` memory leak, breaking other BindToClose scripts, and potential error.
 
 ## [1.3.0]
 - Added :GetAsync(), :GetTableAsync, and :IncrementAsync(), which are [promise](https://github.com/evaera/roblox-lua-promise) versions of their non-async counterparts.

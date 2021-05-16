@@ -560,13 +560,18 @@ function DataStore2.__call(_, dataStoreName, player)
 		end
 	end
 
-	game:BindToClose(function()
-		if bindToCloseCallback == nil then
-			return
-		end
-
-		bindToCloseCallback()
+	local success, errorMessage = pcall(function()
+		game:BindToClose(function()
+			if bindToCloseCallback == nil then
+				return
+			end
+	
+			bindToCloseCallback()
+		end)
 	end)
+	if success == false then
+		warn(errorMessage)
+	end
 
 	Promise.race({
 		Promise.fromEvent(bindToCloseEvent.Event),
