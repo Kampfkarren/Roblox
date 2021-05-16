@@ -570,7 +570,7 @@ function DataStore2.__call(_, dataStoreName, player)
 		end)
 	end)
 	if success == false then
-		warn(errorMessage)
+		warn("DataStore2 could not BindToClose", errorMessage)
 	end
 
 	Promise.race({
