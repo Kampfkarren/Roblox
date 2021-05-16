@@ -547,7 +547,7 @@ function DataStore2.__call(_, dataStoreName, player)
 	local bindToCloseEvent = Instance.new("BindableEvent")
 
 	local bindToCloseCallback = function()
-		if isSaveFinished == false then
+		if not isSaveFinished then
 			bindToCloseEvent:Fire()
 
 			saveFinishedEvent.Event:Wait()
@@ -569,14 +569,14 @@ function DataStore2.__call(_, dataStoreName, player)
 			bindToCloseCallback()
 		end)
 	end)
-	if success == false then
+	if not success then
 		warn("DataStore2 could not BindToClose", errorMessage)
 	end
 
 	Promise.race({
 		Promise.fromEvent(bindToCloseEvent.Event),
 		Promise.fromEvent(player.AncestryChanged, function()
-			return player:IsDescendantOf(game) == false
+			return not player:IsDescendantOf(game)
 		end),
 	}):andThen(function()
 		dataStore:SaveAsync():andThen(function()
@@ -594,7 +594,9 @@ function DataStore2.__call(_, dataStoreName, player)
 			DataStoreCache[player] = nil
 			bindToCloseCallback = nil
 		end)
-	end):catch(warn)
+	end):catch(function(errorMessage)
+		warn("DataStore2 could not save data when the player left", errorMessage)
+	end)
 
 	if not DataStoreCache[player] then
 		DataStoreCache[player] = {}
