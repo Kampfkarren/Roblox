@@ -543,15 +543,14 @@ function DataStore2.__call(_, dataStoreName, player)
 
 	setmetatable(dataStore, DataStoreMetatable)
 
-	local event, fired = Instance.new("BindableEvent"), false
+	local saveFinishedEvent, isSaveFinished = Instance.new("BindableEvent"), false
+	local bindToCloseEvent = Instance.new("BindableEvent")
 
 	local bindToCloseCallback = function()
-		if not fired then
-			spawn(function()
-				player.Parent = nil -- Forces AncestryChanged to fire and save the data
-			end)
+		if isSaveFinished == false then
+			bindToCloseEvent:Fire()
 
-			event.Event:Wait()
+			saveFinishedEvent.Event:Wait()
 		end
 
 		local value = dataStore:Get(nil, true)
@@ -569,25 +568,28 @@ function DataStore2.__call(_, dataStoreName, player)
 		bindToCloseCallback()
 	end)
 
-	local playerLeavingConnection
-	playerLeavingConnection = player.AncestryChanged:Connect(function()
-		if player:IsDescendantOf(game) then return end
-		playerLeavingConnection:Disconnect()
+	Promise.race({
+		Promise.fromEvent(bindToCloseEvent.Event),
+		Promise.fromEvent(player.AncestryChanged, function()
+			return player:IsDescendantOf(game) == false
+		end),
+	}):andThen(function()
 		dataStore:SaveAsync():andThen(function()
 			print("player left, saved", dataStoreName)
 		end):catch(function(error)
 			-- TODO: Something more elegant
 			warn("error when player left!", error)
 		end):finally(function()
-			event:Fire()
-			fired = true
+			isSaveFinished = true
+			saveFinishedEvent:Fire()
 		end)
 
-		delay(40, function() --Give a long delay for people who haven't figured out the cache :^(
+		--Give a long delay for people who haven't figured out the cache :^(
+		return Promise.delay(40):andThen(function() 
 			DataStoreCache[player] = nil
 			bindToCloseCallback = nil
 		end)
-	end)
+	end):catch(warn)
 
 	if not DataStoreCache[player] then
 		DataStoreCache[player] = {}
