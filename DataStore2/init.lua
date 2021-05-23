@@ -543,15 +543,17 @@ function DataStore2.__call(_, dataStoreName, player)
 
 	setmetatable(dataStore, DataStoreMetatable)
 
-	local event, fired = Instance.new("BindableEvent"), false
+	local saveFinishedEvent, isSaveFinished = Instance.new("BindableEvent"), false
+	local bindToCloseEvent = Instance.new("BindableEvent")
 
-	game:BindToClose(function()
-		if not fired then
-			spawn(function()
-				player.Parent = nil -- Forces AncestryChanged to fire and save the data
+	local bindToCloseCallback = function()
+		if not isSaveFinished then
+			-- Defer to avoid a race between connecting and firing "saveFinishedEvent"
+			Promise.defer(function()
+				bindToCloseEvent:Fire() -- Resolves the Promise.race to save the data
 			end)
 
-			event.Event:Wait()
+			saveFinishedEvent.Event:Wait()
 		end
 
 		local value = dataStore:Get(nil, true)
@@ -559,24 +561,41 @@ function DataStore2.__call(_, dataStoreName, player)
 		for _, bindToClose in ipairs(dataStore.bindToClose) do
 			bindToClose(player, value)
 		end
-	end)
+	end
 
-	local playerLeavingConnection
-	playerLeavingConnection = player.AncestryChanged:Connect(function()
-		if player:IsDescendantOf(game) then return end
-		playerLeavingConnection:Disconnect()
+	local success, errorMessage = pcall(function()
+		game:BindToClose(function()
+			if bindToCloseCallback == nil then
+				return
+			end
+	
+			bindToCloseCallback()
+		end)
+	end)
+	if not success then
+		warn("DataStore2 could not BindToClose", errorMessage)
+	end
+
+	Promise.race({
+		Promise.fromEvent(bindToCloseEvent.Event),
+		Promise.fromEvent(player.AncestryChanged, function()
+			return not player:IsDescendantOf(game)
+		end),
+	}):andThen(function()
 		dataStore:SaveAsync():andThen(function()
 			print("player left, saved", dataStoreName)
 		end):catch(function(error)
 			-- TODO: Something more elegant
 			warn("error when player left!", error)
 		end):finally(function()
-			event:Fire()
-			fired = true
+			isSaveFinished = true
+			saveFinishedEvent:Fire()
 		end)
 
-		delay(40, function() --Give a long delay for people who haven't figured out the cache :^(
+		--Give a long delay for people who haven't figured out the cache :^(
+		return Promise.delay(40):andThen(function() 
 			DataStoreCache[player] = nil
+			bindToCloseCallback = nil
 		end)
 	end)
 
