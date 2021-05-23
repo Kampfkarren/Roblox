@@ -3,7 +3,9 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.4.0]
+**This release contains a bug where calling :Set() before calling :Get() can yield. This will not be an issue for most consumers, but be aware of it.**
+
 - Added `DataStore2.SaveAllAsync`.
 - Fix `:IncrementAsync` throwing an error on combined data stores.
 - Fix `:Set` on combined data stores having the potential to yield.
