@@ -179,20 +179,40 @@ function DataStore:GetTableAsync(default, ...)
 end
 
 function DataStore:Set(value, _dontCallOnUpdate)
+	if self.readOnly then
+		error(string.format("Attempted to Set read-only datastore '%s'",self.Name))
+		return
+	end
+
 	self.value = clone(value)
 	self:_Update(_dontCallOnUpdate)
 end
 
 function DataStore:Update(updateFunc)
+	if self.readOnly then
+		error(string.format("Attempted to Update read-only datastore '%s'",self.Name))
+		return
+	end
+
 	self.value = updateFunc(self.value)
 	self:_Update()
 end
 
 function DataStore:Increment(value, defaultValue)
+	if self.readOnly then
+		error(string.format("Attempted to Increment read-only datastore '%s'",self.Name))
+		return
+	end
+
 	self:Set(self:Get(defaultValue) + value)
 end
 
 function DataStore:IncrementAsync(add, defaultValue)
+	if self.readOnly then
+		error(string.format("Attempted to IncrementAsync read-only datastore '%s'",self.Name))
+		return
+	end
+
 	return self:GetAsync(defaultValue):andThen(function(value)
 		return Promise.promisify(function()
 			self:Set(value + add)
@@ -264,6 +284,11 @@ end
 	</description>
 **--]]
 function DataStore:Save()
+	if self.readOnly then
+		error(string.format("Attempted to Save read-only datastore '%s'",self.Name))
+		return
+	end
+
 	local success, result = self:SaveAsync():await()
 
 	if success then
@@ -279,6 +304,11 @@ end
 	</description>
 **--]]
 function DataStore:SaveAsync()
+	if self.readOnly then
+		error(string.format("Attempted to SaveAsync read-only datastore '%s'",self.Name))
+		return
+	end
+
 	return Promise.async(function(resolve, reject)
 		if not self.valueUpdated then
 			warn(("Data store %s was not saved as it was not updated."):format(self.Name))
@@ -349,6 +379,11 @@ function DataStore:GetKeyValue(key)
 end
 
 function DataStore:SetKeyValue(key, newValue)
+	if self.readOnly then
+		error(string.format("Attempted to SetKeyValue read-only datastore '%s'",self.Name))
+		return
+	end
+
 	if not self.value then
 		self.value = self:Get({})
 	end
@@ -383,11 +418,19 @@ do
 
 		self.combinedInitialGot = true
 		tableResult[self.combinedName] = clone(tableValue)
-		self.combinedStore:Set(tableResult, true)
+
+		self.combinedStore.value = clone(tableResult)
+		self.combinedStore:_Update(true)
+
 		return clone(tableValue)
 	end
 
 	function CombinedDataStore:Set(value, dontCallOnUpdate)
+		if self.readOnly then
+			error(string.format("Attempted to Set read-only datastore '%s'",self.Name))
+			return
+		end
+
 		return self.combinedStore:GetAsync({}):andThen(function(tableResult)
 			tableResult[self.combinedName] = value
 			self.combinedStore:Set(tableResult, dontCallOnUpdate)
@@ -396,10 +439,20 @@ do
 	end
 
 	function CombinedDataStore:Update(updateFunc)
+		if self.readOnly then
+			error(string.format("Attempted to Update read-only datastore '%s'",self.Name))
+			return
+		end
+
 		self:Set(updateFunc(self:Get()))
 	end
 
 	function CombinedDataStore:Save()
+		if self.readOnly then
+			error(string.format("Attempted to Save read-only datastore '%s'",self.Name))
+			return
+		end
+
 		self.combinedStore:Save()
 	end
 
@@ -479,6 +532,64 @@ function DataStore2.PatchGlobalSettings(patch)
 		-- TODO: Implement type checking with this when osyris' t is in
 		Settings[key] = value
 	end
+end
+
+function DataStore2.FromUserId(dataStoreName, userId)
+	-- Read-only dataStore, since the user might be active in another server,
+	-- which would lead to overwriting and racing.
+
+	assert(
+		typeof(dataStoreName) == "string" and typeof(userId) == "number",
+		("DataStore2.FromUserId() API call expected {string dataStoreName, number userId}, got {%s, %s}")
+		:format(
+			typeof(dataStoreName),
+			typeof(userId)
+		)
+	)
+
+	if DataStoreCache[userId] and DataStoreCache[userId][dataStoreName] then
+		return DataStoreCache[userId][dataStoreName]
+	elseif combinedDataStoreInfo[dataStoreName] then
+		local dataStore = DataStore2.FromUserId(combinedDataStoreInfo[dataStoreName], userId)
+
+		local combinedStore = setmetatable({
+			combinedName = dataStoreName,
+			combinedStore = dataStore,
+		}, {
+			__index = function(_, key)
+				return CombinedDataStore[key] or dataStore[key]
+			end,
+		})
+
+		if not DataStoreCache[userId] then
+			DataStoreCache[userId] = {}
+		end
+
+		DataStoreCache[userId][dataStoreName] = combinedStore
+		return combinedStore
+	end
+
+	local dataStore = {
+		Name = dataStoreName,
+		UserId = userId,
+		readOnly = true,
+		callbacks = {},
+		beforeInitialGet = {},
+		afterSave = {},
+		bindToClose = {},
+	}
+
+	dataStore.savingMethod = SavingMethods[Settings.SavingMethod].new(dataStore)
+
+	setmetatable(dataStore, DataStoreMetatable)
+
+	if not DataStoreCache[userId] then
+		DataStoreCache[userId] = {}
+	end
+
+	DataStoreCache[userId][dataStoreName] = dataStore
+
+	return dataStore
 end
 
 function DataStore2.__call(_, dataStoreName, player)
@@ -568,7 +679,7 @@ function DataStore2.__call(_, dataStoreName, player)
 			if bindToCloseCallback == nil then
 				return
 			end
-	
+
 			bindToCloseCallback()
 		end)
 	end)
@@ -593,7 +704,7 @@ function DataStore2.__call(_, dataStoreName, player)
 		end)
 
 		--Give a long delay for people who haven't figured out the cache :^(
-		return Promise.delay(40):andThen(function() 
+		return Promise.delay(40):andThen(function()
 			DataStoreCache[player] = nil
 			bindToCloseCallback = nil
 		end)
