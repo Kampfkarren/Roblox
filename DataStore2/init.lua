@@ -28,6 +28,7 @@
 
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
+local Players = game:GetService("Players")
 
 local Constants = require(script.Constants)
 local IsPlayer = require(script.IsPlayer)
@@ -536,23 +537,24 @@ function DataStore2.PatchGlobalSettings(patch)
 	end
 end
 
-function DataStore2.FromUserId(dataStoreName, userId)
-	-- Read-only dataStore, since the user might be active in another server,
-	-- which would lead to overwriting and racing.
+function DataStore2.ReadOnly(dataStoreName, identifier)
+	-- Create a read-only dataStore, useful for players not in the current server
 
 	assert(
-		typeof(dataStoreName) == "string" and typeof(userId) == "number",
-		("DataStore2.FromUserId() API call expected {string dataStoreName, number userId}, got {%s, %s}")
+		typeof(dataStoreName) == "string" and (IsPlayer.Check(identifier) or typeof(identifier) == "number"),
+		("DataStore2.ReadOnly() API call expected {dataStoreName: string, identifier: Player | UserId}, got {%s, %s}")
 		:format(
 			typeof(dataStoreName),
-			typeof(userId)
+			typeof(identifier)
 		)
 	)
+
+	local userId = IsPlayer.Check(identifier) and identifier.UserId or identifier
 
 	if ReadOnlyDataStoreCache[userId] and ReadOnlyDataStoreCache[userId][dataStoreName] then
 		return ReadOnlyDataStoreCache[userId][dataStoreName]
 	elseif combinedDataStoreInfo[dataStoreName] then
-		local dataStore = DataStore2.FromUserId(combinedDataStoreInfo[dataStoreName], userId)
+		local dataStore = DataStore2.ReadOnly(combinedDataStoreInfo[dataStoreName], userId)
 
 		local combinedStore = setmetatable({
 			combinedName = dataStoreName,
@@ -594,15 +596,21 @@ function DataStore2.FromUserId(dataStoreName, userId)
 	return dataStore
 end
 
-function DataStore2.__call(_, dataStoreName, player)
+function DataStore2.__call(_, dataStoreName, identifier)
 	assert(
-		typeof(dataStoreName) == "string" and IsPlayer.Check(player),
-		("DataStore2() API call expected {string dataStoreName, Player player}, got {%s, %s}")
+		typeof(dataStoreName) == "string" and (IsPlayer.Check(identifier) or typeof(identifier) == "number"),
+		("DataStore2() API call expected {dataStoreName: string, identifier: Player | UserId}, got {%s, %s}")
 		:format(
 			typeof(dataStoreName),
-			typeof(player)
+			typeof(identifier)
 		)
 	)
+
+	local player = IsPlayer.Check(identifier) and identifier or Players:GetPlayerByUserId(identifier)
+	if player == nil then
+		-- User is not in this server, return a read-only store
+		return DataStore2.ReadOnly(dataStoreName, identifier)
+	end
 
 	if DataStoreCache[player] and DataStoreCache[player][dataStoreName] then
 		return DataStoreCache[player][dataStoreName]
