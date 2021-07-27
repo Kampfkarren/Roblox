@@ -608,8 +608,13 @@ function DataStore2.__call(_, dataStoreName, identifier)
 
 	local player = IsPlayer.Check(identifier) and identifier or Players:GetPlayerByUserId(identifier)
 	if player == nil then
-		-- User is not in this server, return a read-only store
-		return DataStore2.ReadOnly(dataStoreName, identifier)
+		-- User is not in this server, tell dev to use a read-only store instead
+		error(string.format(
+			"Cannot create DataStore for '%s' since that user is not in this server.\nYou can use DataStore2.ReadOnly('%s', %s) instead.",
+			tostring(identifier), dataStoreName, tostring(identifier)
+		), 2)
+
+		--return DataStore2.ReadOnly(dataStoreName, identifier) -- automatically make readonly store instead
 	end
 
 	if DataStoreCache[player] and DataStoreCache[player][dataStoreName] then
