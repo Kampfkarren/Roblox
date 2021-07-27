@@ -485,6 +485,7 @@ DataStoreMetatable.__index = DataStore
 
 --Library
 local DataStoreCache = {}
+local ReadOnlyDataStoreCache = {}
 
 local DataStore2 = {}
 local combinedDataStoreInfo = {}
@@ -512,6 +513,7 @@ end
 
 function DataStore2.ClearCache()
 	DataStoreCache = {}
+	ReadOnlyDataStoreCache = {}
 end
 
 function DataStore2.SaveAll(player)
@@ -547,8 +549,8 @@ function DataStore2.FromUserId(dataStoreName, userId)
 		)
 	)
 
-	if DataStoreCache[userId] and DataStoreCache[userId][dataStoreName] then
-		return DataStoreCache[userId][dataStoreName]
+	if ReadOnlyDataStoreCache[userId] and ReadOnlyDataStoreCache[userId][dataStoreName] then
+		return ReadOnlyDataStoreCache[userId][dataStoreName]
 	elseif combinedDataStoreInfo[dataStoreName] then
 		local dataStore = DataStore2.FromUserId(combinedDataStoreInfo[dataStoreName], userId)
 
@@ -561,18 +563,18 @@ function DataStore2.FromUserId(dataStoreName, userId)
 			end,
 		})
 
-		if not DataStoreCache[userId] then
-			DataStoreCache[userId] = {}
+		if not ReadOnlyDataStoreCache[userId] then
+			ReadOnlyDataStoreCache[userId] = {}
 		end
 
-		DataStoreCache[userId][dataStoreName] = combinedStore
+		ReadOnlyDataStoreCache[userId][dataStoreName] = combinedStore
 		return combinedStore
 	end
 
 	local dataStore = {
+		readOnly = true,
 		Name = dataStoreName,
 		UserId = userId,
-		readOnly = true,
 		callbacks = {},
 		beforeInitialGet = {},
 		afterSave = {},
@@ -583,11 +585,11 @@ function DataStore2.FromUserId(dataStoreName, userId)
 
 	setmetatable(dataStore, DataStoreMetatable)
 
-	if not DataStoreCache[userId] then
-		DataStoreCache[userId] = {}
+	if not ReadOnlyDataStoreCache[userId] then
+		ReadOnlyDataStoreCache[userId] = {}
 	end
 
-	DataStoreCache[userId][dataStoreName] = dataStore
+	ReadOnlyDataStoreCache[userId][dataStoreName] = dataStore
 
 	return dataStore
 end
