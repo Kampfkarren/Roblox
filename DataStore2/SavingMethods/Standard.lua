@@ -15,11 +15,9 @@ end
 
 function Standard:Set(value)
 	return Promise.async(function(resolve)
-		self.dataStore:UpdateAsync(self.userId, function()
-			return value
-		end)
+		self.dataStore:GetAsync(self.userId)
 
-		resolve()
+		resolve(self.dataStore:SetAsync(self.userId, value, { self.userId }))
 	end)
 end
 
