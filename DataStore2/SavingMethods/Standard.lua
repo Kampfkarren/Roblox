@@ -9,15 +9,25 @@ Standard.__index = Standard
 
 function Standard:Get()
 	return Promise.async(function(resolve)
-		resolve(self.dataStore:GetAsync(self.userId))
+		self.storeData = self.dataStore:GetAsync(self.userId)
+
+		resolve(self.storeData)
 	end)
 end
 
 function Standard:Set(value)
 	return Promise.async(function(resolve)
-		self.dataStore:GetAsync(self.userId)
+		local datastoreKeyResponse
 
-		resolve(self.dataStore:SetAsync(self.userId, value, { self.userId }))
+		if self.storeData == nil then
+			datastoreKeyResponse = self.dataStore:SetAsync(self.userId, value, { self.userId })
+		else
+			datastoreKeyResponse = self.dataStore:UpdateAsync(self.userId, function()
+				return value
+			end)
+		end
+
+		resolve(datastoreKeyResponse)
 	end)
 end
 
