@@ -46,11 +46,11 @@ function OrderedBackups:Set(value)
 	local key = (self.mostRecentKey or 0) + 1
 
 	return Promise.async(function(resolve)
-		self.dataStore:SetAsync(key, value)
+		self.dataStore:SetAsync(key, value, { self.dataStore2.UserId })
 		resolve()
 	end):andThen(function()
 		return Promise.promisify(function()
-			self.orderedDataStore:SetAsync(key, key)
+			self.orderedDataStore:SetAsync(key, key, { self.dataStore2.UserId })
 		end)()
 	end):andThen(function()
 		self.mostRecentKey = key
