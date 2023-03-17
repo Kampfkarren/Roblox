@@ -178,13 +178,47 @@ function DataStore:GetTableAsync(default, ...)
 	end)
 end
 
+function DataStore:SetValidator(validator)
+	assert(
+		type(validator) == "function",
+		"function expected, got " .. typeof(validator)
+	)
+
+	self.validator = validator
+end
+
+local function assertValidatorWithDefaultError(validator, input, defaultError)
+	local isValid, message = validator(input)
+	if not isValid then
+		error(message or defaultError) 
+	end
+end
+
 function DataStore:Set(value, _dontCallOnUpdate)
+	if self.validator ~= nil then
+		assertValidatorWithDefaultError(
+			self.validator,
+			value,
+			"Attempted to set data store to an invalid value during :Set"
+		)
+	end
+
 	self.value = clone(value)
 	self:_Update(_dontCallOnUpdate)
 end
 
 function DataStore:Update(updateFunc)
-	self.value = updateFunc(self.value)
+	local updateFuncReturn = updateFunc(self.value)
+
+	if self.validator ~= nil then
+		assertValidatorWithDefaultError(
+			self.validator,
+			updateFuncReturn,
+			"Attempted to set data store to an invalid value during :Update"
+		)
+	end
+
+	self.value = updateFuncReturn
 	self:_Update()
 end
 
