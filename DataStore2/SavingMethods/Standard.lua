@@ -16,7 +16,7 @@ end
 function Standard:Set(value)
 	return Promise.async(function(resolve)
 		self.dataStore:UpdateAsync(self.userId, function()
-			return value
+			return value, { self.userId }
 		end)
 
 		resolve()
