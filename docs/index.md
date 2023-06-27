@@ -11,4 +11,7 @@ If you find anything missing, file [an issue on GitHub](https://github.com/Kampf
 - [ZOぞ](https://www.roblox.com/games/6678877691/ZO) - 83M+ visits
 - [Corridor Kawaii](https://www.roblox.com/games/6154244609/Corridor-Kawaii) - 59.5M+ visits
 - [Fairy World](https://www.roblox.com/games/1817078882/Fairy-World) - 17.8M+ visits
-- Do you want your game on here? [File an issue on GitHub for it](https://github.com/Kampfkarren/Roblox/issues)!
+- [Slide World](https://www.roblox.com/games/10214969603) - 700+ visits
+- [No-Scope Arcade](https://www.roblox.com/games/6407649031) - 113M+ visits
+  
+Do you want your game on here? [File an issue on GitHub for it](https://github.com/Kampfkarren/Roblox/issues)!
